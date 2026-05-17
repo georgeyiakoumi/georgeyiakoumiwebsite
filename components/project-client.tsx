@@ -230,7 +230,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
             draggable={false}
           />
           {project.hero_caption && (
-            <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
+            <Typography variant="figcaption" className="max-w-3xl md:max-w-md lg:max-w-xl xl:max-w-3xl order-first md:order-last">
               {project.hero_caption}
             </Typography>
           )}
