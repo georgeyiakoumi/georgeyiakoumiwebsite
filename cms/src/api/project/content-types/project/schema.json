@@ -43,10 +43,6 @@
     "end_date": {
       "type": "date"
     },
-    "tags": {
-      "type": "customField",
-      "customField": "plugin::tagsinput.tags"
-    },
     "tools": {
       "type": "relation",
       "relation": "oneToMany",
@@ -60,8 +56,8 @@
     },
     "snapshot_items": {
       "type": "component",
-      "repeatable": true,
-      "component": "project-blocks.snapshot-item"
+      "component": "project-blocks.snapshot-item",
+      "repeatable": true
     },
     "body": {
       "type": "dynamiczone",

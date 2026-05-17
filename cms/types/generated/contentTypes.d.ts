@@ -658,7 +658,6 @@ export interface ApiGlobalSeoGlobalSeo extends Struct.SingleTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    appleTouchIcon: Schema.Attribute.Media<'images'>;
     authorBio: Schema.Attribute.Text;
     authorJobTitle: Schema.Attribute.String &
       Schema.Attribute.DefaultTo<'Product Designer'>;
@@ -667,7 +666,6 @@ export interface ApiGlobalSeoGlobalSeo extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    favIcon: Schema.Attribute.Media<'images'>;
     githubUrl: Schema.Attribute.String;
     gtagId: Schema.Attribute.String;
     keywords: Schema.Attribute.Text;
@@ -744,8 +742,6 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
       'project-blocks.snapshot-item',
       true
     >;
-    tags: Schema.Attribute.JSON &
-      Schema.Attribute.CustomField<'plugin::tagsinput.tags'>;
     title: Schema.Attribute.String & Schema.Attribute.Required;
     tools: Schema.Attribute.Relation<'oneToMany', 'api::tool.tool'>;
     type: Schema.Attribute.Enumeration<['client', 'personal', 'article']>;
