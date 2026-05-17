@@ -50,7 +50,7 @@ export function SnapshotBlock({ items: rawItems, toolsContent }: SnapshotBlockPr
   if (items.length === 0) return null;
 
   return (
-    <div className="mx-auto w-full md:max-w-md lg:max-w-xl xl:max-w-2xl px-8 lg:px-0 mb-16">
+    <div className="mx-auto w-full md:max-w-lg lg:max-w-xl xl:max-w-2xl px-8 lg:px-0 mb-16">
       <div>
         <dl className="grid grid-cols-[4rem_1fr] gap-x-4 gap-y-5 sm:grid-cols-[3rem_1fr]">
           {items.map((item) => (

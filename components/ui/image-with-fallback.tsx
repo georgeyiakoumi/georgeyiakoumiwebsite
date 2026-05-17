@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import { ImageIcon } from "lucide-react";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Spinner } from "@/components/ui/spinner";
 import { cn } from "@/lib/utils";
 
 type ImageWithFallbackProps = React.ComponentProps<typeof Image> & {
@@ -43,7 +44,10 @@ export function ImageWithFallback({
         skeletonClassName
       )}
     >
-      <ImageIcon className="size-6 text-muted-foreground" />
+      <div className="relative flex items-center justify-center">
+        <ImageIcon className="size-24 text-muted-foreground opacity-10 absolute" />
+        {!hasError && <Spinner className="size-8 text-muted-foreground" />}
+      </div>
     </Skeleton>
   );
 

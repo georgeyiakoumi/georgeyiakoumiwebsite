@@ -14,8 +14,8 @@
   "attributes": {
     "siteName": {
       "type": "string",
-      "required": true,
-      "default": "George Yiakoumi"
+      "default": "George Yiakoumi",
+      "required": true
     },
     "siteTitle": {
       "type": "string",
@@ -26,8 +26,7 @@
       "required": true
     },
     "keywords": {
-      "type": "text",
-      "description": "Comma-separated keywords"
+      "type": "text"
     },
     "authorName": {
       "type": "string",
@@ -47,8 +46,7 @@
       "type": "string"
     },
     "twitterHandle": {
-      "type": "string",
-      "description": "Include @ symbol"
+      "type": "string"
     },
     "ogTitle": {
       "type": "string"
@@ -66,30 +64,14 @@
     },
     "twitterCard": {
       "type": "enumeration",
+      "default": "summary_large_image",
       "enum": [
         "summary",
         "summary_large_image"
-      ],
-      "default": "summary_large_image"
+      ]
     },
     "gtagId": {
       "type": "string"
-    },
-    "favIcon": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
-    },
-    "appleTouchIcon": {
-      "type": "media",
-      "multiple": false,
-      "required": false,
-      "allowedTypes": [
-        "images"
-      ]
     }
   }
 }

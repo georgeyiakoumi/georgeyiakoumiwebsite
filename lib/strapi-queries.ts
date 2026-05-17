@@ -165,9 +165,6 @@ export interface ProjectData {
   slug: string;
   date: string;
   end_date?: string;
-  tags: Array<{
-    name: string;
-  }>;
   project_thumb?: {
     id: number;
     url: string;
@@ -252,7 +249,6 @@ export async function getAboutPage() {
 
 export async function getProjects(options?: {
   limit?: number;
-  tag?: string;
   type?: 'client' | 'personal' | 'article';
 }) {
   try {
@@ -264,10 +260,6 @@ export async function getProjects(options?: {
       'populate[project_thumb][fields][3]': 'height',
       'sort[0]': 'date:desc',
     };
-
-    if (options?.tag) {
-      query['filters[tags][name][$eq]'] = options.tag;
-    }
 
     if (options?.type) {
       query['filters[type][$eq]'] = options.type;

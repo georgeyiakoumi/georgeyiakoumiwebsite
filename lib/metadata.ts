@@ -211,7 +211,6 @@ export async function generateProjectJsonLd({
   image,
   datePublished,
   dateModified,
-  tags,
 }: {
   title: string;
   description: string;
@@ -219,7 +218,6 @@ export async function generateProjectJsonLd({
   image?: string;
   datePublished: string;
   dateModified?: string;
-  tags?: string[];
 }) {
   const seoData = await getGlobalSEO();
   const authorName = seoData?.authorName || SITE_CONFIG.author.name;
@@ -239,9 +237,6 @@ export async function generateProjectJsonLd({
       name: authorName,
       url: SITE_CONFIG.url,
     },
-    ...(tags && tags.length > 0 && {
-      keywords: tags.join(", "),
-    }),
     inLanguage: "en-US",
   };
 }

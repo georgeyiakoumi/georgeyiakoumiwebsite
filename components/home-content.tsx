@@ -82,7 +82,8 @@ export function HomeContent({ aboutData, tools, businesses, latestProject }: Hom
             alt={avatarAlt}
             width={128}
             height={128}
-            className="size-32 rounded-full mx-auto object-cover"
+            className="size-32 rounded-full mx-auto object-cover select-none"
+            draggable={false}
             priority
             fetchPriority="high"
             placeholder="blur"

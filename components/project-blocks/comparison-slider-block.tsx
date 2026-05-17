@@ -3,8 +3,9 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronsLeftRight } from "lucide-react";
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { Typography } from "@/components/ui/typography";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { ComparisonSliderBlock as ComparisonSliderBlockType } from "@/lib/strapi-queries";
 
 interface ComparisonSliderBlockProps {
@@ -14,7 +15,6 @@ interface ComparisonSliderBlockProps {
 
 export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderBlockProps) {
   const [sliderPosition, setSliderPosition] = useState(50);
-  const containerRef = useRef<HTMLDivElement>(null);
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
@@ -79,90 +79,83 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
   }, [isDragging, handleTrackMove]);
 
   return (
-    <figure className="flex flex-col gap-4 items-center w-full px-8 my-8">
+    <BlockFigure>
       {block.caption && (
-        <Typography variant="figcaption" className="max-w-2xl md:order-last">
-          {block.caption}
-        </Typography>
+        <BlockCaption>{block.caption}</BlockCaption>
       )}
 
-      <div className="relative w-full md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto">
-        {/* Image container */}
-        <div
-          ref={containerRef}
-          className="relative w-full aspect-video select-none"
-        >
-          <div className="absolute inset-0 rounded-lg overflow-hidden border-border border">
-            {/* Before Image (full) */}
+      {/* Image container */}
+      <div className="relative w-full aspect-video select-none">
+        <div className="absolute inset-0 rounded-lg overflow-hidden border-border border">
+          {/* Before Image (full) */}
+          <ImageWithFallback
+            src={beforeImageUrl || ''}
+            alt={`${projectTitle} — before`}
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem"
+            className="object-cover pointer-events-none select-none"
+            draggable={false}
+          />
+
+          {/* After Image (clipped) */}
+          <div
+            className="absolute inset-0 pointer-events-none"
+            style={{
+              clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
+            }}
+          >
             <ImageWithFallback
-              src={beforeImageUrl || ''}
-              alt={`${projectTitle} — before`}
+              src={afterImageUrl || ''}
+              alt={`${projectTitle} — after`}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem"
-              className="object-cover pointer-events-none select-none"
+              className="object-cover select-none"
               draggable={false}
             />
-
-            {/* After Image (clipped) */}
-            <div
-              className="absolute inset-0 pointer-events-none"
-              style={{
-                clipPath: `inset(0 ${100 - sliderPosition}% 0 0)`,
-              }}
-            >
-              <ImageWithFallback
-                src={afterImageUrl || ''}
-                alt={`${projectTitle} — after`}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem"
-                className="object-cover select-none"
-                draggable={false}
-              />
-            </div>
           </div>
-
-          {/* Divider line on image */}
-          <div
-            className="absolute top-0 bottom-0 w-px bg-background/80 pointer-events-none z-10"
-            style={{ left: `${sliderPosition}%` }}
-          />
         </div>
 
-        {/* Track and handle below image */}
+        {/* Divider line on image */}
         <div
-          ref={trackRef}
-          className="relative w-full h-12 lg:h-8 mt-2 cursor-ew-resize select-none flex items-center touch-none"
-          onMouseDown={handleMouseDown}
-          onTouchStart={handleTouchStart}
-          role="slider"
-          aria-label="Comparison slider"
-          aria-valuenow={Math.round(sliderPosition)}
-          aria-valuemin={0}
-          aria-valuemax={100}
-          tabIndex={0}
-          onKeyDown={(e) => {
-            if (e.key === 'ArrowLeft') setSliderPosition((p) => Math.max(p - 2, 0));
-            if (e.key === 'ArrowRight') setSliderPosition((p) => Math.min(p + 2, 100));
-          }}
+          className="absolute top-0 bottom-0 w-px bg-background/80 pointer-events-none z-10"
+          style={{ left: `${sliderPosition}%` }}
+        />
+      </div>
+
+      {/* Track and handle below image */}
+      <div
+        ref={trackRef}
+        className="relative w-full h-12 lg:h-8 cursor-ew-resize select-none flex items-center touch-none"
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        role="slider"
+        aria-label="Comparison slider"
+        aria-valuenow={Math.round(sliderPosition)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft') setSliderPosition((p) => Math.max(p - 2, 0));
+          if (e.key === 'ArrowRight') setSliderPosition((p) => Math.min(p + 2, 100));
+        }}
+      >
+        {/* Track background */}
+        <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 rounded-full bg-muted" />
+
+        {/* Filled track */}
+        <div
+          className="absolute top-1/2 -translate-y-1/2 left-0 h-0.5 rounded-full bg-foreground"
+          style={{ width: `${sliderPosition}%` }}
+        />
+
+        {/* Handle */}
+        <div
+          className="absolute size-8 lg:size-6 rounded-full bg-primary border-1 border-border shadow-sm flex items-center justify-center"
+          style={{ left: `${sliderPosition}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
         >
-          {/* Track background */}
-          <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 rounded-full bg-muted" />
-
-          {/* Filled track */}
-          <div
-            className="absolute top-1/2 -translate-y-1/2 left-0 h-0.5 rounded-full bg-foreground"
-            style={{ width: `${sliderPosition}%` }}
-          />
-
-          {/* Handle */}
-          <div
-            className="absolute size-8 lg:size-6 rounded-full bg-primary border-1 border-border shadow-sm flex items-center justify-center"
-            style={{ left: `${sliderPosition}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
-          >
-            <ChevronsLeftRight className="size-4 lg:size-3 text-primary-foreground" />
-          </div>
+          <ChevronsLeftRight className="size-4 lg:size-3 text-primary-foreground" />
         </div>
       </div>
-    </figure>
+    </BlockFigure>
   );
 }

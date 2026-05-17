@@ -1,6 +1,7 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { Typography } from "@/components/ui/typography";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { ImageBlock as ImageBlockType } from "@/lib/strapi-queries";
 
 interface ImageBlockProps {
@@ -19,23 +20,21 @@ export function ImageBlock({ block, projectTitle }: ImageBlockProps) {
     '(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem'; // contained (default)
 
   return (
-    <figure className="flex flex-col gap-4 items-center w-full px-8 my-8">
+    <BlockFigure>
       <ImageWithFallback
         src={imageUrl || ''}
         alt={block.image.alternativeText || projectTitle}
         width={block.image.width || 1920}
         height={block.image.height || 1080}
         sizes={sizes}
-        className="h-auto md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto border-border border rounded-lg select-none"
+        className="h-auto border-border border rounded-lg select-none"
         wrapperClassName="w-full flex justify-center"
         skeletonClassName="rounded-lg"
         draggable={false}
       />
       {block.caption && (
-        <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
-          {block.caption}
-        </Typography>
+        <BlockCaption>{block.caption}</BlockCaption>
       )}
-    </figure>
+    </BlockFigure>
   );
 }

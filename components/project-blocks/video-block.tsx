@@ -2,7 +2,8 @@
 
 import { useRef, useEffect } from "react";
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { Typography } from "@/components/ui/typography";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { VideoBlock as VideoBlockType } from "@/lib/strapi-queries";
 
 function toEmbedUrl(url: string): string {
@@ -54,24 +55,20 @@ export function VideoBlock({ block }: VideoBlockProps) {
   // Embedded URL (YouTube/Vimeo)
   if (block.url) {
     return (
-      <figure className="flex flex-col gap-4 items-center w-full px-8 my-8">
-        <div className="w-full md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto">
-          <div className="relative w-full aspect-video rounded-lg overflow-hidden md:border-border md:border">
-            <iframe
-              src={toEmbedUrl(block.url)}
-              title="Project video"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-              className="absolute inset-0 w-full h-full"
-            />
-          </div>
+      <BlockFigure>
+        <div className="relative w-full aspect-video rounded-lg overflow-hidden md:border-border md:border">
+          <iframe
+            src={toEmbedUrl(block.url)}
+            title="Project video"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowFullScreen
+            className="absolute inset-0 w-full h-full"
+          />
         </div>
         {block.caption && (
-          <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
-            {block.caption}
-          </Typography>
+          <BlockCaption>{block.caption}</BlockCaption>
         )}
-      </figure>
+      </BlockFigure>
     );
   }
 
@@ -80,25 +77,21 @@ export function VideoBlock({ block }: VideoBlockProps) {
     const videoUrl = getStrapiMediaURL(block.file.url);
 
     return (
-      <figure className="flex flex-col gap-4 items-center w-full px-8 my-8">
-        <div className="w-full md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto">
-          <video
-            ref={videoRef}
-            src={videoUrl || ''}
-            className="project-image w-full h-auto rounded-lg md:border-border md:border"
-            loop
-            muted
-            playsInline
-          >
-            Your browser does not support the video tag.
-          </video>
-        </div>
+      <BlockFigure>
+        <video
+          ref={videoRef}
+          src={videoUrl || ''}
+          className="project-image w-full h-auto rounded-lg md:border-border md:border"
+          loop
+          muted
+          playsInline
+        >
+          Your browser does not support the video tag.
+        </video>
         {block.caption && (
-          <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
-            {block.caption}
-          </Typography>
+          <BlockCaption>{block.caption}</BlockCaption>
         )}
-      </figure>
+      </BlockFigure>
     );
   }
 

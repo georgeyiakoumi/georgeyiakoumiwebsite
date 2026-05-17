@@ -7,6 +7,19 @@ import { ModeToggle } from "@/components/mode-toggle";
 import { ScrollProgressProvider, ScrollProgress, ScrollProgressContainer } from "@/components/animate-ui/primitives/animate/scroll-progress";
 import { ScrollVisibilityProvider } from "@/hooks/use-scroll-visibility";
 import { useEffect, useState } from "react";
+import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
+
+function HeaderBackdrop() {
+  const scrollVisible = useScrollVisibility();
+
+  return (
+    <div
+      aria-hidden="true"
+      style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }}
+      className={`fixed top-0 left-0 right-0 h-20 z-9 pointer-events-none bg-background/90 backdrop-blur-sm md:hidden transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0'}`}
+    />
+  );
+}
 
 export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -32,6 +45,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
       <ScrollVisibilityProvider>
         <SiteNavigation />
         <ModeToggle />
+        <HeaderBackdrop />
 
         {/* Scroll progress indicator - only on index and project detail pages */}
         {showScrollProgress && (
