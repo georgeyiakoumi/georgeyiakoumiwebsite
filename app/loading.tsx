@@ -20,7 +20,6 @@ export default function HomeLoading() {
           <div className="lg:hidden">
             <Skeleton className="w-full aspect-video rounded-xl" />
             <div className="flex flex-col gap-2 mt-4">
-              <Skeleton className="h-4 w-24" />
               <Skeleton className="h-6 w-3/4" />
               <Skeleton className="h-4 w-full" />
             </div>
@@ -29,7 +28,6 @@ export default function HomeLoading() {
           <div className="hidden lg:flex gap-4 items-center rounded-lg border border-border p-px">
             <Skeleton className="size-32 rounded-l-lg shrink-0" />
             <div className="flex flex-col gap-2 flex-1 py-4">
-              <Skeleton className="h-3 w-24" />
               <Skeleton className="h-5 w-3/4" />
               <Skeleton className="h-4 w-full" />
             </div>

@@ -4,7 +4,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 export default function ProjectLoading() {
   return (
     <Section className="!h-auto !justify-start !items-start !p-0 relative">
-      <Skeleton className="h-10 w-24 fixed top-8 left-8 md:bottom-8 md:top-auto md:left-8 lg:left-16 z-20" />
+      <Skeleton className="h-10 w-24 fixed top-8 left-8 md:bottom-8 md:top-auto lg:left-16 lg:bottom-16 z-20" />
 
       <header className="flex flex-col gap-8 px-8 place-items-center justify-center w-full h-screen">
         <Skeleton className="h-12 w-full max-w-xl" />
@@ -16,7 +16,9 @@ export default function ProjectLoading() {
         </div>
       </header>
 
-      <Skeleton className="w-full h-[calc(100vh-17rem)] md:h-[calc(100vh-12rem)]" />
+      <div className="w-full px-8 md:px-0 my-8 md:max-w-md lg:max-w-xl xl:max-w-3xl mx-auto">
+        <Skeleton className="w-full aspect-video rounded-lg" />
+      </div>
 
       <article className="flex flex-col w-full">
         {Array.from({ length: 5 }).map((_, i) => (
