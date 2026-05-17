@@ -20,6 +20,8 @@ import { Typography } from "@/components/ui/typography";
 import { ProjectCard } from "@/components/project-card";
 import { ProjectBlockRenderer } from "@/components/project-blocks";
 import { SnapshotBlock } from "@/components/project-blocks/snapshot-block";
+import { BlockFigure } from "@/components/project-blocks/block-figure";
+import { BlockCaption } from "@/components/project-blocks/block-caption";
 import { ShareBar } from "@/components/share-bar";
 import type { ProjectData, ToolData, SnapshotItem } from "@/lib/strapi-queries";
 
@@ -155,7 +157,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
   return (
     <section className="place-items-center relative">
       <AnimateIcon animateOnHover asChild>
-        <Button onClick={handleBack} variant="ghost" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`fixed cursor-pointer top-8 left-8 md:bottom-8 md:top-auto md:left-8 lg:left-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none md:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
+        <Button onClick={handleBack} variant="ghost" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`fixed cursor-pointer top-8 left-8 md:bottom-8 md:top-auto lg:left-16 lg:bottom-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none md:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
           <ArrowLeft />
           Back
         </Button>
@@ -213,7 +215,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
       </header>
 
       {heroImageUrl && (
-        <figure className="flex flex-col gap-4 items-center w-full px-8">
+        <BlockFigure className="xl:max-w-3xl">
           <ImageWithFallback
             src={heroImageUrl}
             alt={project.project_thumb?.alternativeText || project.title || ''}
@@ -222,19 +224,17 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
             priority
             fetchPriority="high"
             sizes="(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem"
-            className="h-auto md:max-w-md lg:max-w-xl xl:max-w-3xl mx-auto md:border-border md:border md:rounded-lg select-none"
+            className="h-auto border-border border rounded-lg select-none"
             wrapperClassName="w-full flex justify-center"
-            skeletonClassName="md:rounded-lg"
+            skeletonClassName="rounded-lg"
             placeholder="blur"
             blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTkyMCIgaGVpZ2h0PSIxMDgwIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPjxyZWN0IHdpZHRoPSIxOTIwIiBoZWlnaHQ9IjEwODAiIGZpbGw9IiNlZWUiLz48L3N2Zz4="
             draggable={false}
           />
           {project.hero_caption && (
-            <Typography variant="figcaption" className="max-w-3xl md:max-w-md lg:max-w-xl xl:max-w-3xl order-first md:order-last">
-              {project.hero_caption}
-            </Typography>
+            <BlockCaption>{project.hero_caption}</BlockCaption>
           )}
-        </figure>
+        </BlockFigure>
       )}
 
       <article className="flex flex-col w-full py-16">

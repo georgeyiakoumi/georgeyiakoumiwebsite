@@ -11,15 +11,12 @@ import {
 } from "@/components/ui/tooltip";
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { Button } from "@/components/ui/button";
 
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
@@ -46,7 +43,7 @@ export function SiteFooter() {
   );
 
   return (
-    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-6 left-1/2 md:!transform-none md:translate-x-0 md:bottom-4 md:top-auto md:right-4 md:bottom-4 lg:bottom-12 lg:right-12 md:left-auto box-border flex flex-col gap-4 items-start lg:items-end z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
+    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-6 left-1/2 md:!transform-none md:translate-x-0 md:bottom-8 md:top-auto md:right-8 md:left-auto lg:bottom-16 lg:right-16 box-border flex flex-col items-start lg:items-end z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
       {/* Mobile/Tablet: Drawer */}
       <div className="xl:hidden">
         <Drawer open={open} onOpenChange={setOpen}>
