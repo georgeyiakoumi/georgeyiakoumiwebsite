@@ -155,7 +155,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
   return (
     <section className="place-items-center relative">
       <AnimateIcon animateOnHover asChild>
-        <Button onClick={handleBack} variant="secondary" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`bg-background fixed cursor-pointer top-8 left-8 md:bottom-8 md:top-auto md:left-8 lg:left-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none md:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
+        <Button onClick={handleBack} variant="ghost" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`fixed cursor-pointer top-8 left-8 md:bottom-8 md:top-auto md:left-8 lg:left-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none md:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
           <ArrowLeft />
           Back
         </Button>

@@ -67,7 +67,6 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
     image: projectImageUrl ?? undefined,
     datePublished: project.publishedAt,
     dateModified: project.updatedAt,
-    tags: project.tags?.map((tag) => tag.name) || [],
   });
 
   return (

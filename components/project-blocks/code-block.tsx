@@ -3,7 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "next-themes";
 import { createHighlighter, type Highlighter } from "shiki";
-import { Typography } from "@/components/ui/typography";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { CodeBlockType } from "@/lib/strapi-queries";
 
 const SUPPORTED_LANGS = [
@@ -51,9 +52,9 @@ export function CodeBlock({ block }: CodeBlockProps) {
   }, [block.code, block.language, resolvedTheme]);
 
   return (
-    <figure className="flex flex-col gap-2 items-center w-full my-8 mx-auto md:max-w-md lg:max-w-xl xl:max-w-2xl px-8 lg:px-0">
+    <BlockFigure>
       {block.filename && (
-        <div className={`w-full rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 text-xs text-muted-foreground font-mono ${html ? "" : "mb-0"}`}>
+        <div className={`w-full rounded-t-lg border border-b-0 border-border bg-muted px-4 py-2 text-xs -mb-2 text-muted-foreground font-mono ${html ? "" : "mb-0"}`}>
           {block.filename}
         </div>
       )}
@@ -62,10 +63,8 @@ export function CodeBlock({ block }: CodeBlockProps) {
         dangerouslySetInnerHTML={{ __html: html }}
       />
       {block.caption && (
-        <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
-          {block.caption}
-        </Typography>
+        <BlockCaption>{block.caption}</BlockCaption>
       )}
-    </figure>
+    </BlockFigure>
   );
 }

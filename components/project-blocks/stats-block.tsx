@@ -1,6 +1,8 @@
 "use client";
 
 import { Typography } from "@/components/ui/typography";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { StatsBlock as StatsBlockType } from "@/lib/strapi-queries";
 import {
   Area,
@@ -35,15 +37,6 @@ interface StatsBlockProps {
   block: StatsBlockType;
 }
 
-// Reusable wrapper component for consistent styling
-function StatsWrapper({ children, className = "" }: { children: React.ReactNode; className?: string }) {
-  return (
-    <figure className={`flex flex-col gap-4 items-center w-full md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto px-8 my-8 ${className}`}>
-      {children}
-    </figure>
-  );
-}
-
 export function StatsBlock({ block }: StatsBlockProps) {
   if (!block.items || block.items.length === 0) return null;
 
@@ -66,36 +59,32 @@ export function StatsBlock({ block }: StatsBlockProps) {
     const xlCols = itemCount <= 2 ? 'xl:grid-cols-2' : itemCount === 3 ? 'lg:grid-cols-3' : 'xl:grid-cols-4';
 
     return (
-      <StatsWrapper>
-        <div className="w-full max-w-3xl md:max-w-md lg:max-w-xl xl:max-w-2xl mx-auto">
-          <div className={`grid grid-cols-1 lg:grid-cols-2 ${xlCols} lg:gap-6`}>
-            {block.items.map((item) => (
-              <div
-                key={item.id}
-                className="flex flex-col items-center text-center gap-1 px-2 py-8 lg:p-4 border-t border-r border-l last:border-b lg:border border-border first:rounded-t-lg last:rounded-b-lg lg:rounded-lg bg-muted"
-              >
-                <Typography variant="h3" className="text-primary">
-                  {item.value}
-                  {item.suffix && <span className="text-lg"> {item.suffix}</span>}
+      <BlockFigure>
+        <div className={`w-full grid grid-cols-1 lg:grid-cols-2 ${xlCols} lg:gap-6`}>
+          {block.items.map((item) => (
+            <div
+              key={item.id}
+              className="flex flex-col items-center text-center gap-1 px-2 py-8 lg:p-4 border-t border-r border-l last:border-b lg:border border-border first:rounded-t-lg last:rounded-b-lg lg:rounded-lg bg-muted"
+            >
+              <Typography variant="h3" className="text-primary">
+                {item.value}
+                {item.suffix && <span className="text-lg"> {item.suffix}</span>}
+              </Typography>
+              <Typography variant="large" className="font-semibold">
+                {item.label}
+              </Typography>
+              {(item.context || item.description) && (
+                <Typography variant="muted" className="text-sm text-center">
+                  {item.context || item.description}
                 </Typography>
-                <Typography variant="large" className="font-semibold">
-                  {item.label}
-                </Typography>
-                {(item.context || item.description) && (
-                  <Typography variant="muted" className="text-sm text-center">
-                    {item.context || item.description}
-                  </Typography>
-                )}
-              </div>
-            ))}
-          </div>
+              )}
+            </div>
+          ))}
         </div>
         {block.description && (
-          <Typography variant="figcaption" className="max-w-2xl">
-            {block.description}
-          </Typography>
+          <BlockCaption>{block.description}</BlockCaption>
         )}
-      </StatsWrapper>
+      </BlockFigure>
     );
   }
 
@@ -124,41 +113,36 @@ export function StatsBlock({ block }: StatsBlockProps) {
     const isGradient = variant === 'gradient';
 
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={chartConfig} className="h-[400px] w-full">
-            <AreaChart data={chartData}>
-              {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-              {showAxes && <XAxis dataKey="name" />}
-              {showAxes && <YAxis />}
-              <ChartTooltip content={<ChartTooltipContent />} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <defs>
-                <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="5%" stopColor="var(--color-value)" stopOpacity={0.8} />
-                  <stop offset="95%" stopColor="var(--color-value)" stopOpacity={isGradient ? 0.1 : 0.3} />
-                </linearGradient>
-              </defs>
-              <Area
-                dataKey="value"
-                type={areaType}
-                fill="url(#fillValue)"
-                fillOpacity={1}
-                stroke="var(--color-value)"
-                strokeWidth={2}
-                stackId={isStacked ? "a" : undefined}
-                dot={showDots}
-              />
-            </AreaChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <AreaChart data={chartData}>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+            {showAxes && <XAxis dataKey="name" />}
+            {showAxes && <YAxis />}
+            <ChartTooltip content={<ChartTooltipContent />} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <defs>
+              <linearGradient id="fillValue" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%" stopColor="var(--color-value)" stopOpacity={0.8} />
+                <stop offset="95%" stopColor="var(--color-value)" stopOpacity={isGradient ? 0.1 : 0.3} />
+              </linearGradient>
+            </defs>
+            <Area
+              dataKey="value"
+              type={areaType}
+              fill="url(#fillValue)"
+              fillOpacity={1}
+              stroke="var(--color-value)"
+              strokeWidth={2}
+              stackId={isStacked ? "a" : undefined}
+              dot={showDots}
+            />
+          </AreaChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 
@@ -201,80 +185,70 @@ export function StatsBlock({ block }: StatsBlockProps) {
       }, {} as ChartConfig);
 
       return (
-        <StatsWrapper className="my-16">
-          <div className="max-w-4xl mx-auto w-full">
-            {block.description && (
-              <Typography variant="figcaption" className="mb-12">
-                {block.description}
-              </Typography>
-            )}
-
-            <ChartContainer config={groupedChartConfig} className="h-[400px] w-full">
-              <BarChart accessibilityLayer data={groupedChartData}>
-                <CartesianGrid vertical={false} />
-                <XAxis
-                  dataKey="name"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
+        <BlockFigure className="my-16">
+          {block.description && (
+            <BlockCaption>{block.description}</BlockCaption>
+          )}
+          <ChartContainer config={groupedChartConfig} className="h-[400px] w-full">
+            <BarChart accessibilityLayer data={groupedChartData}>
+              <CartesianGrid vertical={false} />
+              <XAxis
+                dataKey="name"
+                tickLine={false}
+                tickMargin={10}
+                axisLine={false}
+              />
+              {showAxes && <YAxis />}
+              <ChartTooltip content={<ChartTooltipContent />} />
+              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+              {groups.map((group) => (
+                <Bar
+                  key={groupKeyMap[group]}
+                  dataKey={groupKeyMap[group]}
+                  fill={`var(--color-${groupKeyMap[group]})`}
+                  radius={isStacked ? 0 : 4}
+                  stackId={isStacked ? "a" : undefined}
                 />
-                {showAxes && <YAxis />}
-                <ChartTooltip content={<ChartTooltipContent />} />
-                {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-                {groups.map((group) => (
-                  <Bar
-                    key={groupKeyMap[group]}
-                    dataKey={groupKeyMap[group]}
-                    fill={`var(--color-${groupKeyMap[group]})`}
-                    radius={isStacked ? 0 : 4}
-                    stackId={isStacked ? "a" : undefined}
-                  />
-                ))}
-              </BarChart>
-            </ChartContainer>
-          </div>
-        </StatsWrapper>
+              ))}
+            </BarChart>
+          </ChartContainer>
+        </BlockFigure>
       );
     }
 
     // Single-series bar chart (existing behaviour)
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={chartConfig} className="h-[400px] w-full">
-            <BarChart
-              data={chartData}
-              layout={isHorizontal ? "vertical" : "horizontal"}
-            >
-              {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={!isHorizontal} />}
-              {isHorizontal ? (
-                <>
-                  {showAxes && <XAxis type="number" />}
-                  {showAxes && <YAxis dataKey="name" type="category" />}
-                </>
-              ) : (
-                <>
-                  {showAxes && <XAxis dataKey="name" />}
-                  {showAxes && <YAxis />}
-                </>
-              )}
-              <ChartTooltip content={<ChartTooltipContent />} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <Bar
-                dataKey="value"
-                fill="var(--color-value)"
-                radius={4}
-              />
-            </BarChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <BarChart
+            data={chartData}
+            layout={isHorizontal ? "vertical" : "horizontal"}
+          >
+            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={!isHorizontal} />}
+            {isHorizontal ? (
+              <>
+                {showAxes && <XAxis type="number" />}
+                {showAxes && <YAxis dataKey="name" type="category" />}
+              </>
+            ) : (
+              <>
+                {showAxes && <XAxis dataKey="name" />}
+                {showAxes && <YAxis />}
+              </>
+            )}
+            <ChartTooltip content={<ChartTooltipContent />} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <Bar
+              dataKey="value"
+              fill="var(--color-value)"
+              radius={4}
+            />
+          </BarChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 
@@ -284,32 +258,27 @@ export function StatsBlock({ block }: StatsBlockProps) {
     const showLineDots = variant === 'dots' || showDots;
 
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={chartConfig} className="h-[400px] w-full">
-            <LineChart data={chartData}>
-              {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
-              {showAxes && <XAxis dataKey="name" />}
-              {showAxes && <YAxis />}
-              <ChartTooltip content={<ChartTooltipContent />} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <Line
-                type={lineType}
-                dataKey="value"
-                stroke="var(--color-value)"
-                strokeWidth={2}
-                dot={showLineDots}
-              />
-            </LineChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={chartConfig} className="h-[400px] w-full">
+          <LineChart data={chartData}>
+            {showGrid && <CartesianGrid strokeDasharray="3 3" vertical={false} />}
+            {showAxes && <XAxis dataKey="name" />}
+            {showAxes && <YAxis />}
+            <ChartTooltip content={<ChartTooltipContent />} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <Line
+              type={lineType}
+              dataKey="value"
+              stroke="var(--color-value)"
+              strokeWidth={2}
+              dot={showLineDots}
+            />
+          </LineChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 
@@ -329,37 +298,32 @@ export function StatsBlock({ block }: StatsBlockProps) {
     }, {} as ChartConfig);
 
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={pieChartConfig} className="h-[400px] w-full">
-            <PieChart>
-              <ChartTooltip content={<ChartTooltipContent hideLabel />} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <Pie
-                data={chartData}
-                cx="50%"
-                cy="50%"
-                labelLine={false}
-                label={showLabels ? ({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%` : false}
-                outerRadius={120}
-                innerRadius={isDonut ? 60 : 0}
-                dataKey="value"
-                nameKey="name"
-              >
-                {chartData.map((item, index) => (
-                  <Cell key={`cell-${index}`} fill={`var(--color-${item.name})`} />
-                ))}
-              </Pie>
-            </PieChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={pieChartConfig} className="h-[400px] w-full">
+          <PieChart>
+            <ChartTooltip content={<ChartTooltipContent hideLabel />} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <Pie
+              data={chartData}
+              cx="50%"
+              cy="50%"
+              labelLine={false}
+              label={showLabels ? ({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%` : false}
+              outerRadius={120}
+              innerRadius={isDonut ? 60 : 0}
+              dataKey="value"
+              nameKey="name"
+            >
+              {chartData.map((item, index) => (
+                <Cell key={`cell-${index}`} fill={`var(--color-${item.name})`} />
+              ))}
+            </Pie>
+          </PieChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 
@@ -371,32 +335,27 @@ export function StatsBlock({ block }: StatsBlockProps) {
     const isFilled = variant === 'filled';
 
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={chartConfig} className="h-[400px] w-full mx-auto aspect-square max-h-[400px]">
-            <RadarChart data={chartData}>
-              <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <PolarAngleAxis dataKey="name" />
-              {showGrid && <PolarGrid gridType={isCircle ? "circle" : "polygon"} />}
-              <Radar
-                dataKey="value"
-                fill="var(--color-value)"
-                fillOpacity={isFilled ? 0.6 : linesOnly ? 0 : 0.3}
-                stroke="var(--color-value)"
-                strokeWidth={2}
-                dot={showRadarDots}
-              />
-            </RadarChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={chartConfig} className="h-[400px] w-full mx-auto aspect-square max-h-[400px]">
+          <RadarChart data={chartData}>
+            <ChartTooltip content={<ChartTooltipContent />} cursor={false} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <PolarAngleAxis dataKey="name" />
+            {showGrid && <PolarGrid gridType={isCircle ? "circle" : "polygon"} />}
+            <Radar
+              dataKey="value"
+              fill="var(--color-value)"
+              fillOpacity={isFilled ? 0.6 : linesOnly ? 0 : 0.3}
+              stroke="var(--color-value)"
+              strokeWidth={2}
+              dot={showRadarDots}
+            />
+          </RadarChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 
@@ -423,34 +382,29 @@ export function StatsBlock({ block }: StatsBlockProps) {
     }));
 
     return (
-      <StatsWrapper className="my-16">
-        <div className="max-w-4xl mx-auto w-full">
-          {block.description && (
-            <Typography variant="figcaption" className="mb-12">
-              {block.description}
-            </Typography>
-          )}
-
-          <ChartContainer config={radialChartConfig} className="h-[400px] w-full mx-auto aspect-square max-h-[400px]">
-            <RadialBarChart
-              data={radialData}
-              startAngle={-90}
-              endAngle={380}
-              innerRadius={30}
-              outerRadius={140}
-            >
-              <ChartTooltip content={<ChartTooltipContent hideLabel nameKey="name" />} cursor={false} />
-              {showLegend && <ChartLegend content={<ChartLegendContent />} />}
-              <RadialBar
-                dataKey="value"
-                background
-                stackId={isStacked ? "a" : undefined}
-                label={showLabels || showText ? { position: 'insideStart', fill: '#fff' } : undefined}
-              />
-            </RadialBarChart>
-          </ChartContainer>
-        </div>
-      </StatsWrapper>
+      <BlockFigure className="my-16">
+        {block.description && (
+          <BlockCaption>{block.description}</BlockCaption>
+        )}
+        <ChartContainer config={radialChartConfig} className="h-[400px] w-full mx-auto aspect-square max-h-[400px]">
+          <RadialBarChart
+            data={radialData}
+            startAngle={-90}
+            endAngle={380}
+            innerRadius={30}
+            outerRadius={140}
+          >
+            <ChartTooltip content={<ChartTooltipContent hideLabel nameKey="name" />} cursor={false} />
+            {showLegend && <ChartLegend content={<ChartLegendContent />} />}
+            <RadialBar
+              dataKey="value"
+              background
+              stackId={isStacked ? "a" : undefined}
+              label={showLabels || showText ? { position: 'insideStart', fill: '#fff' } : undefined}
+            />
+          </RadialBarChart>
+        </ChartContainer>
+      </BlockFigure>
     );
   }
 

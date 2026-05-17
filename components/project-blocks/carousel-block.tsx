@@ -1,7 +1,8 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselPagination } from "@/components/ui/carousel";
-import { Typography } from "@/components/ui/typography";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { BlockFigure } from "./block-figure";
+import { BlockCaption } from "./block-caption";
 import type { CarouselBlock as CarouselBlockType } from "@/lib/strapi-queries";
 
 interface CarouselBlockProps {
@@ -13,7 +14,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   if (!block.slides || block.slides.length === 0) return null;
 
   return (
-    <figure className="flex flex-col gap-4 items-center w-full md:max-w-lg lg:max-w-xl xl:max-w-2xl px-8 lg:px-0 mx-auto my-8">
+    <BlockFigure>
       <Carousel
         opts={{
           align: "center",
@@ -21,7 +22,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
         }}
         className="w-full border border-border rounded-lg mb-6"
       >
-        
+
         <CarouselContent>
           {block.slides.map((slide) => {
             const slideUrl = getStrapiMediaURL(slide.url);
@@ -58,10 +59,8 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
       <CarouselPagination className="absolute left-0 right-0 bottom-[-32]" />
     </Carousel>
     {block.caption && (
-      <Typography variant="figcaption" className="max-w-2xl order-first md:order-last">
-        {block.caption}
-      </Typography>
+      <BlockCaption>{block.caption}</BlockCaption>
     )}
-    </figure>
+    </BlockFigure>
   );
 }
