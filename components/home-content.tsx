@@ -37,10 +37,10 @@ interface HomeContentProps {
   aboutData: AboutData | null;
   tools: ToolData[];
   businesses: BusinessData[];
-  latestProject?: ProjectData | null;
+  featuredProjects: ProjectData[];
 }
 
-export function HomeContent({ aboutData, tools, businesses, latestProject }: HomeContentProps) {
+export function HomeContent({ aboutData, tools, businesses, featuredProjects }: HomeContentProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
   useEffect(() => {
@@ -108,18 +108,22 @@ export function HomeContent({ aboutData, tools, businesses, latestProject }: Hom
         </div>
       </Section>
 
-      {latestProject && (
+      {featuredProjects.length > 0 && (
         <Section>
           <Typography variant="h2" align="center">
-            Latest project
+            Featured work
           </Typography>
-          <div className="w-full max-w-3xl">
-            <div className="lg:hidden">
-              <ProjectCard project={latestProject} />
-            </div>
-            <div className="hidden lg:block">
-              <ProjectCard project={latestProject} scenario="list" />
-            </div>
+          <div className="w-full max-w-3xl flex flex-col gap-4">
+            {featuredProjects.map((project) => (
+              <div key={project.id}>
+                <div className="lg:hidden">
+                  <ProjectCard project={project} />
+                </div>
+                <div className="hidden lg:block">
+                  <ProjectCard project={project} scenario="list" />
+                </div>
+              </div>
+            ))}
           </div>
           <Button variant="outline" href="/projects">
             All projects

@@ -180,6 +180,7 @@ export interface ProjectData {
   website_url?: string;
   github_url?: string;
   order?: number | null;
+  featured_position?: number | null;
   body?: ProjectBlock[];
   tools?: ToolData[];
   createdAt: string;
@@ -279,6 +280,27 @@ export async function getProjects(options?: {
     return data;
   } catch (error) {
     console.error('Error fetching projects:', error);
+    return [];
+  }
+}
+
+export async function getFeaturedProjects() {
+  try {
+    const data = await fetchAPI<ProjectData[]>({
+      endpoint: '/projects',
+      query: {
+        'filters[featured_position][$notNull]': 'true',
+        'populate[project_thumb][fields][0]': 'url',
+        'populate[project_thumb][fields][1]': 'alternativeText',
+        'populate[project_thumb][fields][2]': 'width',
+        'populate[project_thumb][fields][3]': 'height',
+        'sort[0]': 'featured_position:asc',
+      },
+      tags: ['projects', 'featured-projects'],
+    });
+    return data;
+  } catch (error) {
+    console.error('Error fetching featured projects:', error);
     return [];
   }
 }

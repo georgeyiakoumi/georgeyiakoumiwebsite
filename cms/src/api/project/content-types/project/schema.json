@@ -87,6 +87,9 @@
     },
     "order": {
       "type": "integer"
+    },
+    "featured_position": {
+      "type": "integer"
     }
   }
 }
