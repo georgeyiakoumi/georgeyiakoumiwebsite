@@ -52,7 +52,7 @@ export function SnapshotBlock({ items: rawItems, toolsContent }: SnapshotBlockPr
   return (
     <div className="mx-auto w-full md:max-w-lg lg:max-w-xl xl:max-w-2xl px-8 lg:px-0 mb-16">
       <div>
-        <dl className="grid grid-cols-[4rem_1fr] gap-x-4 gap-y-5 sm:grid-cols-[3rem_1fr]">
+        <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-5">
           {items.map((item) => (
             <React.Fragment key={item.id}>
               <dt className="text-xs uppercase tracking-wide text-muted-foreground pt-0.5">

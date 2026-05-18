@@ -725,6 +725,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     date: Schema.Attribute.Date;
     description: Schema.Attribute.Text;
     end_date: Schema.Attribute.Date;
+    featured_position: Schema.Attribute.Integer;
     github_url: Schema.Attribute.String;
     hero_caption: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -733,6 +734,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
       'api::project.project'
     > &
       Schema.Attribute.Private;
+    order: Schema.Attribute.Integer;
     project_client: Schema.Attribute.String;
     project_role: Schema.Attribute.String;
     project_thumb: Schema.Attribute.Media<'images' | 'files'>;
