@@ -66,6 +66,8 @@ export function getStrapiURL(path = '') {
 
 export function getStrapiMediaURL(url: string | null | undefined) {
   if (!url) return null;
-  if (url.startsWith('http')) return url;
+  if (url.startsWith('http')) {
+    return url.replace('/upload/', '/upload/f_auto,q_auto/');
+  }
   return getStrapiURL(url);
 }
