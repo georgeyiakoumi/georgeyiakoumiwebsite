@@ -1,0 +1,22 @@
+name: Deploy CMS to Render
+
+on:
+  push:
+    paths:
+      - 'cms/src/api/**'
+      - 'cms/config/**'
+
+jobs:
+  deploy-strapi:
+    name: Deploy Strapi to Render
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Trigger Render deploy
+        run: |
+          echo "Triggering Strapi deploy on Render..."
+          curl -s "${{ secrets.RENDER_DEPLOY_HOOK_URL }}"
+          echo "Deploy triggered. Waiting 3 minutes for Render to build and restart..."
+          sleep 180
+          echo "✅ Strapi should be live with updated schema."
