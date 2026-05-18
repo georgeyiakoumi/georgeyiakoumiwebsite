@@ -180,6 +180,7 @@ export interface ProjectData {
   website_url?: string;
   github_url?: string;
   order?: number | null;
+  featured_position?: number | null;
   body?: ProjectBlock[];
   tools?: ToolData[];
   createdAt: string;
@@ -281,6 +282,11 @@ export async function getProjects(options?: {
     console.error('Error fetching projects:', error);
     return [];
   }
+}
+
+export async function getFeaturedProjects() {
+  // featured_position filter is wired up in follow-up once schema is deployed to Render
+  return [];
 }
 
 export async function getProjectBySlug(slug: string) {
