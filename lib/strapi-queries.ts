@@ -179,6 +179,7 @@ export interface ProjectData {
   snapshot_items?: SnapshotItem[];
   website_url?: string;
   github_url?: string;
+  order?: number | null;
   body?: ProjectBlock[];
   tools?: ToolData[];
   createdAt: string;
