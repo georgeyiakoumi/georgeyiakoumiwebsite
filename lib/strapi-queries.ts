@@ -285,8 +285,24 @@ export async function getProjects(options?: {
 }
 
 export async function getFeaturedProjects() {
-  // featured_position filter is wired up in follow-up once schema is deployed to Render
-  return [];
+  try {
+    const data = await fetchAPI<ProjectData[]>({
+      endpoint: '/projects',
+      query: {
+        'filters[featured_position][$notNull]': 'true',
+        'populate[project_thumb][fields][0]': 'url',
+        'populate[project_thumb][fields][1]': 'alternativeText',
+        'populate[project_thumb][fields][2]': 'width',
+        'populate[project_thumb][fields][3]': 'height',
+        'sort[0]': 'featured_position:asc',
+      },
+      tags: ['projects', 'featured-projects'],
+    });
+    return data;
+  } catch (error) {
+    console.error('Error fetching featured projects:', error);
+    return [];
+  }
 }
 
 export async function getProjectBySlug(slug: string) {
