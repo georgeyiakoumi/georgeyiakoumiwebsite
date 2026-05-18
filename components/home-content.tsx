@@ -8,7 +8,7 @@ import { Typography } from "@/components/ui/typography";
 import { type ToolData, type BusinessData, type ProjectData } from "@/lib/strapi-queries";
 import { ProjectCard } from "@/components/project-card";
 import { ThemedLogo } from "@/components/themed-logo";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { ArrowDown } from "lucide-react";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 
@@ -43,6 +43,23 @@ interface HomeContentProps {
 export function HomeContent({ aboutData, tools, businesses, featuredProjects }: HomeContentProps) {
   const [activeCategory, setActiveCategory] = useState<string>("all");
   const [showScrollIndicator, setShowScrollIndicator] = useState(true);
+  const toolsGridRef = useRef<HTMLDivElement>(null);
+
+  const handleCategoryChange = (category: string) => {
+    setActiveCategory(category);
+    if (window.innerWidth >= 1280) return; // xl+ — no scroll
+    requestAnimationFrame(() => {
+      const target = category === "all"
+        ? toolsGridRef.current
+        : toolsGridRef.current?.querySelector<HTMLElement>(`[data-category="${category}"]`);
+      if (!target) return;
+      const scrollContainer = document.querySelector("main");
+      if (!scrollContainer) return;
+      const offset = 140; // accounts for sticky tab bar + header elements
+      const top = target.getBoundingClientRect().top + scrollContainer.scrollTop - offset;
+      scrollContainer.scrollTo({ top, behavior: "smooth" });
+    });
+  };
   useEffect(() => {
     const scrollContainer = document.querySelector("main");
     if (!scrollContainer) return;
@@ -152,19 +169,21 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         </Typography>
 
         <div className="flex flex-col items-center gap-8 w-full">
-          <AnimatedTabs
-            tabs={[
-              { value: "all", label: "All" },
-              { value: "design", label: "Design" },
-              { value: "development", label: "Development" },
-              { value: "tools", label: "Tools" },
-            ]}
-            activeTab={activeCategory}
-            onTabChange={setActiveCategory}
-            ariaLabel="Filter tools by category"
-          />
+          <div className="xl:static sticky top-20 z-10 py-2 w-full flex justify-center">
+            <AnimatedTabs
+              tabs={[
+                { value: "all", label: "All" },
+                { value: "design", label: "Design" },
+                { value: "development", label: "Development" },
+                { value: "tools", label: "Tools" },
+              ]}
+              activeTab={activeCategory}
+              onTabChange={handleCategoryChange}
+              ariaLabel="Filter tools by category"
+            />
+          </div>
 
-          <div className="w-full grid gap-8 grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
+          <div ref={toolsGridRef} className="w-full grid gap-8 grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
             {tools.map((tool) => {
               const isActive = activeCategory === "all" || tool.category === activeCategory;
               return (
