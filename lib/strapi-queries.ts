@@ -259,7 +259,8 @@ export async function getProjects(options?: {
       'populate[project_thumb][fields][1]': 'alternativeText',
       'populate[project_thumb][fields][2]': 'width',
       'populate[project_thumb][fields][3]': 'height',
-      'sort[0]': 'date:desc',
+      'sort[0]': 'order:asc',
+      'sort[1]': 'date:desc',
     };
 
     if (options?.type) {
