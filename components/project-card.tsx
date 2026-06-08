@@ -72,7 +72,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
         background === "background" && "bg-background",
       )}
     >
-      <Link href={`/project/${project.slug}`} className="pb-4">
+      <Link href={`/project/${project.slug}`} className="pb-4 h-full">
         {project.project_thumb && (
           <ItemHeader className="relative aspect-video w-full overflow-hidden">
             <ImageWithFallback
@@ -84,7 +84,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
             />
           </ItemHeader>
         )}
-        <ItemContent className="px-4">
+        <ItemContent className="px-4 min-h-[5rem]">
           <ItemTitle className="line-clamp-2">
             {project.title}
           </ItemTitle>
