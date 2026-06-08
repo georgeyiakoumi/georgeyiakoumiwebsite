@@ -26,9 +26,9 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
   const tabs = useMemo(() => {
     const t: AnimatedTab[] = [
-      { value: "client", label: "Client work", badge: clientCount },
+      { value: "client", label: "Work", badge: clientCount },
     ];
-    if (hasPersonal) t.push({ value: "personal", label: "Personal Projects", badge: personalCount });
+    if (hasPersonal) t.push({ value: "personal", label: "Lab", badge: personalCount });
     if (hasArticles) t.push({ value: "article", label: "Articles", badge: articleCount });
     return t;
   }, [clientCount, personalCount, articleCount, hasPersonal, hasArticles]);
