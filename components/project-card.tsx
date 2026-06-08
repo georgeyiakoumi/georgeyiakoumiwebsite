@@ -26,7 +26,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
         asChild
         variant="outline"
         className={cn(
-          "!p-0 overflow-hidden",
+          "!p-0 overflow-hidden transition-transform duration-200 ease-out will-change-transform xl:hover:scale-[1.02] active:scale-[0.97]",
           background === "background" && "xl:bg-background xl:hover:bg-background xl:hover:border-foreground"
         )}
       >
@@ -65,7 +65,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
       variant="outline"
       asChild
       className={cn(
-        "p-0 rounded-xl overflow-hidden",
+        "p-0 rounded-xl overflow-hidden transition-transform duration-200 ease-out will-change-transform xl:hover:scale-[1.02] active:scale-[0.97]",
         background === "background" && "bg-background",
       )}
     >
