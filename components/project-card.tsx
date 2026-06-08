@@ -53,7 +53,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
               </ItemDescription>
             )}
           </ItemContent>
-          <ItemActions className="xl:text-foreground pr-4">
+          <ItemActions className="xl:text-foreground pr-4 xl:opacity-0 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100">
             <ChevronRight className="size-4" />
           </ItemActions>
         </Link>
