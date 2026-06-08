@@ -26,9 +26,9 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
   const tabs = useMemo(() => {
     const t: AnimatedTab[] = [
-      { value: "client", label: "Client work", badge: clientCount },
+      { value: "client", label: "Work", badge: clientCount },
     ];
-    if (hasPersonal) t.push({ value: "personal", label: "Personal Projects", badge: personalCount });
+    if (hasPersonal) t.push({ value: "personal", label: "Lab", badge: personalCount });
     if (hasArticles) t.push({ value: "article", label: "Articles", badge: articleCount });
     return t;
   }, [clientCount, personalCount, articleCount, hasPersonal, hasArticles]);
@@ -40,12 +40,14 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <AnimatedTabs
-          tabs={tabs}
-          activeTab={activeFilter}
-          onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
-          ariaLabel="Filter projects by type"
-        />
+        <div className="md:sticky md:top-8 lg:top-16 z-10 py-2 w-full flex justify-center">
+          <AnimatedTabs
+            tabs={tabs}
+            activeTab={activeFilter}
+            onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
+            ariaLabel="Filter projects by type"
+          />
+        </div>
       )}
 
       {/* Mobile Carousel */}
