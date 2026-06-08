@@ -22,7 +22,7 @@ interface ProjectCardProps {
 export function ProjectCard({ project, scenario = "carousel", background = "muted" }: ProjectCardProps) {
   if (scenario === "list") {
     return (
-      <div className="transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
+      <div className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
       <Item
         asChild
         variant="outline"
@@ -38,7 +38,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
                 src={project.project_thumb.url}
                 alt={project.project_thumb.alternativeText || project.title}
                 fill
-                className="object-cover"
+                className="object-cover xl:opacity-80 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100"
                 sizes="256px"
               />
             </ItemMedia>
@@ -63,7 +63,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
   }
 
   return (
-    <div className="transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
+    <div className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
     <Item
       variant="outline"
       asChild
@@ -79,7 +79,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
               src={project.project_thumb.url}
               alt={project.project_thumb.alternativeText || project.title}
               fill
-              className="object-cover"
+              className="object-cover xl:opacity-80 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100"
               sizes="(max-width: 768px) 100vw, 768px"
             />
           </ItemHeader>
