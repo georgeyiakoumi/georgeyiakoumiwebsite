@@ -1,6 +1,7 @@
 import { MetadataRoute } from 'next';
 import { getProjects } from '@/lib/strapi-queries';
 import { SITE_CONFIG } from '@/lib/metadata';
+import { getEntryPath } from '@/lib/utils';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -36,9 +37,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     },
   ];
 
-  // Dynamic project routes
+  // Dynamic project/article routes
   const projectRoutes: MetadataRoute.Sitemap = projects.map((project) => ({
-    url: `${baseUrl}/project/${project.slug}`,
+    url: `${baseUrl}${getEntryPath(project.type, project.slug)}`,
     lastModified: new Date(project.updatedAt || project.publishedAt),
     changeFrequency: 'monthly' as const,
     priority: 0.8,

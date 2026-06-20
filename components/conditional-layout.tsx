@@ -32,7 +32,7 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const isCVPage = pathname === "/cv" || isCVSubdomain;
 
   // Only show scroll progress on pages with long-form content
-  const showScrollProgress = pathname === "/" || pathname.startsWith("/project/");
+  const showScrollProgress = pathname === "/" || pathname.startsWith("/project/") || pathname.startsWith("/article/");
 
   if (isCVPage) {
     // Simple layout for CV page

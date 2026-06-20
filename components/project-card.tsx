@@ -1,6 +1,10 @@
+"use client";
+
+import { useRef } from "react";
 import Link from "next/link";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
-import { ChevronRight } from "lucide-react";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
 import {
   Item,
   ItemHeader,
@@ -10,7 +14,7 @@ import {
   ItemDescription,
   ItemActions,
 } from "@/components/ui/item";
-import { cn } from "@/lib/utils";
+import { cn, getEntryPath } from "@/lib/utils";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 interface ProjectCardProps {
@@ -20,9 +24,15 @@ interface ProjectCardProps {
 }
 
 export function ProjectCard({ project, scenario = "carousel", background = "muted" }: ProjectCardProps) {
+  const chevronRef = useRef<ChevronRightIconHandle>(null);
+
   if (scenario === "list") {
     return (
-      <div className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
+      <div
+        className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]"
+        onMouseEnter={() => chevronRef.current?.startAnimation()}
+        onMouseLeave={() => chevronRef.current?.stopAnimation()}
+      >
       <Item
         asChild
         variant="outline"
@@ -31,18 +41,20 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
           background === "background" && "xl:bg-background xl:hover:bg-background xl:hover:border-foreground"
         )}
       >
-        <Link href={`/project/${project.slug}`}>
-          {project.project_thumb && (
-            <ItemMedia variant="image" className="size-32 !rounded-none !translate-y-0 !self-center">
+        <Link href={getEntryPath(project.type, project.slug)}>
+          <ItemMedia variant="image" className="size-32 !rounded-none !translate-y-0 !self-center">
+            {project.project_thumb ? (
               <ImageWithFallback
                 src={project.project_thumb.url}
                 alt={project.project_thumb.alternativeText || project.title}
                 fill
-                className="object-cover xl:opacity-80 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100"
+                className="object-cover origin-right xl:opacity-80 xl:transition-all xl:duration-300 xl:ease-out xl:group-hover:opacity-100 xl:group-hover:scale-110"
                 sizes="256px"
               />
-            </ItemMedia>
-          )}
+            ) : (
+              <Skeleton className="size-full !rounded-none" />
+            )}
+          </ItemMedia>
           <ItemContent>
             <ItemTitle className="xl:text-foreground line-clamp-2">
               {project.title}
@@ -54,7 +66,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
             )}
           </ItemContent>
           <ItemActions className="xl:text-foreground pr-4 xl:opacity-0 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100">
-            <ChevronRight className="size-4" />
+            <ChevronRightIcon ref={chevronRef} size={16} />
           </ItemActions>
         </Link>
       </Item>
@@ -72,9 +84,9 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
         background === "background" && "bg-background",
       )}
     >
-      <Link href={`/project/${project.slug}`} className="pb-4 h-full">
-        {project.project_thumb && (
-          <ItemHeader className="relative aspect-video w-full overflow-hidden">
+      <Link href={getEntryPath(project.type, project.slug)} className="pb-4 h-full">
+        <ItemHeader className="relative aspect-video w-full overflow-hidden">
+          {project.project_thumb ? (
             <ImageWithFallback
               src={project.project_thumb.url}
               alt={project.project_thumb.alternativeText || project.title}
@@ -82,8 +94,10 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
               className="object-cover xl:opacity-80 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100"
               sizes="(max-width: 768px) 100vw, 768px"
             />
-          </ItemHeader>
-        )}
+          ) : (
+            <Skeleton className="size-full" />
+          )}
+        </ItemHeader>
         <ItemContent className="px-4 min-h-[5rem]">
           <ItemTitle className="line-clamp-2">
             {project.title}
