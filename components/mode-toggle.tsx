@@ -2,7 +2,7 @@
 
 import * as React from "react"
 import { Sun } from "@/components/animate-ui/icons/sun"
-import { Moon } from "@/components/animate-ui/icons/moon"
+import { MoonIcon, type MoonIconHandle } from "@/components/ui/moon"
 import { AnimateIcon } from "@/components/animate-ui/icons/icon"
 import { useTheme } from "next-themes"
 import { Button } from "@/components/ui/button"
@@ -13,15 +13,14 @@ export function ModeToggle() {
   const { resolvedTheme, setTheme } = useTheme()
   const scrollVisible = useScrollVisibility()
   const [animate, setAnimate] = React.useState(false)
-  const [animateMoon, setAnimateMoon] = React.useState(false)
+  const moonRef = React.useRef<MoonIconHandle>(null)
 
   const toggleTheme = () => {
     setAnimate(true)
-    setAnimateMoon(true)
+    moonRef.current?.startAnimation()
     setTheme(resolvedTheme === "light" ? "dark" : "light")
     setTimeout(() => {
       setAnimate(false)
-      setAnimateMoon(false)
     }, 600)
   }
 
@@ -33,7 +32,7 @@ export function ModeToggle() {
             <AnimateIcon animate={animate} asChild>
               <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-transform dark:-rotate-90 dark:scale-0" />
             </AnimateIcon>
-            <Moon className={`absolute h-[1.2rem] w-[1.2rem] scale-0 transition-transform dark:scale-100 ${animateMoon ? 'animate-spin-once' : ''}`} />
+            <MoonIcon ref={moonRef} size={19} className="absolute scale-0 transition-transform dark:scale-100" />
             <span className="sr-only">Toggle theme</span>
           </Button>
         </TooltipTrigger>

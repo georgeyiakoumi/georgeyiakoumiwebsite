@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { getGlobalSEO } from "./strapi-queries";
 import { getStrapiMediaURL } from "./strapi";
+import { getEntryPath } from "./utils";
 
 // Fallback configuration if Strapi is unavailable
 export const SITE_CONFIG = {
@@ -208,6 +209,7 @@ export async function generateProjectJsonLd({
   title,
   description,
   slug,
+  type,
   image,
   datePublished,
   dateModified,
@@ -215,20 +217,22 @@ export async function generateProjectJsonLd({
   title: string;
   description: string;
   slug: string;
+  type?: string;
   image?: string;
   datePublished: string;
   dateModified?: string;
 }) {
   const seoData = await getGlobalSEO();
   const authorName = seoData?.authorName || SITE_CONFIG.author.name;
+  const entryPath = getEntryPath(type, slug);
 
   return {
     "@context": "https://schema.org",
     "@type": "CreativeWork",
-    "@id": `${SITE_CONFIG.url}/project/${slug}`,
+    "@id": `${SITE_CONFIG.url}${entryPath}`,
     name: title,
     description: description,
-    url: `${SITE_CONFIG.url}/project/${slug}`,
+    url: `${SITE_CONFIG.url}${entryPath}`,
     image: image || SITE_CONFIG.ogImage,
     datePublished: datePublished,
     dateModified: dateModified || datePublished,
