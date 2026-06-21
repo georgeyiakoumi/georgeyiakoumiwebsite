@@ -55,7 +55,7 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   const projects = await getProjects();
-  const otherProjects = projects.filter((p) => p.slug !== slug);
+  const otherProjects = projects.filter((p) => p.slug !== slug && p.type === project.type);
 
   const projectImageUrl = project.project_thumb
     ? getStrapiMediaURL(project.project_thumb.url)

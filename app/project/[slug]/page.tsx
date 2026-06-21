@@ -53,7 +53,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
   }
 
   const projects = await getProjects();
-  const otherProjects = projects.filter((p) => p.slug !== slug);
+  const otherProjects = projects.filter((p) => p.slug !== slug && p.type !== "article");
 
   // Generate structured data for SEO
   const projectImageUrl = project.project_thumb
