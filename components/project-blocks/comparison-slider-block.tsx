@@ -85,7 +85,22 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
       )}
 
       {/* Image container */}
-      <div className="relative w-full aspect-video select-none">
+      <div
+        ref={trackRef}
+        className="relative w-full aspect-video select-none xl:cursor-ew-resize touch-none"
+        onMouseDown={handleMouseDown}
+        onTouchStart={handleTouchStart}
+        role="slider"
+        aria-label="Comparison slider"
+        aria-valuenow={Math.round(sliderPosition)}
+        aria-valuemin={0}
+        aria-valuemax={100}
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'ArrowLeft') setSliderPosition((p) => Math.max(p - 2, 0));
+          if (e.key === 'ArrowRight') setSliderPosition((p) => Math.min(p + 2, 100));
+        }}
+      >
         <div className="absolute inset-0 rounded-lg overflow-hidden border-border border">
           {/* Before Image (full) */}
           <ImageWithFallback
@@ -120,24 +135,21 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
           className="absolute top-0 bottom-0 w-px bg-background/80 pointer-events-none z-10"
           style={{ left: `${sliderPosition}%` }}
         />
+
+        {/* Desktop: handle on canvas */}
+        <div
+          className="hidden xl:flex absolute size-8 rounded-full bg-primary border-1 border-border shadow-sm items-center justify-center pointer-events-none z-10"
+          style={{ left: `${sliderPosition}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
+        >
+          <ChevronsLeftRight className="size-4 text-primary-foreground" />
+        </div>
       </div>
 
-      {/* Track and handle below image */}
+      {/* Mobile: track and handle below image */}
       <div
-        ref={trackRef}
-        className="relative w-full h-12 lg:h-8 cursor-ew-resize select-none flex items-center touch-none"
+        className="relative w-full h-12 cursor-ew-resize select-none flex items-center touch-none xl:hidden"
         onMouseDown={handleMouseDown}
         onTouchStart={handleTouchStart}
-        role="slider"
-        aria-label="Comparison slider"
-        aria-valuenow={Math.round(sliderPosition)}
-        aria-valuemin={0}
-        aria-valuemax={100}
-        tabIndex={0}
-        onKeyDown={(e) => {
-          if (e.key === 'ArrowLeft') setSliderPosition((p) => Math.max(p - 2, 0));
-          if (e.key === 'ArrowRight') setSliderPosition((p) => Math.min(p + 2, 100));
-        }}
       >
         {/* Track background */}
         <div className="absolute inset-x-0 top-1/2 -translate-y-1/2 h-0.5 rounded-full bg-muted" />
@@ -150,10 +162,10 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
 
         {/* Handle */}
         <div
-          className="absolute size-8 lg:size-6 rounded-full bg-primary border-1 border-border shadow-sm flex items-center justify-center"
+          className="absolute size-8 rounded-full bg-primary border-1 border-border shadow-sm flex items-center justify-center"
           style={{ left: `${sliderPosition}%`, top: '50%', transform: 'translate(-50%, -50%)' }}
         >
-          <ChevronsLeftRight className="size-4 lg:size-3 text-primary-foreground" />
+          <ChevronsLeftRight className="size-4 text-primary-foreground" />
         </div>
       </div>
     </BlockFigure>
