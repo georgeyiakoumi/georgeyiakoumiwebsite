@@ -63,7 +63,8 @@ export function SiteFooter() {
             <DrawerHeader className="gap-3 py-8">
               <DrawerTitle>© {currentYear} {AUTHOR.fullName}</DrawerTitle>
               <DrawerDescription>
-                A designer who codes. Built with Next.js & shadcn/ui.
+                Product designer & design engineer. 
+                Site built from scratch with Next.js & shadcn/ui
               </DrawerDescription>
             </DrawerHeader>
           </DrawerContent>
@@ -81,7 +82,7 @@ export function SiteFooter() {
             </TooltipTrigger>
             <TooltipContent side="left">
               <p>© {currentYear} {AUTHOR.fullName}</p>
-              <p className="text-xs opacity-80 mt-1">A designer who codes. Built with Next.js & shadcn/ui.</p>
+              <p className="text-xs opacity-80 mt-1">Product designer & design engineer. Designed and built from scratch with Next.js & shadcn/ui.</p>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
