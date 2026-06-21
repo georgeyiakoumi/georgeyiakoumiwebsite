@@ -259,7 +259,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
       {otherProjects.length > 0 && (
         <section className="flex flex-col gap-8 h-screen md:h-auto md:py-16 items-center justify-center w-full bg-muted px-0 md:px-8">
           <Typography variant="h2" align="center">
-            Other projects
+            {project.type === "article" ? "Other articles" : "Other projects"}
           </Typography>
 
           {/* Mobile Carousel */}
