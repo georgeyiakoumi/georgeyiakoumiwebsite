@@ -1,0 +1,80 @@
+"use client";
+
+import { useRef, useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { ChevronLeftIcon, type ChevronLeftIconHandle } from "@/components/ui/chevron-left";
+import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
+import { useCarousel } from "@/components/ui/carousel";
+import { cn } from "@/lib/utils";
+
+interface CarouselNavigationProps {
+  className?: string;
+}
+
+export function CarouselNavigation({ className }: CarouselNavigationProps) {
+  const { api, scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
+  const leftRef = useRef<ChevronLeftIconHandle>(null);
+  const rightRef = useRef<ChevronRightIconHandle>(null);
+  const [current, setCurrent] = useState(0);
+  const [total, setTotal] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+
+    setTotal(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap());
+
+    const onSelect = () => setCurrent(api.selectedScrollSnap());
+    const onReInit = () => {
+      setTotal(api.scrollSnapList().length);
+      setCurrent(api.selectedScrollSnap());
+    };
+
+    api.on("select", onSelect);
+    api.on("reInit", onReInit);
+
+    return () => {
+      api.off("select", onSelect);
+      api.off("reInit", onReInit);
+    };
+  }, [api]);
+
+  if (total <= 1) return null;
+
+  return (
+    <div
+      className={cn(
+        "flex items-center gap-2 bg-card rounded-sm will-change-transform transition-all duration-200 origin-top-right xl:hover:scale-[1.1] xl:hover:bg-background",
+        className
+      )}
+    >
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={scrollPrev}
+        onMouseEnter={() => leftRef.current?.startAnimation()}
+        onMouseLeave={() => leftRef.current?.stopAnimation()}
+        disabled={!canScrollPrev}
+        className="rounded-sm cursor-pointer dark:hover:bg-white/15"
+      >
+        <ChevronLeftIcon ref={leftRef} size={16} />
+        <span className="sr-only">Previous slide</span>
+      </Button>
+      <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
+        {current + 1} / {total}
+      </span>
+      <Button
+        variant="ghost"
+        size="icon-sm"
+        onClick={scrollNext}
+        onMouseEnter={() => rightRef.current?.startAnimation()}
+        onMouseLeave={() => rightRef.current?.stopAnimation()}
+        disabled={!canScrollNext}
+        className="rounded-sm cursor-pointer dark:hover:bg-white/15"
+      >
+        <ChevronRightIcon ref={rightRef} size={16} />
+        <span className="sr-only">Next slide</span>
+      </Button>
+    </div>
+  );
+}

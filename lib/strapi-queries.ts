@@ -142,6 +142,20 @@ export interface CodeBlockType {
   caption?: string;
 }
 
+export interface LottieBlock {
+  __component: 'project-blocks.lottie';
+  id: number;
+  file?: {
+    id: number;
+    url: string;
+    alternativeText?: string;
+    mime?: string;
+  };
+  caption?: string;
+  loop?: boolean;
+  autoplay?: boolean;
+}
+
 export interface SnapshotItem {
   id: number;
   label: string;
@@ -155,7 +169,8 @@ export type ProjectBlock =
   | VideoBlock
   | ComparisonSliderBlock
   | StatsBlock
-  | CodeBlockType;
+  | CodeBlockType
+  | LottieBlock;
 
 export interface ProjectData {
   id: number;

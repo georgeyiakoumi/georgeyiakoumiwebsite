@@ -291,4 +291,5 @@ export {
   CarouselPrevious,
   CarouselNext,
   CarouselPagination,
+  useCarousel,
 }

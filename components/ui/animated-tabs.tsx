@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 export interface AnimatedTab {
   value: string;
   label: string;
+  icon?: React.ReactNode;
   badge?: number;
 }
 
@@ -101,9 +102,10 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel }: Animat
           size="sm"
           onClick={() => onTabChange(tab.value)}
           aria-pressed={activeTab === tab.value}
+          aria-label={tab.icon ? tab.label : undefined}
           className="h-7 cursor-pointer relative z-10 hover:bg-transparent gap-1.5"
         >
-          {tab.label}
+          {tab.icon ?? tab.label}
           {tab.badge !== undefined && (
             <Badge variant="secondary" className="h-4 px-1 text-xs">{tab.badge}</Badge>
           )}

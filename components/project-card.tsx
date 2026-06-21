@@ -91,7 +91,7 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
               src={project.project_thumb.url}
               alt={project.project_thumb.alternativeText || project.title}
               fill
-              className="object-cover xl:opacity-80 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100"
+              className="object-cover xl:opacity-80 xl:transition-all xl:duration-300 xl:ease-out xl:group-hover:opacity-100 xl:group-hover:scale-110"
               sizes="(max-width: 768px) 100vw, 768px"
             />
           ) : (
