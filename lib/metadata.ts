@@ -115,13 +115,14 @@ export async function generatePageMetadata({
   image,
   noIndex = false,
 }: {
-  title: string;
+  title: string | { absolute: string };
   description: string;
   path?: string;
   image?: string;
   noIndex?: boolean;
 }): Promise<Metadata> {
   const url = `${SITE_CONFIG.url}${path}`;
+  const titleString = typeof title === "string" ? title : title.absolute;
 
   // Fetch global SEO to get the default OG image if no custom image is provided
   const seoData = await getGlobalSEO();
@@ -138,7 +139,7 @@ export async function generatePageMetadata({
       canonical: url,
     },
     openGraph: {
-      title,
+      title: titleString,
       description,
       url,
       images: [
@@ -146,13 +147,13 @@ export async function generatePageMetadata({
           url: ogImage,
           width: 1200,
           height: 630,
-          alt: title,
+          alt: titleString,
         },
       ],
     },
     twitter: {
       card: "summary_large_image",
-      title,
+      title: titleString,
       description,
       images: [ogImage],
     },

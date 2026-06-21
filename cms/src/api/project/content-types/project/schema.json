@@ -68,7 +68,8 @@
         "project-blocks.image",
         "project-blocks.comparison-slider",
         "project-blocks.carousel",
-        "project-blocks.code-block"
+        "project-blocks.code-block",
+        "project-blocks.lottie"
       ]
     },
     "type": {

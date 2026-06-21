@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_project_blocks_lotties",
+  "info": {
+    "displayName": "lottie",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "file": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "caption": {
+      "type": "text"
+    },
+    "loop": {
+      "type": "boolean",
+      "default": true
+    },
+    "autoplay": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

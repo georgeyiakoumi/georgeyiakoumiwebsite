@@ -5,7 +5,7 @@ test.describe('Homepage', () => {
     await page.goto('/');
 
     // Wait for page to load
-    await expect(page).toHaveTitle(/About/);
+    await expect(page).toHaveTitle(/George Yiakoumi/);
   });
 
   test('should have navigation menu', async ({ page }) => {
@@ -41,6 +41,6 @@ test.describe('Homepage', () => {
     await page.goto('/');
 
     // Check page loads on mobile
-    await expect(page).toHaveTitle(/About/);
+    await expect(page).toHaveTitle(/George Yiakoumi/);
   });
 });

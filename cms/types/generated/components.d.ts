@@ -123,6 +123,20 @@ export interface ProjectBlocksImage extends Struct.ComponentSchema {
   };
 }
 
+export interface ProjectBlocksLottie extends Struct.ComponentSchema {
+  collectionName: 'components_project_blocks_lotties';
+  info: {
+    description: '';
+    displayName: 'lottie';
+  };
+  attributes: {
+    autoplay: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    caption: Schema.Attribute.Text;
+    file: Schema.Attribute.Media<'files'> & Schema.Attribute.Required;
+    loop: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+  };
+}
+
 export interface ProjectBlocksRichText extends Struct.ComponentSchema {
   collectionName: 'components_project_blocks_rich_texts';
   info: {
@@ -239,6 +253,7 @@ declare module '@strapi/strapi' {
       'project-blocks.code-block': ProjectBlocksCodeBlock;
       'project-blocks.comparison-slider': ProjectBlocksComparisonSlider;
       'project-blocks.image': ProjectBlocksImage;
+      'project-blocks.lottie': ProjectBlocksLottie;
       'project-blocks.rich-text': ProjectBlocksRichText;
       'project-blocks.snapshot': ProjectBlocksSnapshot;
       'project-blocks.snapshot-item': ProjectBlocksSnapshotItem;

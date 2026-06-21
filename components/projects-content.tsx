@@ -6,9 +6,16 @@ import { ProjectCard } from "@/components/project-card";
 import { ItemGroup } from "@/components/ui/item";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
+import { List, LayoutGrid } from "lucide-react";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 type ProjectFilter = "client" | "personal" | "article";
+type ViewMode = "list" | "grid";
+
+const viewTabs: AnimatedTab[] = [
+  { value: "list", label: "List", icon: <List className="size-4" /> },
+  { value: "grid", label: "Grid", icon: <LayoutGrid className="size-4" /> },
+];
 
 interface ProjectsContentProps {
   projects: ProjectData[];
@@ -16,6 +23,7 @@ interface ProjectsContentProps {
 
 export function ProjectsContent({ projects }: ProjectsContentProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("client");
+  const [viewMode, setViewMode] = useState<ViewMode>("list");
 
   const clientCount = projects.filter((p) => (p.type || "client") === "client").length;
   const personalCount = projects.filter((p) => p.type === "personal").length;
@@ -40,13 +48,21 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="md:sticky md:top-8 lg:top-16 z-10 py-2 w-full flex justify-center">
+        <div className="md:sticky md:top-8 lg:top-16 z-10 py-2 w-full flex justify-center items-center gap-4">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
             onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
             ariaLabel="Filter projects by type"
           />
+          <div className="hidden xl:block">
+            <AnimatedTabs
+              tabs={viewTabs}
+              activeTab={viewMode}
+              onTabChange={(v) => setViewMode(v as ViewMode)}
+              ariaLabel="Switch view layout"
+            />
+          </div>
         </div>
       )}
 
@@ -62,19 +78,36 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
         {filteredProjects.length > 1 && <CarouselPagination className="mt-4" />}
       </Carousel>
 
-      {/* Tablet Grid */}
+      {/* Tablet Cards */}
       <div className="hidden md:flex md:flex-col lg:hidden w-full max-w-3xl gap-8">
         {filteredProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}
       </div>
 
-      {/* Desktop List */}
-      <ItemGroup className="hidden lg:flex w-full max-w-3xl gap-4">
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} scenario="list" />
-        ))}
-      </ItemGroup>
+      {/* Desktop List (lg default, xl togglable) */}
+      {viewMode === "list" ? (
+        <ItemGroup className="hidden lg:flex w-full max-w-3xl gap-4">
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} scenario="list" />
+          ))}
+        </ItemGroup>
+      ) : (
+        <>
+          {/* lg–xl: always list (no toggle available) */}
+          <ItemGroup className="hidden lg:flex xl:hidden w-full max-w-3xl gap-4">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} scenario="list" />
+            ))}
+          </ItemGroup>
+          {/* xl+: grid when toggled */}
+          <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-4">
+            {filteredProjects.map((project) => (
+              <ProjectCard key={project.id} project={project} />
+            ))}
+          </div>
+        </>
+      )}
     </>
   );
 }
