@@ -717,6 +717,7 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
         'project-blocks.comparison-slider',
         'project-blocks.carousel',
         'project-blocks.code-block',
+        'project-blocks.lottie',
       ]
     >;
     createdAt: Schema.Attribute.DateTime;

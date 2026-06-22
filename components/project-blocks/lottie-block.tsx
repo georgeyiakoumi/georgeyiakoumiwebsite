@@ -30,12 +30,12 @@ export function LottieBlock({ block }: LottieBlockProps) {
 
   return (
     <BlockFigure>
-      <div className="w-full flex justify-center">
+      <div className="w-full border border-border rounded-lg overflow-hidden flex justify-center">
         <Lottie
           animationData={animationData}
           loop={block.loop ?? true}
           autoplay={block.autoplay ?? true}
-          className="w-full max-w-xl"
+          className="w-full"
         />
       </div>
       {block.caption && <BlockCaption>{block.caption}</BlockCaption>}
