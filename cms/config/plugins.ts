@@ -17,6 +17,13 @@ module.exports = ({ env }) => ({
             return { folder: "website/general" }; // Default fallback
           },
         },
+        breakpoints: {},
+        allowedFileTypes: {
+          image: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/avif'],
+          video: ['video/mp4', 'video/webm', 'video/ogg'],
+          audio: ['audio/mpeg', 'audio/ogg', 'audio/wav'],
+          file: ['application/pdf'],
+        },
       },
     },
   });
