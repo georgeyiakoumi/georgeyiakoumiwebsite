@@ -35,11 +35,11 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
         <div className={cn(
           "relative",
           usePeek
-            ? "md:border md:border-border md:rounded-lg md:overflow-hidden [&>[data-slot=carousel-content]]:overflow-visible md:[&>[data-slot=carousel-content]]:overflow-hidden"
+            ? "md:border md:border-border md:rounded-lg md:overflow-hidden"
             : "border border-border rounded-lg overflow-hidden"
         )}>
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
-          <CarouselContent className={cn(usePeek ? "-ml-3 md:-ml-4" : "ml-0")}>
+          <CarouselContent className={cn(usePeek ? "mx-4 md:mx-0 md:-ml-4" : "ml-0")}>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');
@@ -47,7 +47,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
               return (
                 <CarouselItem key={slide.id} className={cn(
                   usePeek
-                    ? "pl-3 basis-[calc(100%-4rem)] md:basis-full"
+                    ? "px-1.5 md:px-0 md:pl-4"
                     : "pl-0"
                 )}>
                   <div className={cn(
