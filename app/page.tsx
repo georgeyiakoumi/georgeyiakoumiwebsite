@@ -4,8 +4,8 @@ import { HomeContent } from "@/components/home-content";
 
 export const generateMetadata = async () => {
   return generatePageMetadata({
-    title: { absolute: "George Yiakoumi — Product Designer" },
-    description: "Product Designer specializing in user experience, interface design, and digital product strategy. I've worked with leading companies to create intuitive digital experiences.",
+    title: { absolute: "George Yiakoumi" },
+    description: "Product Designer and design engineer specializing in user experience, interface design, and digital product strategy. I've worked with leading companies to create intuitive digital experiences.",
     path: "/",
   });
 };

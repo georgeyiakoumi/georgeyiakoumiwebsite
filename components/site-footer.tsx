@@ -34,7 +34,7 @@ export function SiteFooter() {
 
   const LogoLottie = () => (
     <div
-      className="size-8 md:size-10"
+      className="size-12 md:size-14"
       style={{
         filter: resolvedTheme === "dark" ? "invert(1)" : undefined,
       }}
