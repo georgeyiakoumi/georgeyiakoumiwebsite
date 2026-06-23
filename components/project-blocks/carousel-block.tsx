@@ -1,7 +1,8 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { cn } from "@/lib/utils";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselPagination } from "@/components/ui/carousel";
-import { CarouselNavigation } from "@/components/ui/carousel-navigation";
+import Fade from "embla-carousel-fade";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { CarouselNavigation, CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { BlockFigure } from "./block-figure";
 import { BlockCaption } from "./block-caption";
@@ -28,6 +29,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
           loop: canLoop,
           containScroll: false,
         }}
+        plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 768px)": { active: true } } })] : []}
         className="w-full"
       >
         <div className={cn(
@@ -81,7 +83,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
         </div>
         <div className={cn("flex items-center justify-between mt-2 lg:hidden", usePeek && "px-8 md:px-0")}>
           <CarouselPrevious className="static translate-y-0" />
-          <CarouselPagination className="mt-0" />
+          <CarouselCounter />
           <CarouselNext className="static translate-y-0" />
         </div>
       </Carousel>
