@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Carousel, CarouselContent, CarouselItem, CarouselPagination } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ProjectCard } from "@/components/project-card";
 import { ItemGroup } from "@/components/ui/item";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
@@ -75,7 +76,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             </CarouselItem>
           ))}
         </CarouselContent>
-        {filteredProjects.length > 1 && <CarouselPagination className="mt-4" />}
+        {filteredProjects.length > 1 && <CarouselCounter className="mt-4 block text-center" />}
       </Carousel>
 
       {/* Tablet Cards */}
