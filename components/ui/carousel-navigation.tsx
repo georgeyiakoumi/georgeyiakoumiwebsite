@@ -11,10 +11,8 @@ interface CarouselNavigationProps {
   className?: string;
 }
 
-export function CarouselNavigation({ className }: CarouselNavigationProps) {
-  const { api, scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
-  const leftRef = useRef<ChevronLeftIconHandle>(null);
-  const rightRef = useRef<ChevronRightIconHandle>(null);
+function useCarouselCounter() {
+  const { api } = useCarousel();
   const [current, setCurrent] = useState(0);
   const [total, setTotal] = useState(0);
 
@@ -38,6 +36,27 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
       api.off("reInit", onReInit);
     };
   }, [api]);
+
+  return { current, total };
+}
+
+export function CarouselCounter({ className }: { className?: string }) {
+  const { current, total } = useCarouselCounter();
+
+  if (total <= 1) return null;
+
+  return (
+    <span className={cn("text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none", className)}>
+      {current + 1} / {total}
+    </span>
+  );
+}
+
+export function CarouselNavigation({ className }: CarouselNavigationProps) {
+  const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel();
+  const { current, total } = useCarouselCounter();
+  const leftRef = useRef<ChevronLeftIconHandle>(null);
+  const rightRef = useRef<ChevronRightIconHandle>(null);
 
   if (total <= 1) return null;
 
