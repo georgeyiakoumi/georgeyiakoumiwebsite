@@ -51,6 +51,7 @@ export interface ProjectBlocksCarousel extends Struct.ComponentSchema {
   };
   attributes: {
     caption: Schema.Attribute.Text;
+    noGap: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     slides: Schema.Attribute.Media<
       'images' | 'files' | 'videos' | 'audios',
       true

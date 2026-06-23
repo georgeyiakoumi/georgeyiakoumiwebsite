@@ -1,4 +1,5 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
+import { cn } from "@/lib/utils";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselPagination } from "@/components/ui/carousel";
 import { CarouselNavigation } from "@/components/ui/carousel-navigation";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
@@ -14,25 +15,40 @@ interface CarouselBlockProps {
 export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   if (!block.slides || block.slides.length === 0) return null;
 
+  const noGap = block.noGap ?? false;
+
   return (
-    <BlockFigure className="px-0 md:px-0">
+    <BlockFigure className={cn(!noGap && "px-0 md:px-0")}>
       <Carousel
         opts={{
           align: "center",
-          loop: true,
+          loop: !noGap,
         }}
         className="w-full"
       >
-        <div className="relative md:border md:border-border md:rounded-lg md:overflow-hidden [&>[data-slot=carousel-content]]:overflow-visible md:[&>[data-slot=carousel-content]]:overflow-hidden">
+        <div className={cn(
+          "relative",
+          noGap
+            ? "border border-border rounded-lg overflow-hidden"
+            : "md:border md:border-border md:rounded-lg md:overflow-hidden [&>[data-slot=carousel-content]]:overflow-visible md:[&>[data-slot=carousel-content]]:overflow-hidden"
+        )}>
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
-          <CarouselContent className="-ml-3 md:-ml-4">
+          <CarouselContent className={cn(noGap ? "ml-0" : "-ml-3 md:-ml-4")}>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');
 
               return (
-                <CarouselItem key={slide.id} className="pl-3 basis-[calc(100%-4rem)] md:basis-full md:pl-4">
-                  <div className="border border-border rounded-lg overflow-hidden md:border-0 md:rounded-none">
+                <CarouselItem key={slide.id} className={cn(
+                  noGap
+                    ? "pl-0"
+                    : "pl-3 basis-[calc(100%-4rem)] md:basis-full md:pl-4"
+                )}>
+                  <div className={cn(
+                    noGap
+                      ? ""
+                      : "border border-border rounded-lg overflow-hidden md:border-0 md:rounded-none"
+                  )}>
                     {isVideo ? (
                       <video
                         src={slideUrl || ''}
@@ -59,7 +75,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <div className="flex items-center justify-between mt-2 px-8 md:px-0 lg:hidden">
+        <div className={cn("flex items-center justify-between mt-2 lg:hidden", !noGap && "px-8 md:px-0")}>
           <CarouselPrevious className="static translate-y-0" />
           <CarouselPagination className="mt-0" />
           <CarouselNext className="static translate-y-0" />
