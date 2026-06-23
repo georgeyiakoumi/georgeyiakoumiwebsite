@@ -19,6 +19,10 @@
     },
     "caption": {
       "type": "text"
+    },
+    "noGap": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

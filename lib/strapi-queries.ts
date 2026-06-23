@@ -61,6 +61,7 @@ export interface CarouselBlock {
     mime?: string;
   }>;
   caption?: string;
+  noGap?: boolean;
 }
 
 export interface VideoBlock {
