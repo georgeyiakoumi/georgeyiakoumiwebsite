@@ -121,6 +121,7 @@ export interface ProjectBlocksImage extends Struct.ComponentSchema {
     caption: Schema.Attribute.Text;
     image: Schema.Attribute.Media<'images' | 'files'> &
       Schema.Attribute.Required;
+    zoomEnabled: Schema.Attribute.Boolean;
   };
 }
 

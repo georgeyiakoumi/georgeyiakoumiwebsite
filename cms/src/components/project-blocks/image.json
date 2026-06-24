@@ -19,8 +19,7 @@
       "type": "text"
     },
     "zoomEnabled": {
-      "type": "boolean",
-      "default": false
+      "type": "boolean"
     }
   }
 }
