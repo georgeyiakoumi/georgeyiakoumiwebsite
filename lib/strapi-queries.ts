@@ -47,6 +47,7 @@ export interface ImageBlock {
   };
   caption?: string;
   size?: 'full' | 'contained' | 'small';
+  zoomEnabled?: boolean;
 }
 
 export interface CarouselBlock {
