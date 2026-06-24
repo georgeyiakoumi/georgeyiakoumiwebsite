@@ -3,3 +3,4 @@ package = "@netlify/plugin-nextjs"
 
 [build]
   command = "npm run build"
+  ignore = "git diff --quiet $CACHED_COMMIT_REF HEAD -- . ':!cms'"
