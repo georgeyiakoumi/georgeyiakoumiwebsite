@@ -231,58 +231,6 @@ function CarouselNext({
   )
 }
 
-function CarouselPagination({ className, ...props }: React.ComponentProps<"div">) {
-  const { api } = useCarousel()
-  const [selectedIndex, setSelectedIndex] = React.useState(0)
-  const [scrollSnaps, setScrollSnaps] = React.useState<number[]>([])
-
-  React.useEffect(() => {
-    if (!api) return
-
-    setScrollSnaps(api.scrollSnapList())
-    setSelectedIndex(api.selectedScrollSnap())
-
-    const onSelect = () => {
-      setSelectedIndex(api.selectedScrollSnap())
-    }
-
-    api.on("select", onSelect)
-    api.on("reInit", () => {
-      setScrollSnaps(api.scrollSnapList())
-      setSelectedIndex(api.selectedScrollSnap())
-    })
-
-    return () => {
-      api.off("select", onSelect)
-    }
-  }, [api])
-
-  return (
-    <div
-      className={cn("flex gap-2 justify-center mt-4", className)}
-      data-slot="carousel-pagination"
-      {...props}
-    >
-      {scrollSnaps.map((_, index) => (
-        <button
-          key={index}
-          type="button"
-          className={cn(
-            "relative p-3 transition-all",
-            "after:absolute after:inset-0 after:m-auto after:rounded-full after:transition-all",
-            index === selectedIndex
-              ? "after:bg-primary after:h-2 after:w-6"
-              : "after:bg-muted-foreground/30 after:size-2"
-          )}
-          onClick={() => api?.scrollTo(index)}
-          aria-label={`Go to slide ${index + 1}`}
-          aria-current={index === selectedIndex ? "true" : "false"}
-        />
-      ))}
-    </div>
-  )
-}
-
 export {
   type CarouselApi,
   Carousel,
@@ -290,6 +238,5 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
-  CarouselPagination,
   useCarousel,
 }

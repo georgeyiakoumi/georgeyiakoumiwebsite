@@ -7,7 +7,8 @@ import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselPagination } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ItemGroup } from "@/components/ui/item";
 
 import { ArrowLeft } from "@/components/animate-ui/icons/arrow-left";
@@ -263,15 +264,19 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
           </Typography>
 
           {/* Mobile Carousel */}
-          <Carousel className="w-full md:hidden">
+          <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full md:hidden">
             <CarouselContent className="mx-4">
               {otherProjects.map((otherProject) => (
-                <CarouselItem key={otherProject.id} className="px-4">
+                <CarouselItem key={otherProject.id} className="px-1.5">
                   <ProjectCard project={otherProject} background="background" />
                 </CarouselItem>
               ))}
             </CarouselContent>
-            <CarouselPagination className="mt-4" />
+            <div className="flex items-center justify-between mt-4 px-8">
+              <CarouselPrevious className="static translate-y-0" />
+              <CarouselCounter />
+              <CarouselNext className="static translate-y-0" />
+            </div>
           </Carousel>
 
           {/* Desktop List */}

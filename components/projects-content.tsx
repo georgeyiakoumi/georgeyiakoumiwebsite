@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ProjectCard } from "@/components/project-card";
 import { ItemGroup } from "@/components/ui/item";
@@ -68,15 +68,21 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Mobile Carousel */}
-      <Carousel className="w-full md:hidden">
+      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full md:hidden">
         <CarouselContent className="mx-4">
           {filteredProjects.map((project) => (
-            <CarouselItem key={project.id} className="px-4">
+            <CarouselItem key={project.id} className="px-1.5">
               <ProjectCard project={project} />
             </CarouselItem>
           ))}
         </CarouselContent>
-        {filteredProjects.length > 1 && <CarouselCounter className="mt-4 block text-center" />}
+        {filteredProjects.length > 1 && (
+          <div className="flex items-center justify-between mt-4 px-8">
+            <CarouselPrevious className="static translate-y-0" />
+            <CarouselCounter />
+            <CarouselNext className="static translate-y-0" />
+          </div>
+        )}
       </Carousel>
 
       {/* Tablet Cards */}
