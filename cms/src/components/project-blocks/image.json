@@ -17,6 +17,10 @@
     },
     "caption": {
       "type": "text"
+    },
+    "zoomEnabled": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
