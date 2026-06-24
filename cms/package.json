@@ -6,7 +6,7 @@
   "scripts": {
     "build": "strapi build",
     "deploy": "strapi deploy",
-    "develop": "strapi develop",
+    "develop": "cross-env ENV_PATH=./.env.local strapi develop",
     "start": "strapi start",
     "strapi": "strapi"
   },
@@ -30,6 +30,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "cross-env": "^10.1.0",
     "typescript": "^5"
   },
   "engines": {
