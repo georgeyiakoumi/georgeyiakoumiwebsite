@@ -25,39 +25,48 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    console.log('[Revalidate] Received body:', JSON.stringify(body, null, 2));
-
-    // Strapi sends: { event: 'entry.publish', model: 'project', entry: {...} }
-    // Also accept: { model: 'project', slug: '...' }
     const model = body.model || body.entry?.uid?.split('.')[1];
     const slug = body.slug || body.entry?.slug;
+    const type = body.entry?.type;
 
-    console.log('[Revalidate] Parsed model:', model, 'slug:', slug);
+    console.log('[Revalidate] model:', model, 'slug:', slug, 'type:', type);
 
-    // For projects, always revalidate everything to be safe
-    if (model === 'project' || body.event?.includes('project')) {
-      console.log('[Revalidate] Revalidating project pages...');
+    const revalidated: string[] = [];
 
-      // Revalidate all projects pages
+    if (model === 'project') {
       revalidatePath('/projects', 'page');
-      console.log('[Revalidate] Revalidated /projects');
+      revalidated.push('/projects');
 
-      // Also revalidate all project detail pages by revalidating the layout
-      revalidatePath('/project', 'layout');
-      console.log('[Revalidate] Revalidated /project layout');
+      if (type === 'article') {
+        revalidatePath('/article', 'layout');
+        revalidated.push('/article');
+      } else {
+        revalidatePath('/project', 'layout');
+        revalidated.push('/project');
+      }
 
-      return NextResponse.json({
-        revalidated: true,
-        message: 'Revalidated all project pages',
-        now: Date.now()
-      });
+      revalidatePath('/', 'page');
+      revalidated.push('/');
+    } else if (model === 'about' || model === 'tool') {
+      revalidatePath('/', 'page');
+      revalidated.push('/');
+    } else if (model === 'global-seo') {
+      revalidatePath('/', 'layout');
+      revalidated.push('/ (layout)');
+    } else if (model === 'cv-page' || model === 'career-chapter' || model === 'certificate' || model === 'certificate-supplier' || model === 'business') {
+      revalidatePath('/cv', 'page');
+      revalidated.push('/cv');
+    } else {
+      revalidatePath('/', 'layout');
+      revalidated.push('/ (full layout fallback)');
     }
 
-    console.log('[Revalidate] No matching model, skipping revalidation');
+    console.log('[Revalidate] Revalidated:', revalidated.join(', '));
+
     return NextResponse.json({
-      revalidated: false,
-      message: 'No revalidation performed',
-      receivedBody: body
+      revalidated: true,
+      paths: revalidated,
+      now: Date.now()
     });
   } catch (err) {
     console.error('[Revalidate] Error:', err);
