@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import { useTheme } from "next-themes";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
@@ -11,9 +11,10 @@ import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ItemGroup } from "@/components/ui/item";
 
-import { ArrowLeft } from "@/components/animate-ui/icons/arrow-left";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
-import { ArrowDown, ExternalLink, Github } from "lucide-react";
+import { ArrowLeftIcon, type ArrowLeftIconHandle } from "@/components/ui/arrow-left";
+import { ScrollIndicator } from "@/components/scroll-indicator";
+import { LinkIcon, type LinkIconHandle } from "@/components/ui/link";
+import { GithubIcon, type GithubIconHandle } from "@/components/ui/github";
 
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
@@ -98,20 +99,9 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
     : null;
 
   const scrollVisible = useScrollVisibility();
-  const [showScrollIndicator, setShowScrollIndicator] = useState(true);
-
-  useEffect(() => {
-    const scrollContainer = document.querySelector("main");
-    if (!scrollContainer) return;
-
-    const handleScroll = () => {
-      setShowScrollIndicator(scrollContainer.scrollTop < 100);
-    };
-
-    scrollContainer.addEventListener("scroll", handleScroll, { passive: true });
-    return () => scrollContainer.removeEventListener("scroll", handleScroll);
-  }, []);
-
+  const arrowLeftRef = useRef<ArrowLeftIconHandle>(null);
+  const linkIconRef = useRef<LinkIconHandle>(null);
+  const githubIconRef = useRef<GithubIconHandle>(null);
   const handleBack = () => {
     window.history.back();
   };
@@ -157,14 +147,12 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
 
   return (
     <section className="place-items-center relative">
-      <AnimateIcon animateOnHover asChild>
-        <Button onClick={handleBack} variant="ghost" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`fixed cursor-pointer top-8 left-8 md:bottom-8 md:top-auto lg:left-16 lg:bottom-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none md:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
-          <ArrowLeft />
-          Back
-        </Button>
-      </AnimateIcon>
+      <Button onClick={handleBack} variant="ghost" style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }} className={`fixed cursor-pointer top-8 left-8 lg:bottom-8 lg:top-auto lg:left-16 lg:bottom-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none lg:!transform-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto'}`} onMouseEnter={() => arrowLeftRef.current?.startAnimation()} onMouseLeave={() => arrowLeftRef.current?.stopAnimation()}>
+        <ArrowLeftIcon ref={arrowLeftRef} />
+        Back
+      </Button>
 
-      <header className="relative flex flex-col gap-8 px-8 items-center justify-center w-full md:max-w-lg lg:max-w-2xl xl:max-w-3xl h-screen mx-auto">
+      <header className="relative flex flex-col gap-8 px-8 items-center justify-center w-full lg:max-w-2xl xl:max-w-3xl h-screen mx-auto">
         <Typography variant="h1" className="text-center">
           {project.title}
         </Typography>
@@ -184,8 +172,10 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="Visit website"
+                  onMouseEnter={() => linkIconRef.current?.startAnimation()}
+                  onMouseLeave={() => linkIconRef.current?.stopAnimation()}
                 >
-                  <ExternalLink className="size-4" />
+                  <LinkIcon ref={linkIconRef} size={16} />
                   View project
                 </a>
               </Button>
@@ -197,8 +187,10 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="View source on GitHub"
+                  onMouseEnter={() => githubIconRef.current?.startAnimation()}
+                  onMouseLeave={() => githubIconRef.current?.stopAnimation()}
                 >
-                  <Github className="size-4" />
+                  <GithubIcon ref={githubIconRef} size={16} />
                   GitHub Repo
                 </a>
               </Button>
@@ -206,13 +198,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
           </div>
         )}
 
-        <div
-          className={`absolute animate-bounce bottom-32 md:bottom-8 lg:bottom-16 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 text-muted-foreground transition-opacity duration-300 motion-reduce:hidden ${
-            showScrollIndicator ? "opacity-100" : "opacity-0 pointer-events-none"
-          }`}
-        >
-          <ArrowDown className="size-5" />
-        </div>
+        <ScrollIndicator />
       </header>
 
       {heroImageUrl && (
@@ -224,7 +210,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
             height={1080}
             priority
             fetchPriority="high"
-            sizes="(max-width: 768px) 100vw, (max-width: 1024px) 32rem, 48rem"
+            sizes="(max-width: 1024px) 100vw, (max-width: 1280px) 42rem, 48rem"
             className="h-auto border-border border rounded-lg select-none"
             wrapperClassName="w-full flex justify-center"
             skeletonClassName="rounded-lg"
@@ -258,13 +244,13 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
       </article>
 
       {otherProjects.length > 0 && (
-        <section className="flex flex-col gap-8 h-screen md:h-auto md:py-16 items-center justify-center w-full bg-muted px-0 md:px-8">
+        <section className="flex flex-col gap-8 h-screen lg:h-auto lg:py-16 items-center justify-center w-full bg-muted px-0 lg:px-8">
           <Typography variant="h2" align="center">
             {project.type === "article" ? "Other articles" : "Other projects"}
           </Typography>
 
           {/* Mobile Carousel */}
-          <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full md:hidden">
+          <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
             <CarouselContent className="mx-4">
               {otherProjects.map((otherProject) => (
                 <CarouselItem key={otherProject.id} className="px-1.5">
@@ -280,7 +266,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
           </Carousel>
 
           {/* Desktop List */}
-          <ItemGroup className="hidden md:flex w-full md:max-w-md lg:max-w-xl xl:max-w-3xl gap-4">
+          <ItemGroup className="hidden lg:flex w-full lg:max-w-xl xl:max-w-3xl gap-4">
             {otherProjects.map((otherProject) => (
               <ProjectCard key={otherProject.id} project={otherProject} scenario="list" background="background" />
             ))}

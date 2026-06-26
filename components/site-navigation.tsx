@@ -3,10 +3,10 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useRef, useTransition } from "react";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
-import { User } from "@/components/animate-ui/icons/user";
-import { GalleryHorizontalEnd } from "@/components/animate-ui/icons/gallery-vertical-end";
-import { MessageCircleMore } from "@/components/animate-ui/icons/message-circle-more";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { UserIcon, type UserIconHandle } from "@/components/ui/user";
+import { GalleryVerticalEndIcon, type GalleryVerticalEndIconHandle } from "@/components/ui/gallery-vertical-end";
+import { FileTextIcon, type FileTextIconHandle } from "@/components/ui/file-text";
+import { AtSignIcon, type AtSignIconHandle } from "@/components/ui/at-sign";
 import { GithubIcon, type GithubIconHandle } from "@/components/ui/github";
 import { LinkedinIcon, type LinkedinIconHandle } from "@/components/ui/linkedin";
 import { Spinner } from "@/components/ui/spinner";
@@ -19,9 +19,18 @@ import {
 } from "@/components/ui/navigation-menu";
 import { NAV_LINKS, SOCIAL_LINKS } from "@/lib/constants";
 
-export function SiteNavigation() {
+interface SiteNavigationProps {
+  cvUrl?: string;
+  email?: string;
+}
+
+export function SiteNavigation({ cvUrl, email }: SiteNavigationProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const userIconRef = useRef<UserIconHandle>(null);
+  const galleryIconRef = useRef<GalleryVerticalEndIconHandle>(null);
+  const fileTextIconRef = useRef<FileTextIconHandle>(null);
+  const atSignIconRef = useRef<AtSignIconHandle>(null);
   const linkedinIconRef = useRef<LinkedinIconHandle>(null);
   const githubIconRef = useRef<GithubIconHandle>(null);
   const [isPending, startTransition] = useTransition();
@@ -38,62 +47,76 @@ export function SiteNavigation() {
   };
 
   return (
-    <NavigationMenu orientation="vertical" style={{ transform: `translateX(-50%) translateY(${navVisible ? '0' : '120%'})` }} className={`bg-background rounded-full border border-border md:border-0 overflow-hidden md:overflow-visible md:rounded-md fixed box-border items-start left-1/2 md:!transform-none md:left-8 lg:left-16 bottom-8 md:bottom-auto md:top-8 lg:top-16 z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${navVisible ? "opacity-100" : "opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto"}`}>
+    <NavigationMenu orientation="vertical" style={{ transform: `translateX(-50%) translateY(${navVisible ? '0' : '120%'})` }} className={`bg-background rounded-full border border-border lg:border-0 overflow-hidden lg:overflow-visible lg:rounded-md fixed box-border items-start left-1/2 lg:!transform-none lg:left-8 lg:left-16 bottom-8 lg:bottom-auto lg:top-8 lg:top-16 z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${navVisible ? "opacity-100" : "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto"}`}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild active={pathname === NAV_LINKS.about.href} className="pl-6">
-            <AnimateIcon animateOnHover asChild>
-              <Link
-                href={NAV_LINKS.about.href}
-                aria-label={NAV_LINKS.about.ariaLabel}
-                onClick={(e) => handleNavClick(e, NAV_LINKS.about.href)}
-              >
-                {isPending && pendingPathRef.current === NAV_LINKS.about.href ? (
-                  <Spinner className="md:hidden" />
-                ) : (
-                  <User />
-                )}
-                <span>{NAV_LINKS.about.label}</span>
-              </Link>
-            </AnimateIcon>
+            <Link
+              href={NAV_LINKS.about.href}
+              aria-label={NAV_LINKS.about.ariaLabel}
+              onClick={(e) => handleNavClick(e, NAV_LINKS.about.href)}
+              onMouseEnter={() => userIconRef.current?.startAnimation()}
+              onMouseLeave={() => userIconRef.current?.stopAnimation()}
+            >
+              {isPending && pendingPathRef.current === NAV_LINKS.about.href ? (
+                <Spinner className="lg:hidden" />
+              ) : (
+                <UserIcon ref={userIconRef} />
+              )}
+              <span>{NAV_LINKS.about.label}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild active={pathname === NAV_LINKS.projects.href}>
-            <AnimateIcon animateOnHover asChild>
-              <Link
-                href={NAV_LINKS.projects.href}
-                aria-label={NAV_LINKS.projects.ariaLabel}
-                onClick={(e) => handleNavClick(e, NAV_LINKS.projects.href)}
-              >
-                {isPending && pendingPathRef.current === NAV_LINKS.projects.href ? (
-                  <Spinner className="md:hidden" />
-                ) : (
-                  <GalleryHorizontalEnd />
-                )}
-                <span>{NAV_LINKS.projects.label}</span>
-              </Link>
-            </AnimateIcon>
+            <Link
+              href={NAV_LINKS.projects.href}
+              aria-label={NAV_LINKS.projects.ariaLabel}
+              onClick={(e) => handleNavClick(e, NAV_LINKS.projects.href)}
+              onMouseEnter={() => galleryIconRef.current?.startAnimation()}
+              onMouseLeave={() => galleryIconRef.current?.stopAnimation()}
+            >
+              {isPending && pendingPathRef.current === NAV_LINKS.projects.href ? (
+                <Spinner className="lg:hidden" />
+              ) : (
+                <GalleryVerticalEndIcon ref={galleryIconRef} />
+              )}
+              <span>{NAV_LINKS.projects.label}</span>
+            </Link>
           </NavigationMenuLink>
         </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild active={pathname === NAV_LINKS.contact.href}>
-            <AnimateIcon animateOnHover asChild>
-              <Link
-                href={NAV_LINKS.contact.href}
-                aria-label={NAV_LINKS.contact.ariaLabel}
-                onClick={(e) => handleNavClick(e, NAV_LINKS.contact.href)}
+        {cvUrl && (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <a
+                href={cvUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="View CV"
+                onMouseEnter={() => fileTextIconRef.current?.startAnimation()}
+                onMouseLeave={() => fileTextIconRef.current?.stopAnimation()}
               >
-                {isPending && pendingPathRef.current === NAV_LINKS.contact.href ? (
-                  <Spinner className="md:hidden" />
-                ) : (
-                  <MessageCircleMore />
-                )}
-                <span>{NAV_LINKS.contact.label}</span>
-              </Link>
-            </AnimateIcon>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
+                <FileTextIcon ref={fileTextIconRef} />
+                <span>CV</span>
+              </a>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        )}
+        {email && (
+          <NavigationMenuItem>
+            <NavigationMenuLink asChild>
+              <a
+                href={`mailto:${email}`}
+                aria-label={`Email ${email}`}
+                onMouseEnter={() => atSignIconRef.current?.startAnimation()}
+                onMouseLeave={() => atSignIconRef.current?.stopAnimation()}
+              >
+                <AtSignIcon ref={atSignIconRef} />
+                <span>Email</span>
+              </a>
+            </NavigationMenuLink>
+          </NavigationMenuItem>
+        )}
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
             <a

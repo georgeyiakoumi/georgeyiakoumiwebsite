@@ -39,6 +39,16 @@
       ],
       "type": "media",
       "multiple": false
+    },
+    "sector": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::business-sector.business-sector"
+    },
+    "tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::business-tag.business-tag"
     }
   }
 }

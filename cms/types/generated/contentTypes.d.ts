@@ -456,12 +456,77 @@ export interface ApiAboutAbout extends Struct.SingleTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
+    cvUrl: Schema.Attribute.String;
+    email: Schema.Attribute.Email;
     heading_businesses: Schema.Attribute.String;
     heading_tools: Schema.Attribute.String;
     hero: Schema.Attribute.Blocks;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::about.about'> &
       Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiBusinessSectorBusinessSector
+  extends Struct.CollectionTypeSchema {
+  collectionName: 'business_sectors';
+  info: {
+    description: '';
+    displayName: 'Business Sector';
+    pluralName: 'business-sectors';
+    singularName: 'business-sector';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::business-sector.business-sector'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiBusinessTagBusinessTag extends Struct.CollectionTypeSchema {
+  collectionName: 'business_tags';
+  info: {
+    description: '';
+    displayName: 'Business Tag';
+    pluralName: 'business-tags';
+    singularName: 'business-tag';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::business-tag.business-tag'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -497,6 +562,14 @@ export interface ApiBusinessBusiness extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     name: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    sector: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::business-sector.business-sector'
+    >;
+    tags: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::business-tag.business-tag'
+    >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1300,6 +1373,8 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::about.about': ApiAboutAbout;
+      'api::business-sector.business-sector': ApiBusinessSectorBusinessSector;
+      'api::business-tag.business-tag': ApiBusinessTagBusinessTag;
       'api::business.business': ApiBusinessBusiness;
       'api::career-chapter.career-chapter': ApiCareerChapterCareerChapter;
       'api::certificate-supplier.certificate-supplier': ApiCertificateSupplierCertificateSupplier;

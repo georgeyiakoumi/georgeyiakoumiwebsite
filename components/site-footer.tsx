@@ -34,7 +34,7 @@ export function SiteFooter() {
 
   const LogoLottie = () => (
     <div
-      className="size-12 md:size-14"
+      className="size-12 lg:size-14"
       style={{
         filter: resolvedTheme === "dark" ? "invert(1)" : undefined,
       }}
@@ -50,12 +50,12 @@ export function SiteFooter() {
   );
 
   return (
-    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-6 left-1/2 md:!transform-none md:translate-x-0 md:bottom-8 md:top-auto md:right-8 md:left-auto lg:bottom-16 lg:right-16 box-border flex flex-col items-start lg:items-end z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none md:opacity-100 md:pointer-events-auto'}`}>
+    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-6 left-1/2 lg:!transform-none lg:translate-x-0 lg:bottom-16 lg:top-auto lg:right-16 lg:left-auto box-border flex flex-col items-start lg:items-end z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto'}`}>
       {/* Mobile/Tablet: Drawer */}
       <div className="xl:hidden">
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
-            <button aria-label="Open footer information" className="size-12 flex items-center justify-center md:size-auto" onMouseEnter={handleMouseEnter}>
+            <button aria-label="Open footer information" className="size-12 flex items-center justify-center lg:size-auto" onMouseEnter={handleMouseEnter}>
               <LogoLottie />
             </button>
           </DrawerTrigger>

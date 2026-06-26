@@ -23,6 +23,12 @@
     },
     "contact": {
       "type": "blocks"
+    },
+    "cvUrl": {
+      "type": "string"
+    },
+    "email": {
+      "type": "email"
     }
   }
 }

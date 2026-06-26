@@ -8,7 +8,7 @@ interface BlockCaptionProps {
 
 export function BlockCaption({ children, className }: BlockCaptionProps) {
   return (
-    <Typography variant="figcaption" className={cn("order-first md:order-last", className)}>
+    <Typography variant="figcaption" className={cn("order-first lg:order-last", className)}>
       {children}
     </Typography>
   );

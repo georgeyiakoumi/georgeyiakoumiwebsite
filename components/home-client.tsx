@@ -6,11 +6,10 @@ import { Button } from "@/components/ui/button";
 import { Section } from "@/components/section";
 import { Typography } from "@/components/ui/typography";
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
-import { MessageCircleMore } from "@/components/animate-ui/icons/message-circle-more";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
+import { AtSignIcon, type AtSignIconHandle } from "@/components/ui/at-sign";
 import { getAboutPage, getTools, getBusinesses, type ToolData, type BusinessData } from "@/lib/strapi-queries";
 import { ThemedLogo } from "@/components/themed-logo";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import HomeLoading from "@/app/loading";
 
 export function HomeClient() {
@@ -20,6 +19,7 @@ export function HomeClient() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string>("all");
+  const atSignRef = useRef<AtSignIconHandle>(null);
 
   useEffect(() => {
     Promise.all([
@@ -181,12 +181,19 @@ export function HomeClient() {
         <Typography variant="lead" align="center">
           {contactDescription}
         </Typography>
-        <AnimateIcon animateOnHover asChild>
-          <Button size="lg" href="/contact">
-            <MessageCircleMore />
-            Get in touch
+        {aboutData.email && (
+          <Button
+            size="lg"
+            asChild
+            onMouseEnter={() => atSignRef.current?.startAnimation()}
+            onMouseLeave={() => atSignRef.current?.stopAnimation()}
+          >
+            <a href={`mailto:${aboutData.email}`}>
+              <AtSignIcon ref={atSignRef} />
+              Get in touch
+            </a>
           </Button>
-        </AnimateIcon>
+        )}
       </Section>
     </>
   );

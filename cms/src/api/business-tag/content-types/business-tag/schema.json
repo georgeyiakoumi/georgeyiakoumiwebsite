@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "business_tags",
+  "info": {
+    "singularName": "business-tag",
+    "pluralName": "business-tags",
+    "displayName": "Business Tag",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}

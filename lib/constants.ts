@@ -27,9 +27,4 @@ export const NAV_LINKS = {
     label: "Projects",
     ariaLabel: `View ${AUTHOR.firstName}'s projects`,
   },
-  contact: {
-    href: "/contact",
-    label: "Contact",
-    ariaLabel: `Contact ${AUTHOR.firstName}`,
-  },
 } as const;

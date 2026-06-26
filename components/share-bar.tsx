@@ -2,10 +2,9 @@
 
 import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
-import { AnimateIcon } from "@/components/animate-ui/icons/icon";
-import { Copy } from "@/components/animate-ui/icons/copy";
-import { Check } from "@/components/animate-ui/icons/check";
-import { MessageSquareShare } from "@/components/animate-ui/icons/message-square-share";
+import { CopyIcon, type CopyIconHandle } from "@/components/ui/copy";
+import { CheckIcon, type CheckIconHandle } from "@/components/ui/check";
+import { SendIcon, type SendIconHandle } from "@/components/ui/send";
 import { LinkedinIcon, type LinkedinIconHandle } from "@/components/ui/linkedin";
 
 interface ShareBarProps {
@@ -18,6 +17,9 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
   const [canShare, setCanShare] = useState(false);
   const [url, setUrl] = useState(urlProp ?? "");
   const linkedinRef = useRef<LinkedinIconHandle>(null);
+  const copyRef = useRef<CopyIconHandle>(null);
+  const checkRef = useRef<CheckIconHandle>(null);
+  const sendRef = useRef<SendIconHandle>(null);
 
   useEffect(() => {
     if (!urlProp) setUrl(window.location.href);
@@ -27,6 +29,7 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
   const handleCopy = async () => {
     await navigator.clipboard.writeText(url);
     setCopied(true);
+    checkRef.current?.startAnimation();
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -40,20 +43,30 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
 
   return (
     <div className="flex items-center justify-center gap-2 mx-auto w-full md:max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0 py-8 mt-16 border-t border-border">
-      <AnimateIcon animateOnHover asChild>
-        <Button variant="outline" size="sm" onClick={handleCopy} className="cursor-pointer gap-1.5">
-          {copied ? <Check /> : <Copy />}
-          {copied ? "Copied!" : "Copy link"}
-        </Button>
-      </AnimateIcon>
+      <Button
+        variant="outline"
+        size="sm"
+        onClick={handleCopy}
+        className="cursor-pointer gap-1.5"
+        onMouseEnter={() => (copied ? checkRef : copyRef).current?.startAnimation()}
+        onMouseLeave={() => (copied ? checkRef : copyRef).current?.stopAnimation()}
+      >
+        {copied ? <CheckIcon ref={checkRef} size={16} /> : <CopyIcon ref={copyRef} size={16} />}
+        {copied ? "Copied!" : "Copy link"}
+      </Button>
 
       {canShare && (
-        <AnimateIcon animateOnHover asChild>
-          <Button variant="outline" size="sm" onClick={handleShare} className="cursor-pointer gap-1.5">
-            <MessageSquareShare />
-            Share
-          </Button>
-        </AnimateIcon>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={handleShare}
+          className="cursor-pointer gap-1.5"
+          onMouseEnter={() => sendRef.current?.startAnimation()}
+          onMouseLeave={() => sendRef.current?.stopAnimation()}
+        >
+          <SendIcon ref={sendRef} size={16} />
+          Share
+        </Button>
       )}
 
       {!canShare && (

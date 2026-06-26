@@ -122,14 +122,6 @@ export const Vertical: Story = {
         </NavigationMenuItem>
         <NavigationMenuItem>
           <NavigationMenuLink asChild>
-            <a href="/contact">
-              <Mail className="size-4" />
-              <span>Contact</span>
-            </a>
-          </NavigationMenuLink>
-        </NavigationMenuItem>
-        <NavigationMenuItem>
-          <NavigationMenuLink asChild>
             <a href="https://linkedin.com/in/georgeyiakoumi" target="_blank" rel="noopener noreferrer">
               <Linkedin className="size-4" />
               <span>LinkedIn</span>

@@ -1,0 +1,21 @@
+{
+  "kind": "collectionType",
+  "collectionName": "business_sectors",
+  "info": {
+    "singularName": "business-sector",
+    "pluralName": "business-sectors",
+    "displayName": "Business Sector",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    }
+  }
+}
