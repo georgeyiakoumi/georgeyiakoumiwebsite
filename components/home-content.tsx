@@ -16,6 +16,7 @@ import { AnimatedTabs } from "@/components/ui/animated-tabs";
 
 // Lazy load animation component
 const AtSignIcon = dynamic(() => import("@/components/ui/at-sign").then(mod => ({ default: mod.AtSignIcon })), { ssr: false });
+type AtSignIconHandle = import("@/components/ui/at-sign").AtSignIconHandle;
 
 interface AboutData {
   hero: Array<{
@@ -47,6 +48,7 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
   const [activeSector, setActiveSector] = useState<string>("all");
   const toolsGridRef = useRef<HTMLDivElement>(null);
   const galleryIconRef = useRef<GalleryVerticalEndIconHandle>(null);
+  const atSignRef = useRef<AtSignIconHandle>(null);
 
   const categoryTabs = useMemo(() => {
     const categories = tools
@@ -166,13 +168,14 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         </Section>
       )}
 
-      <Section>
+      <Section className="px-0">
         <Typography variant="h2" align="center">
           {aboutData.heading_businesses}
         </Typography>
 
         {sectorTabs.length > 2 && (
           <AnimatedTabs
+            className="max-w-full "
             tabs={sectorTabs}
             activeTab={activeSector}
             onTabChange={setActiveSector}
@@ -180,7 +183,7 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
           />
         )}
 
-          <div className="w-full grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+          <div className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
             {businesses.map((business, index) => {
               const isActive = activeSector === "all" || business.sector?.name === activeSector;
               return (
@@ -207,6 +210,7 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         <div className="flex flex-col items-center gap-8 w-full">
           <div className="xl:static sticky top-20 z-10 py-2 w-full flex justify-center">
             <AnimatedTabs
+              className="max-w-full"
               tabs={categoryTabs}
               activeTab={activeCategory}
               onTabChange={handleCategoryChange}
@@ -242,10 +246,15 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
           {contactDescription}
         </Typography>
         {aboutData.email && (
-          <Button size="lg" asChild>
+          <Button
+            size="lg"
+            asChild
+            onMouseEnter={() => atSignRef.current?.startAnimation()}
+            onMouseLeave={() => atSignRef.current?.stopAnimation()}
+          >
             <a href={`mailto:${aboutData.email}`}>
-              <AtSignIcon />
-              Get in touch
+              <AtSignIcon ref={atSignRef} />
+              Email me
             </a>
           </Button>
         )}

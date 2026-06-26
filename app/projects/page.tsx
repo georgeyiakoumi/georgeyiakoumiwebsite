@@ -10,7 +10,7 @@ import { ProjectsContent } from "@/components/projects-content";
 export const generateMetadata = async () => {
   return generatePageMetadata({
     title: "Projects",
-    description: "Explore my portfolio of design projects, case studies, and UX/UI work. See how I solve complex problems through thoughtful design and user-centered solutions.",
+    description: "Case studies and articles covering product design, design engineering, and the thinking behind the work.",
     path: "/projects",
   });
 };

@@ -769,6 +769,36 @@ export interface ApiGlobalSeoGlobalSeo extends Struct.SingleTypeSchema {
   };
 }
 
+export interface ApiProjectTagProjectTag extends Struct.CollectionTypeSchema {
+  collectionName: 'project_tags';
+  info: {
+    displayName: 'Project Tag';
+    pluralName: 'project-tags';
+    singularName: 'project-tag';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::project-tag.project-tag'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String &
+      Schema.Attribute.Required &
+      Schema.Attribute.Unique;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiProjectProject extends Struct.CollectionTypeSchema {
   collectionName: 'projects';
   info: {
@@ -811,6 +841,10 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     order: Schema.Attribute.Integer;
     project_client: Schema.Attribute.String;
     project_role: Schema.Attribute.String;
+    project_tags: Schema.Attribute.Relation<
+      'manyToMany',
+      'api::project-tag.project-tag'
+    >;
     project_thumb: Schema.Attribute.Media<'images' | 'files'>;
     publishedAt: Schema.Attribute.DateTime;
     slug: Schema.Attribute.UID<'title'> & Schema.Attribute.Required;
@@ -1381,6 +1415,7 @@ declare module '@strapi/strapi' {
       'api::certificate.certificate': ApiCertificateCertificate;
       'api::cv-page.cv-page': ApiCvPageCvPage;
       'api::global-seo.global-seo': ApiGlobalSeoGlobalSeo;
+      'api::project-tag.project-tag': ApiProjectTagProjectTag;
       'api::project.project': ApiProjectProject;
       'api::tool.tool': ApiToolTool;
       'plugin::content-releases.release': PluginContentReleasesRelease;
