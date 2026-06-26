@@ -1,4 +1,4 @@
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project/project-card";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 interface ProjectsGridProps {

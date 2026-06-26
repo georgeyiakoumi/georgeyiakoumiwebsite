@@ -53,9 +53,9 @@ export async function POST(request: NextRequest) {
     } else if (model === 'global-seo') {
       revalidatePath('/', 'layout');
       revalidated.push('/ (layout)');
-    } else if (model === 'cv-page' || model === 'career-chapter' || model === 'certificate' || model === 'certificate-supplier' || model === 'business') {
-      revalidatePath('/cv', 'page');
-      revalidated.push('/cv');
+    } else if (model === 'business' || model === 'business-sector' || model === 'business-tag') {
+      revalidatePath('/', 'page');
+      revalidated.push('/');
     } else {
       revalidatePath('/', 'layout');
       revalidated.push('/ (full layout fallback)');

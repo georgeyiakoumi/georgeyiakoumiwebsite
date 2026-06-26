@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import { getProjects, getProjectBySlug } from "@/lib/strapi-queries";
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { generatePageMetadata, generateProjectJsonLd, SITE_CONFIG } from "@/lib/metadata";
-import { ProjectClient } from "@/components/project-client";
+import { ProjectClient } from "@/components/project/slug/project-client";
 import { notFound } from "next/navigation";
 
 interface ArticlePageProps {

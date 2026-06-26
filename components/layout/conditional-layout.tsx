@@ -1,11 +1,9 @@
 "use client";
 
-import { usePathname } from "next/navigation";
-import { SiteNavigation } from "@/components/site-navigation";
-import { SiteFooter } from "@/components/site-footer";
-import { ModeToggle } from "@/components/mode-toggle";
+import { SiteNavigation } from "@/components/layout/site-navigation";
+import { SiteFooter } from "@/components/layout/site-footer";
+import { ModeToggle } from "@/components/layout/mode-toggle";
 import { ScrollVisibilityProvider } from "@/hooks/use-scroll-visibility";
-import { useEffect, useState } from "react";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 
 function HeaderBackdrop() {
@@ -27,19 +25,6 @@ interface ConditionalLayoutProps {
 }
 
 export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutProps) {
-  const pathname = usePathname();
-  const [isCVSubdomain, setIsCVSubdomain] = useState(false);
-
-  useEffect(() => {
-    setIsCVSubdomain(window.location.hostname === 'cv.georgeyiakoumi.com');
-  }, []);
-
-  const isCVPage = pathname === "/cv" || isCVSubdomain;
-
-  if (isCVPage) {
-    return <main>{children}</main>;
-  }
-
   return (
     <ScrollVisibilityProvider>
       <SiteNavigation cvUrl={cvUrl} email={email} />

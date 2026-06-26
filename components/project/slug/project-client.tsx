@@ -7,10 +7,6 @@ import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ItemGroup } from "@/components/ui/item";
-
 import { ArrowLeftIcon, type ArrowLeftIconHandle } from "@/components/ui/arrow-left";
 import { ScrollIndicator } from "@/components/scroll-indicator";
 import { LinkIcon, type LinkIconHandle } from "@/components/ui/link";
@@ -19,12 +15,12 @@ import { GithubIcon, type GithubIconHandle } from "@/components/ui/github";
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 import { Typography } from "@/components/ui/typography";
-import { ProjectCard } from "@/components/project-card";
-import { ProjectBlockRenderer } from "@/components/project-blocks";
-import { SnapshotBlock } from "@/components/project-blocks/snapshot-block";
-import { BlockFigure } from "@/components/project-blocks/block-figure";
-import { BlockCaption } from "@/components/project-blocks/block-caption";
-import { ShareBar } from "@/components/share-bar";
+import { OtherProjects } from "@/components/project/slug/other-projects";
+import { ProjectBlockRenderer } from "@/components/project/project-blocks";
+import { SnapshotBlock } from "@/components/project/project-blocks/snapshot-block";
+import { BlockFigure } from "@/components/project/project-blocks/block-figure";
+import { BlockCaption } from "@/components/project/project-blocks/block-caption";
+import { ShareBar } from "@/components/project/slug/share-bar";
 import type { ProjectData, ToolData, SnapshotItem } from "@/lib/strapi-queries";
 
 interface ProjectClientProps {
@@ -243,36 +239,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
         <ShareBar type={project.type} />
       </article>
 
-      {otherProjects.length > 0 && (
-        <section className="flex flex-col gap-8 h-screen lg:h-auto lg:py-16 items-center justify-center w-full bg-muted px-0 lg:px-8">
-          <Typography variant="h2" align="center">
-            {project.type === "article" ? "Other articles" : "Other projects"}
-          </Typography>
-
-          {/* Mobile Carousel */}
-          <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
-            <CarouselContent className="mx-4">
-              {otherProjects.map((otherProject) => (
-                <CarouselItem key={otherProject.id} className="px-1.5">
-                  <ProjectCard project={otherProject} background="background" />
-                </CarouselItem>
-              ))}
-            </CarouselContent>
-            <div className="flex items-center justify-between mt-4 px-8">
-              <CarouselPrevious className="static translate-y-0" />
-              <CarouselCounter />
-              <CarouselNext className="static translate-y-0" />
-            </div>
-          </Carousel>
-
-          {/* Desktop List */}
-          <ItemGroup className="hidden lg:flex w-full lg:max-w-xl xl:max-w-3xl gap-4">
-            {otherProjects.map((otherProject) => (
-              <ProjectCard key={otherProject.id} project={otherProject} scenario="list" background="background" />
-            ))}
-          </ItemGroup>
-        </section>
-      )}
+      <OtherProjects projects={otherProjects} type={project.type} />
     </section>
   );
 }

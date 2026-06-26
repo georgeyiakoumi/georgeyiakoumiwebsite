@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project/project-card";
 import { ItemGroup } from "@/components/ui/item";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";

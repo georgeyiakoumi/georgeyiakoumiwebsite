@@ -3,10 +3,10 @@
 import dynamic from "next/dynamic";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Button } from "@/components/ui/button";
-import { Section } from "@/components/section";
+import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { type ToolData, type BusinessData, type ProjectData } from "@/lib/strapi-queries";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project/project-card";
 import { ThemedLogo } from "@/components/themed-logo";
 import { useState, useRef, useMemo } from "react";
 import { ScrollIndicator } from "@/components/scroll-indicator";

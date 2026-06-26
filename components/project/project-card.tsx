@@ -5,13 +5,13 @@ import Link from "next/link";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
+import { Badge } from "@/components/ui/badge";
 import {
   Item,
   ItemHeader,
   ItemMedia,
   ItemContent,
   ItemTitle,
-  ItemDescription,
   ItemActions,
 } from "@/components/ui/item";
 import { cn, getEntryPath } from "@/lib/utils";
@@ -59,10 +59,12 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
             <ItemTitle className="xl:text-foreground line-clamp-2">
               {project.title}
             </ItemTitle>
-            {project.description && (
-              <ItemDescription className="xl:text-muted-foreground">
-                {project.description}
-              </ItemDescription>
+            {project.project_tags && project.project_tags.length > 0 && (
+              <div className="flex flex-wrap gap-1">
+                {project.project_tags.map((tag) => (
+                  <Badge key={tag.id} variant="secondary" className="text-xs">{tag.name}</Badge>
+                ))}
+              </div>
             )}
           </ItemContent>
           <ItemActions className="xl:text-foreground pr-4 xl:opacity-0 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100">
@@ -102,8 +104,12 @@ export function ProjectCard({ project, scenario = "carousel", background = "mute
           <ItemTitle className="line-clamp-2">
             {project.title}
           </ItemTitle>
-          {project.description && (
-            <ItemDescription>{project.description}</ItemDescription>
+          {project.project_tags && project.project_tags.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {project.project_tags.map((tag) => (
+                <Badge key={tag.id} variant="secondary" className="text-xs">{tag.name}</Badge>
+              ))}
+            </div>
           )}
         </ItemContent>
       </Link>

@@ -1,4 +1,4 @@
-import { Section } from "@/components/section";
+import { Section } from "@/components/layout/section";
 import { Skeleton } from "@/components/ui/skeleton";
 
 export default function PortfolioLoading() {
