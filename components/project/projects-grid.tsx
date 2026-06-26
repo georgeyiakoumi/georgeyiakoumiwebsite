@@ -1,4 +1,4 @@
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project/project-card";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 interface ProjectsGridProps {
@@ -17,7 +17,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             animationFillMode: 'backwards'
           }}
         >
-          <ProjectCard project={project} />
+          <ProjectCard project={project} variant="thumb" />
         </div>
       ))}
     </div>

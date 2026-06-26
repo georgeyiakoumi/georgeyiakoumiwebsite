@@ -200,6 +200,7 @@ export interface ProjectData {
   featured_position?: number | null;
   body?: ProjectBlock[];
   tools?: ToolData[];
+  project_tags?: { id: number; name: string }[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;
@@ -279,6 +280,7 @@ export async function getProjects(options?: {
       'populate[project_thumb][fields][1]': 'alternativeText',
       'populate[project_thumb][fields][2]': 'width',
       'populate[project_thumb][fields][3]': 'height',
+      'populate[project_tags][fields][0]': 'name',
       'sort[0]': 'order:asc',
       'sort[1]': 'date:desc',
     };
@@ -313,6 +315,7 @@ export async function getFeaturedProjects() {
         'populate[project_thumb][fields][1]': 'alternativeText',
         'populate[project_thumb][fields][2]': 'width',
         'populate[project_thumb][fields][3]': 'height',
+        'populate[project_tags][fields][0]': 'name',
         'sort[0]': 'featured_position:asc',
       },
       tags: ['projects', 'featured-projects'],
@@ -337,6 +340,7 @@ export async function getProjectBySlug(slug: string) {
         'populate[project_thumb][fields][3]': 'height',
         'populate[tools][populate]': '*',
         'populate[snapshot_items]': '*',
+        'populate[project_tags][fields][0]': 'name',
       },
       tags: ['projects', `project-${slug}`],
     });
@@ -487,155 +491,3 @@ export async function getBusinesses() {
   }
 }
 
-export interface CVPageData {
-  id: number;
-  documentId: string;
-  heading: string;
-  tagline: string;
-  email: string;
-  linkedin: string;
-  website: string;
-  description: Array<{
-    type: string;
-    children?: Array<{
-      type: string;
-      text?: string;
-    }>;
-  }>;
-  avatar?: {
-    id: number;
-    documentId: string;
-    url: string;
-    alternativeText?: string;
-    width?: number;
-    height?: number;
-    formats?: {
-      small?: { url: string };
-      medium?: { url: string };
-      thumbnail?: { url: string };
-    };
-  };
-  language?: Array<{
-    id: number;
-    region: string;
-    level: string;
-  }>;
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface CareerChapterData {
-  id: number;
-  documentId: string;
-  business_name: string;
-  country: string;
-  city: string;
-  hybrid: boolean;
-  remote: boolean;
-  description: string;
-  Chapter: Array<{
-    id: number;
-    role: string;
-    start_date: string;
-    end_date: string | null;
-    experience: Array<{
-      type: string;
-      format?: string;
-      children?: Array<{
-        type: string;
-        children?: Array<{
-          type: string;
-          text?: string;
-        }>;
-      }>;
-    }>;
-  }>;
-  thumbnail?: {
-    id: number;
-    documentId: string;
-    url: string;
-    alternativeText?: string;
-    width?: number;
-    height?: number;
-  };
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export interface CertificateData {
-  id: number;
-  documentId: string;
-  name: string;
-  url: string;
-  certificate_supplier?: {
-    id: number;
-    documentId: string;
-    name: string;
-    thumbnail?: {
-      id: number;
-      documentId: string;
-      url: string;
-      alternativeText?: string;
-      width?: number;
-      height?: number;
-      formats?: {
-        thumbnail?: { url: string };
-      };
-    };
-  };
-  createdAt: string;
-  updatedAt: string;
-  publishedAt: string;
-}
-
-export async function getCVPage() {
-  try {
-    const data = await fetchAPI<CVPageData>({
-      endpoint: '/cv-page',
-      query: {
-        'populate': '*',
-      },
-      tags: ['cv-page'],
-    });
-    return data;
-  } catch (error) {
-    console.error('Error fetching CV page:', error);
-    return null;
-  }
-}
-
-export async function getCareerChapters() {
-  try {
-    const data = await fetchAPI<CareerChapterData[]>({
-      endpoint: '/career-chapters',
-      query: {
-        'populate': '*',
-        'pagination[pageSize]': 1000,
-      },
-      tags: ['career-chapters'],
-    });
-    return data;
-  } catch (error) {
-    console.error('Error fetching career chapters:', error);
-    return [];
-  }
-}
-
-export async function getCertificates() {
-  try {
-    const data = await fetchAPI<CertificateData[]>({
-      endpoint: '/certificates',
-      query: {
-        'populate[certificate_supplier][populate]': 'thumbnail',
-        'pagination[pageSize]': 1000,
-      },
-      tags: ['certificates'],
-    });
-    return data;
-  } catch (error) {
-    console.error('Error fetching certificates:', error);
-    return [];
-  }
-}

@@ -4,8 +4,8 @@ import { generatePageMetadata } from "@/lib/metadata";
 import { SquareLibrary } from "lucide-react";
 
 import { Empty, EmptyHeader, EmptyMedia, EmptyTitle, EmptyDescription } from "@/components/ui/empty";
-import { Section } from "@/components/section";
-import { ProjectsContent } from "@/components/projects-content";
+import { Section } from "@/components/layout/section";
+import { ProjectsContent } from "@/components/project/projects-content";
 
 export const generateMetadata = async () => {
   return generatePageMetadata({

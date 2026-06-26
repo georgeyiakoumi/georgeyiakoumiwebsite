@@ -1,11 +1,11 @@
 import { Mulish } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/theme-provider";
+import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { GoogleAnalytics } from '@/components/google-analytics';
 import { generateSiteMetadata } from "@/lib/metadata";
 import { SEOScripts } from "@/components/seo-scripts";
-import { ConditionalLayout } from "@/components/conditional-layout";
+import { ConditionalLayout } from "@/components/layout/conditional-layout";
 import { getAboutPage } from "@/lib/strapi-queries";
 
 // Import safelist to ensure Tailwind scans it for dynamic Strapi classes

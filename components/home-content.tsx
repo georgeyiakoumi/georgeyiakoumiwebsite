@@ -3,10 +3,10 @@
 import dynamic from "next/dynamic";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Button } from "@/components/ui/button";
-import { Section } from "@/components/section";
+import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { type ToolData, type BusinessData, type ProjectData } from "@/lib/strapi-queries";
-import { ProjectCard } from "@/components/project-card";
+import { ProjectCard } from "@/components/project/project-card";
 import { ThemedLogo } from "@/components/themed-logo";
 import { useState, useRef, useMemo } from "react";
 import { ScrollIndicator } from "@/components/scroll-indicator";
@@ -139,21 +139,21 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
       </Section>
 
       {featuredProjects.length > 0 && (
-        <Section>
+        <Section className="space-y-8">
           <Typography variant="h2" align="center">
             Featured work
           </Typography>
-          <div className="w-full max-w-3xl flex flex-col gap-4">
-            {featuredProjects.map((project) => (
-              <div key={project.id}>
-                <div className="lg:hidden">
-                  <ProjectCard project={project} />
-                </div>
-                <div className="hidden lg:block">
-                  <ProjectCard project={project} scenario="list" />
-                </div>
-              </div>
-            ))}
+          <div className="w-full max-w-3xl">
+            <div className="lg:hidden grid md:grid-cols-2 gap-4">
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} variant="thumb" />
+              ))}
+            </div>
+            <div className="hidden lg:flex flex-col gap-8">
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} variant="list" />
+              ))}
+            </div>
           </div>
           <Button variant="outline" asChild>
             <Link
@@ -175,7 +175,7 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
 
         {sectorTabs.length > 2 && (
           <AnimatedTabs
-            className="max-w-full "
+            className="max-w-full sticky top-20 z-10 py-2"
             tabs={sectorTabs}
             activeTab={activeSector}
             onTabChange={setActiveSector}
@@ -208,15 +208,13 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         </Typography>
 
         <div className="flex flex-col items-center gap-8 w-full">
-          <div className="xl:static sticky top-20 z-10 py-2 w-full flex justify-center">
             <AnimatedTabs
-              className="max-w-full"
+              className="max-w-full sticky top-20 z-10 py-2"
               tabs={categoryTabs}
               activeTab={activeCategory}
               onTabChange={handleCategoryChange}
               ariaLabel="Filter tools by category"
             />
-          </div>
 
           <div ref={toolsGridRef} className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
             {tools.map((tool) => {
