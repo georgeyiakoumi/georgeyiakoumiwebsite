@@ -71,7 +71,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
         <CarouselContent className="mx-4">
           {filteredProjects.map((project) => (
             <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} variant="thumb" />
+              <ProjectCard project={project} variant="thumb" showActions={false} />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -86,7 +86,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (
-        <div className="hidden lg:flex flex-col w-full max-w-3xl gap-4">
+        <div className="hidden lg:flex flex-col w-full max-w-3xl gap-12">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
@@ -100,9 +100,9 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             ))}
           </div>
           {/* xl+: grid when toggled */}
-          <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-4">
+          <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-8">
             {filteredProjects.map((project) => (
-              <CardView key={project.id} project={project} />
+              <ProjectCard key={project.id} project={project} variant="thumb" />
             ))}
           </div>
         </>

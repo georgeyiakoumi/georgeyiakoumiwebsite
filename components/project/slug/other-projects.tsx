@@ -25,7 +25,7 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
         <CarouselContent className="mx-4">
           {projects.map((project) => (
             <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} variant="thumb" className="bg-background" />
+              <ProjectCard project={project} variant="thumb" showActions={false} className="bg-background" />
             </CarouselItem>
           ))}
         </CarouselContent>
