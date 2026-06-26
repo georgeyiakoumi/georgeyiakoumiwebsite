@@ -17,7 +17,7 @@ export function ProjectsGrid({ projects }: ProjectsGridProps) {
             animationFillMode: 'backwards'
           }}
         >
-          <ProjectCard project={project} />
+          <ProjectCard project={project} variant="thumb" />
         </div>
       ))}
     </div>

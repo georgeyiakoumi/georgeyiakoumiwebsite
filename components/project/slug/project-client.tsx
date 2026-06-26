@@ -148,7 +148,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
         Back
       </Button>
 
-      <header className="relative flex flex-col gap-8 px-8 items-center justify-center w-full lg:max-w-2xl xl:max-w-3xl h-screen mx-auto">
+      <header className="relative flex flex-col gap-8 px-8 items-center justify-center w-full lg:max-w-2xl xl:max-w-3xl min-h-dvh mx-auto">
         <Typography variant="h1" className="text-center">
           {project.title}
         </Typography>

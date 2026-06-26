@@ -139,21 +139,21 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
       </Section>
 
       {featuredProjects.length > 0 && (
-        <Section>
+        <Section className="space-y-8">
           <Typography variant="h2" align="center">
             Featured work
           </Typography>
-          <div className="w-full max-w-3xl flex flex-col gap-4">
-            {featuredProjects.map((project) => (
-              <div key={project.id}>
-                <div className="lg:hidden">
-                  <ProjectCard project={project} />
-                </div>
-                <div className="hidden lg:block">
-                  <ProjectCard project={project} scenario="list" />
-                </div>
-              </div>
-            ))}
+          <div className="w-full max-w-3xl">
+            <div className="lg:hidden grid md:grid-cols-2 gap-4">
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} variant="thumb" />
+              ))}
+            </div>
+            <div className="hidden lg:flex flex-col gap-8">
+              {featuredProjects.map((project) => (
+                <ProjectCard key={project.id} project={project} variant="list" />
+              ))}
+            </div>
           </div>
           <Button variant="outline" asChild>
             <Link

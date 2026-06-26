@@ -1,119 +1,231 @@
 "use client";
 
-import { useRef } from "react";
+import * as React from "react";
 import Link from "next/link";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
 import { Badge } from "@/components/ui/badge";
-import {
-  Item,
-  ItemHeader,
-  ItemMedia,
-  ItemContent,
-  ItemTitle,
-  ItemActions,
-} from "@/components/ui/item";
+import { Button } from "@/components/ui/button";
+import { ChevronRightIcon } from "@/components/ui/chevron-right";
 import { cn, getEntryPath } from "@/lib/utils";
 import type { ProjectData } from "@/lib/strapi-queries";
 
-interface ProjectCardProps {
-  project: ProjectData;
-  scenario?: "carousel" | "list";
-  background?: "muted" | "background";
+// --- Primitives ---
+
+function ProjectCardRoot({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card"
+      className={cn("group rounded-xl overflow-hidden", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
 }
 
-export function ProjectCard({ project, scenario = "carousel", background = "muted" }: ProjectCardProps) {
-  const chevronRef = useRef<ChevronRightIconHandle>(null);
+function ProjectCardLink({
+  project,
+  className,
+  children,
+}: {
+  project: ProjectData;
+  className?: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <Link href={getEntryPath(project.type, project.slug)} className={cn("h-full", className)}>
+      {children}
+    </Link>
+  );
+}
 
-  if (scenario === "list") {
+function ProjectCardThumb({
+  src,
+  alt,
+  className,
+  sizes = "(max-width: 768px) 100vw, 768px",
+}: {
+  src?: string;
+  alt: string;
+  className?: string;
+  sizes?: string;
+}) {
+  return (
+    <div data-slot="project-card-thumb" className={cn("relative overflow-hidden", className)}>
+      {src ? (
+        <ImageWithFallback
+          src={src} alt={alt} fill
+          className="object-cover xl:opacity-80 xl:transition-all xl:duration-300 xl:ease-out xl:group-hover:opacity-100 xl:group-hover:scale-110"
+          sizes={sizes}
+        />
+      ) : (
+        <Skeleton className="size-full" />
+      )}
+    </div>
+  );
+}
+
+function ProjectCardContent({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card-content"
+      className={cn("flex items-center", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ProjectCardHeader({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card-header"
+      className={cn("relative flex flex-col justify-center p-6 gap-6", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ProjectCardTitle({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"h3">) {
+  return (
+    <h3
+      data-slot="project-card-title"
+      className={cn("font-medium line-clamp-2", className)}
+      {...props}
+    >
+      {children}
+    </h3>
+  );
+}
+
+function ProjectCardTags({ tags }: { tags?: { id: number; name: string }[] }) {
+  if (!tags || tags.length === 0) return null;
+
+  return (
+    <div data-slot="project-card-tags" className="flex flex-wrap gap-1">
+      {tags.map((tag) => (
+        <Badge key={tag.id} variant="outline">
+          {tag.name}
+        </Badge>
+      ))}
+    </div>
+  );
+}
+
+function ProjectCardActions({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card-actions"
+      className={cn("flex items-center", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+// --- Composed ---
+
+interface ProjectCardProps {
+  project: ProjectData;
+  variant?: "thumb" | "list";
+  className?: string;
+}
+
+function ProjectCard({ project, variant = "thumb", className }: ProjectCardProps) {
+  const thumbSrc = project.project_thumb?.url;
+  const thumbAlt = project.project_thumb?.alternativeText || project.title;
+
+  if (variant === "list") {
     return (
-      <div
-        className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]"
-        onMouseEnter={() => chevronRef.current?.startAnimation()}
-        onMouseLeave={() => chevronRef.current?.stopAnimation()}
-      >
-      <Item
-        asChild
-        variant="outline"
+      <ProjectCardRoot
+        data-variant="list"
         className={cn(
-          "!p-0 overflow-hidden",
-          background === "background" && "xl:bg-background xl:hover:bg-background xl:hover:border-foreground"
+          "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
+          className
         )}
       >
-        <Link href={getEntryPath(project.type, project.slug)}>
-          <ItemMedia variant="image" className="size-32 !rounded-none !translate-y-0 !self-center">
-            {project.project_thumb ? (
-              <ImageWithFallback
-                src={project.project_thumb.url}
-                alt={project.project_thumb.alternativeText || project.title}
-                fill
-                className="object-cover xl:opacity-80 xl:transition-all xl:duration-300 xl:ease-out xl:group-hover:opacity-100 xl:group-hover:scale-110"
-                sizes="256px"
-              />
-            ) : (
-              <Skeleton className="size-full !rounded-none" />
-            )}
-          </ItemMedia>
-          <ItemContent>
-            <ItemTitle className="xl:text-foreground line-clamp-2">
-              {project.title}
-            </ItemTitle>
-            {project.project_tags && project.project_tags.length > 0 && (
-              <div className="flex flex-wrap gap-1">
-                {project.project_tags.map((tag) => (
-                  <Badge key={tag.id} variant="secondary" className="text-xs">{tag.name}</Badge>
-                ))}
-              </div>
-            )}
-          </ItemContent>
-          <ItemActions className="xl:text-foreground pr-4 xl:opacity-0 xl:transition-opacity xl:duration-300 xl:ease-out xl:group-hover:opacity-100">
-            <ChevronRightIcon ref={chevronRef} size={16} />
-          </ItemActions>
-        </Link>
-      </Item>
-      </div>
+        <ProjectCardLink
+          project={project}
+          className="relative z-10 grid grid-cols-[3fr_4fr_auto] items-stretch"
+        >
+          <ProjectCardThumb
+            src={thumbSrc}
+            alt={thumbAlt}
+            className="aspect-video w-full h-full rounded-xl transition-[border-radius] duration-300 ease-out xl:group-hover:rounded-r-none"
+          />
+          <ProjectCardContent className="flex-1">
+            <ProjectCardHeader className="before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-500 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-300">
+              <ProjectCardTitle className="text-2xl">{project.title}</ProjectCardTitle>
+              <ProjectCardTags tags={project.project_tags} />
+              <ProjectCardActions className="opacity-0 transition-opacity duration-300 ease-out group-hover:opacity-100">
+                <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
+                  {project.type === "article" ? "Read article" : "Read case study"}
+                  <ChevronRightIcon size={14} />
+                </Button>
+              </ProjectCardActions>
+            </ProjectCardHeader>
+          </ProjectCardContent>
+        </ProjectCardLink>
+      </ProjectCardRoot>
     );
   }
 
   return (
-    <div className="group transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]">
-    <Item
-      variant="outline"
-      asChild
+    <ProjectCardRoot
+      data-variant="thumb"
       className={cn(
-        "p-0 rounded-xl overflow-hidden",
-        background === "background" && "bg-background",
+        "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
+        className
       )}
     >
-      <Link href={getEntryPath(project.type, project.slug)} className="pb-4 h-full">
-        <ItemHeader className="relative aspect-video w-full overflow-hidden">
-          {project.project_thumb ? (
-            <ImageWithFallback
-              src={project.project_thumb.url}
-              alt={project.project_thumb.alternativeText || project.title}
-              fill
-              className="object-cover xl:opacity-80 xl:transition-all xl:duration-300 xl:ease-out xl:group-hover:opacity-100 xl:group-hover:scale-110"
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-          ) : (
-            <Skeleton className="size-full" />
-          )}
-        </ItemHeader>
-        <ItemContent className="px-4 min-h-[5rem]">
-          <ItemTitle className="line-clamp-2">
-            {project.title}
-          </ItemTitle>
-          {project.project_tags && project.project_tags.length > 0 && (
-            <div className="flex flex-wrap gap-1">
-              {project.project_tags.map((tag) => (
-                <Badge key={tag.id} variant="secondary" className="text-xs">{tag.name}</Badge>
-              ))}
-            </div>
-          )}
-        </ItemContent>
-      </Link>
-    </Item>
-    </div>
+      <ProjectCardLink project={project} className="flex flex-col">
+        <ProjectCardThumb
+          src={thumbSrc}
+          alt={thumbAlt}
+          className="aspect-video w-full rounded-xl"
+        />
+        <ProjectCardHeader>
+          <ProjectCardTitle className="text-lg">{project.title}</ProjectCardTitle>
+          <ProjectCardTags tags={project.project_tags} />
+        </ProjectCardHeader>
+      </ProjectCardLink>
+    </ProjectCardRoot>
   );
 }
+
+export {
+  ProjectCard,
+  ProjectCardRoot,
+  ProjectCardLink,
+  ProjectCardThumb,
+  ProjectCardContent,
+  ProjectCardHeader,
+  ProjectCardTitle,
+  ProjectCardTags,
+  ProjectCardActions,
+};

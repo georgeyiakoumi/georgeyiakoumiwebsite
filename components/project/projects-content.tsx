@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ProjectCard } from "@/components/project/project-card";
-import { ItemGroup } from "@/components/ui/item";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
 import { List, LayoutGrid } from "lucide-react";
@@ -72,7 +71,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
         <CarouselContent className="mx-4">
           {filteredProjects.map((project) => (
             <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} />
+              <ProjectCard project={project} variant="thumb" />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -85,32 +84,25 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
         )}
       </Carousel>
 
-      {/* Tablet Cards */}
-      <div className="hidden w-full max-w-3xl gap-8">
-        {filteredProjects.map((project) => (
-          <ProjectCard key={project.id} project={project} />
-        ))}
-      </div>
-
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (
-        <ItemGroup className="hidden lg:flex w-full max-w-3xl gap-4">
+        <div className="hidden lg:flex flex-col w-full max-w-3xl gap-4">
           {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} scenario="list" />
+            <ProjectCard key={project.id} project={project} variant="list" />
           ))}
-        </ItemGroup>
+        </div>
       ) : (
         <>
           {/* lg–xl: always list (no toggle available) */}
-          <ItemGroup className="hidden lg:flex xl:hidden w-full max-w-3xl gap-4">
+          <div className="hidden lg:flex xl:hidden flex-col w-full max-w-3xl gap-4">
             {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} scenario="list" />
+              <ProjectCard key={project.id} project={project} variant="list" />
             ))}
-          </ItemGroup>
+          </div>
           {/* xl+: grid when toggled */}
           <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-4">
             {filteredProjects.map((project) => (
-              <ProjectCard key={project.id} project={project} />
+              <CardView key={project.id} project={project} />
             ))}
           </div>
         </>

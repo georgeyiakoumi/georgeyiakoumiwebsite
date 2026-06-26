@@ -3,7 +3,6 @@
 import { Typography } from "@/components/ui/typography";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ItemGroup } from "@/components/ui/item";
 import { ProjectCard } from "@/components/project/project-card";
 import type { ProjectData } from "@/lib/strapi-queries";
 
@@ -26,7 +25,7 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
         <CarouselContent className="mx-4">
           {projects.map((project) => (
             <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} background="background" />
+              <ProjectCard project={project} variant="thumb" className="bg-background" />
             </CarouselItem>
           ))}
         </CarouselContent>
@@ -38,11 +37,11 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
       </Carousel>
 
       {/* Desktop List */}
-      <ItemGroup className="hidden lg:flex w-full lg:max-w-xl xl:max-w-3xl gap-4">
+      <div className="hidden lg:flex flex-col w-full lg:max-w-xl xl:max-w-3xl gap-8">
         {projects.map((project) => (
-          <ProjectCard key={project.id} project={project} scenario="list" background="background" />
+          <ProjectCard key={project.id} project={project} variant="list" className="bg-background" />
         ))}
-      </ItemGroup>
+      </div>
     </section>
   );
 }
