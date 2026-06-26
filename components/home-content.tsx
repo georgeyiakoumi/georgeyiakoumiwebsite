@@ -175,7 +175,7 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
 
         {sectorTabs.length > 2 && (
           <AnimatedTabs
-            className="max-w-full "
+            className="max-w-full sticky top-20 z-10 py-2"
             tabs={sectorTabs}
             activeTab={activeSector}
             onTabChange={setActiveSector}
@@ -208,15 +208,13 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         </Typography>
 
         <div className="flex flex-col items-center gap-8 w-full">
-          <div className="xl:static sticky top-20 z-10 py-2 w-full flex justify-center">
             <AnimatedTabs
-              className="max-w-full"
+              className="max-w-full sticky top-20 z-10 py-2"
               tabs={categoryTabs}
               activeTab={activeCategory}
               onTabChange={handleCategoryChange}
               ariaLabel="Filter tools by category"
             />
-          </div>
 
           <div ref={toolsGridRef} className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
             {tools.map((tool) => {

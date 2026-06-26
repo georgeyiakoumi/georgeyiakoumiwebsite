@@ -41,16 +41,16 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
   }, [activeTab]);
 
   return (
-    <div className={cn("-mx-8 lg:-mx-0", className)}>
+    <div className={cn("-mx-8 lg:-mx-0 relative", className)}>
+      {/* Left fade */}
+      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-r from-background to-transparent lg:hidden" aria-hidden="true" />
 
       <div
-        ref={scrollRef}
-                className="overflow-x-auto scrollbar-hide lg:flex lg:justify-center"
-
-        
-      >
-        <div
-                    className="relative inline-flex h-9 items-center justify-center rounded-lg p-1 text-muted-foreground gap-1 mx-8 lg:mx-0"
+          ref={scrollRef}
+          className="overflow-x-auto scrollbar-hide lg:flex lg:justify-center bg-background rounded-xl overflow-hidden"
+        >
+        <div 
+          className="relative inline-flex h-9 items-center justify-center rounded-lg p-1 text-muted-foreground gap-1 mx-8 lg:mx-0"
           role="group"
           aria-label={ariaLabel}
         >
@@ -64,7 +64,7 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
               aria-pressed={activeTab === tab.value}
               aria-label={tab.icon ? tab.label : undefined}
               className={cn(
-                "h-7 cursor-pointer relative z-10 hover:bg-transparent gap-1.5 whitespace-nowrap",
+                "h-7 cursor-pointer relative hover:bg-transparent gap-1.5 z-1 whitespace-nowrap",
                 activeTab === tab.value && "text-foreground"
               )}
             >
@@ -84,6 +84,9 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
           ))}
         </div>
       </div>
+
+      {/* Right fade */}
+      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-l from-background to-transparent lg:hidden" aria-hidden="true" />
     </div>
   );
 }
