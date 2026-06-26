@@ -91,6 +91,11 @@
     },
     "featured_position": {
       "type": "integer"
+    },
+    "project_tags": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::project-tag.project-tag"
     }
   }
 }
