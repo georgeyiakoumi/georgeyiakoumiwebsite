@@ -7,10 +7,6 @@ test.describe('Navigation', () => {
     // Navigate to Projects
     await page.click('text=Projects');
     await expect(page).toHaveURL(/\/projects/);
-
-    // Navigate to Contact
-    await page.click('text=Contact');
-    await expect(page).toHaveURL(/\/contact/);
   });
 
   test('should have working external links', async ({ page }) => {

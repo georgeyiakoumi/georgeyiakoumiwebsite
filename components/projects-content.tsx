@@ -49,7 +49,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="md:sticky md:top-8 lg:top-16 z-10 py-2 w-full flex justify-center items-center gap-4">
+        <div className="lg:sticky lg:top-16 z-10 py-2 w-full flex justify-center items-center gap-4">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -68,7 +68,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Mobile Carousel */}
-      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full md:hidden">
+      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
         <CarouselContent className="mx-4">
           {filteredProjects.map((project) => (
             <CarouselItem key={project.id} className="px-1.5">
@@ -86,7 +86,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       </Carousel>
 
       {/* Tablet Cards */}
-      <div className="hidden md:flex md:flex-col lg:hidden w-full max-w-3xl gap-8">
+      <div className="hidden w-full max-w-3xl gap-8">
         {filteredProjects.map((project) => (
           <ProjectCard key={project.id} project={project} />
         ))}

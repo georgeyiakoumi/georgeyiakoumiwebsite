@@ -6,6 +6,7 @@ import { getStrapiMediaURL } from "@/lib/strapi";
 import { Typography } from "@/components/ui/typography";
 import { useEffect, useState } from "react";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "@/components/ui/hover-card";
+import { Badge } from "@/components/ui/badge";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerDescription, DrawerTrigger } from "@/components/ui/drawer";
 
 interface LogoItemData {
@@ -23,6 +24,8 @@ interface LogoItemData {
     height?: number;
     ext?: string;
   };
+  sector?: { id: number; name: string } | null;
+  tags?: { id: number; name: string }[];
 }
 
 interface ThemedLogoProps {
@@ -116,6 +119,13 @@ export function ThemedLogo({ data }: ThemedLogoProps) {
             </Item>
             <DrawerTitle className="pt-4">{data.name}</DrawerTitle>
             {description && <DrawerDescription>{description}</DrawerDescription>}
+            {data.tags && data.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 justify-center">
+                {data.tags.map((tag) => (
+                  <Badge key={tag.id} variant="outline">{tag.name}</Badge>
+                ))}
+              </div>
+            )}
           </DrawerHeader>
         </DrawerContent>
       </Drawer>
@@ -129,10 +139,17 @@ export function ThemedLogo({ data }: ThemedLogoProps) {
         {logoItem}
       </HoverCardTrigger>
       <HoverCardContent className="w-80">
-        <div className="space-y-1">
+        <div className="space-y-2">
           <Typography variant="small" as="h4">{data.name}</Typography>
           {description && (
             <Typography variant="muted">{description}</Typography>
+          )}
+          {data.tags && data.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {data.tags.map((tag) => (
+                <Badge key={tag.id} variant="outline">{tag.name}</Badge>
+              ))}
+            </div>
           )}
         </div>
       </HoverCardContent>

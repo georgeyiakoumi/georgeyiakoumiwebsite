@@ -246,6 +246,8 @@ export interface AboutData {
   heading_businesses: string;
   heading_tools: string;
   contact: AboutRichTextBlock[];
+  cvUrl?: string;
+  email?: string;
   businesses: AboutBusiness[];
   tools: AboutBusiness[];
   createdAt: string;
@@ -454,6 +456,14 @@ export interface BusinessData {
     height?: number;
     ext?: string;
   };
+  sector?: {
+    id: number;
+    name: string;
+  };
+  tags?: {
+    id: number;
+    name: string;
+  }[];
   createdAt: string;
   updatedAt: string;
   publishedAt: string;

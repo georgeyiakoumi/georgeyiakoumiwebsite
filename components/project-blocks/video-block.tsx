@@ -56,7 +56,7 @@ export function VideoBlock({ block }: VideoBlockProps) {
   if (block.url) {
     return (
       <BlockFigure>
-        <div className="relative w-full aspect-video rounded-lg overflow-hidden md:border-border md:border">
+        <div className="relative w-full aspect-video rounded-lg overflow-hidden lg:border-border lg:border">
           <iframe
             src={toEmbedUrl(block.url)}
             title="Project video"
@@ -81,7 +81,7 @@ export function VideoBlock({ block }: VideoBlockProps) {
         <video
           ref={videoRef}
           src={videoUrl || ''}
-          className="project-image w-full h-auto rounded-lg md:border-border md:border"
+          className="project-image w-full h-auto rounded-lg lg:border-border lg:border"
           loop
           muted
           playsInline
