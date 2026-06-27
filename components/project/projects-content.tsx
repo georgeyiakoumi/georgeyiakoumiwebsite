@@ -53,7 +53,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="lg:sticky lg:top-16 z-10 pb-2 w-full flex justify-between lg:justify-center items-center gap-4 px-4 lg:px-0">
+        <div className="lg:sticky lg:top-16 z-10 w-full flex justify-between items-center px-4">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -83,7 +83,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       {mobileViewMode === "carousel" ? (
         <ProjectCardCarousel projects={filteredProjects} className="lg:hidden" />
       ) : (
-        <ProjectCardGrid className="lg:hidden w-full px-8 grid-cols-1 md:grid-cols-2">
+        <ProjectCardGrid className="lg:hidden w-full px-5 grid-cols-1 md:grid-cols-2">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="thumb" />
           ))}
@@ -92,7 +92,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (
-        <ProjectCardList className="hidden lg:flex w-full max-w-3xl">
+        <ProjectCardList className="hidden lg:flex w-full max-w-3xl pt-16">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
