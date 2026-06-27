@@ -1,9 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
+import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
 import { List, LayoutGrid } from "lucide-react";
@@ -67,22 +65,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Mobile Carousel */}
-      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
-        <CarouselContent className="mx-4">
-          {filteredProjects.map((project) => (
-            <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} variant="thumb" showActions={false} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        {filteredProjects.length > 1 && (
-          <div className="flex items-center justify-between mt-4 px-8">
-            <CarouselPrevious className="static translate-y-0" />
-            <CarouselCounter />
-            <CarouselNext className="static translate-y-0" />
-          </div>
-        )}
-      </Carousel>
+      <ProjectCardCarousel projects={filteredProjects} className="lg:hidden" />
 
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (

@@ -7,6 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ChevronRightIcon } from "@/components/ui/chevron-right";
+import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
+import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { cn, getEntryPath } from "@/lib/utils";
 import type { ProjectData } from "@/lib/strapi-queries";
 
@@ -285,9 +287,39 @@ function ProjectCardGrid({
   );
 }
 
+function ProjectCardCarousel({
+  projects,
+  className,
+  cardClassName,
+}: {
+  projects: ProjectData[];
+  className?: string;
+  cardClassName?: string;
+}) {
+  return (
+    <Carousel opts={{ align: "center", loop: true, containScroll: false }} className={cn("w-full", className)}>
+      <CarouselContent className="mx-4">
+        {projects.map((project) => (
+          <CarouselItem key={project.id} className="px-1.5">
+            <ProjectCard project={project} variant="thumb" showActions={false} className={cardClassName} />
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+      {projects.length > 1 && (
+        <div className="flex items-center justify-between mt-4 px-8">
+          <CarouselPrevious className="static translate-y-0" />
+          <CarouselCounter />
+          <CarouselNext className="static translate-y-0" />
+        </div>
+      )}
+    </Carousel>
+  );
+}
+
 export {
   ProjectCard,
   ProjectCardSkeleton,
+  ProjectCardCarousel,
   ProjectCardList,
   ProjectCardGrid,
   ProjectCardRoot,

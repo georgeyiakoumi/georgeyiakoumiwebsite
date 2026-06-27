@@ -1,9 +1,7 @@
 "use client";
 
 import { Typography } from "@/components/ui/typography";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard, ProjectCardList } from "@/components/project/project-card";
+import { ProjectCard, ProjectCardCarousel, ProjectCardList } from "@/components/project/project-card";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 interface OtherProjectsProps {
@@ -21,20 +19,7 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
       </Typography>
 
       {/* Mobile Carousel */}
-      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
-        <CarouselContent className="mx-4">
-          {projects.map((project) => (
-            <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} variant="thumb" showActions={false} className="bg-background" />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <div className="flex items-center justify-between mt-4 px-8">
-          <CarouselPrevious className="static translate-y-0" />
-          <CarouselCounter />
-          <CarouselNext className="static translate-y-0" />
-        </div>
-      </Carousel>
+      <ProjectCardCarousel projects={projects} className="lg:hidden" cardClassName="bg-background" />
 
       {/* Desktop List */}
       <ProjectCardList className="hidden lg:flex w-full lg:max-w-xl xl:max-w-3xl">

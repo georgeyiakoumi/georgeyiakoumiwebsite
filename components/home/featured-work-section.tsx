@@ -56,13 +56,13 @@ export function FeaturedWorkSectionSkeleton() {
     <Section>
       <Skeleton className="h-8 w-48" />
       <div className="w-full max-w-3xl">
-        <ProjectCardGrid className="lg:hidden">
+        <div className="lg:hidden">
           <ProjectCardSkeleton variant="thumb" />
-        </ProjectCardGrid>
-        <ProjectCardList className="hidden lg:flex">
+        </div>
+        <div className="hidden lg:flex flex-col gap-4">
           <ProjectCardSkeleton variant="list" />
           <ProjectCardSkeleton variant="list" />
-        </ProjectCardList>
+        </div>
       </div>
       <Skeleton className="h-10 w-32" />
     </Section>
