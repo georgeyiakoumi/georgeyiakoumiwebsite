@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
@@ -57,6 +58,19 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
             </div>
           );
         })}
+      </div>
+    </Section>
+  );
+}
+
+export function CompaniesSectionSkeleton() {
+  return (
+    <Section>
+      <Skeleton className="h-8 w-48" />
+      <div className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+        {Array.from({ length: 9 }).map((_, i) => (
+          <Skeleton key={i} className="h-16 w-full" />
+        ))}
       </div>
     </Section>
   );

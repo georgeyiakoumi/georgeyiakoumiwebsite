@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useMemo } from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
@@ -78,6 +79,19 @@ export function StackSection({ heading, tools }: StackSectionProps) {
             );
           })}
         </div>
+      </div>
+    </Section>
+  );
+}
+
+export function StackSectionSkeleton() {
+  return (
+    <Section>
+      <Skeleton className="h-8 w-32" />
+      <div className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
+        {Array.from({ length: 16 }).map((_, i) => (
+          <Skeleton key={i} className="h-16 w-full" />
+        ))}
       </div>
     </Section>
   );

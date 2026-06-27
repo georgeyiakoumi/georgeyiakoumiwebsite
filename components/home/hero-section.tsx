@@ -1,6 +1,7 @@
 "use client";
 
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { ScrollIndicator } from "@/components/scroll-indicator";
@@ -39,6 +40,17 @@ export function HeroSection({ headingText, avatarUrl, avatarAlt, paragraphs }: H
       ))}
 
       <ScrollIndicator />
+    </Section>
+  );
+}
+
+export function HeroSectionSkeleton() {
+  return (
+    <Section as="header">
+      <Skeleton className="size-32 rounded-full" />
+      <Skeleton className="h-10 w-64" />
+      <Skeleton className="h-6 w-96" />
+      <Skeleton className="h-6 w-80" />
     </Section>
   );
 }
