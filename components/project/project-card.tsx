@@ -172,18 +172,18 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
             hoverEffects={showActions}
             className="aspect-video border border-border w-full h-full rounded-xl transition-[border-radius,border-right-color] duration-200 ease-out delay-200 xl:group-hover:rounded-r-none xl:group-hover:border-r-transparent xl:group-hover:delay-0"
           >
+          </ProjectCardThumb>
+          <ProjectCardHeader className="flex-1 rounded-r-xl border-t border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
+            <ProjectCardTags tags={project.project_tags} />
+            <ProjectCardTitle className="text-xl">{project.title}</ProjectCardTitle>
             {showActions && (
-              <ProjectCardActions className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
+              <ProjectCardActions className="absolute bottom-4 left-4 z-10 flex items-end justify-start opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
                 <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
                   {project.type === "article" ? "Read article" : "Read case study"}
                   <ChevronRightIcon ref={chevronRef} />
                 </Button>
               </ProjectCardActions>
             )}
-          </ProjectCardThumb>
-          <ProjectCardHeader className="flex-1 rounded-r-xl border-t border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
-            <ProjectCardTags tags={project.project_tags} />
-            <ProjectCardTitle className="text-xl">{project.title}</ProjectCardTitle>
           </ProjectCardHeader>
         </ProjectCardLink>
       </ProjectCardRoot>

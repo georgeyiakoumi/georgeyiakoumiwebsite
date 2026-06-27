@@ -5,7 +5,7 @@ import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedWorkSection } from "@/components/home/featured-work-section";
 import { CompaniesSection } from "@/components/home/companies-section";
 import { StackSection } from "@/components/home/stack-section";
-import { ContactSection } from "@/components/home/contact-section";
+import { AboutSection } from "@/components/home/about-section";
 
 interface AboutData {
   hero: Array<{
@@ -36,22 +36,16 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
   if (!aboutData) return null;
 
   const heading = aboutData.hero.find(block => block.type === 'heading');
-  const avatarBlock = aboutData.hero.find(block => block.type === 'image');
   const paragraphs = aboutData.hero.filter(block => block.type === 'paragraph');
-
   const headingText = heading?.children?.[0]?.text;
-  const avatarUrl = avatarBlock?.image?.url;
-  const avatarAlt = avatarBlock?.image?.alternativeText || "Profile photo";
 
   const contactHeading = aboutData.contact.find(block => block.type === 'heading');
-  const contactParagraph = aboutData.contact.find(block => block.type === 'paragraph');
+  const contactParagraphs = aboutData.contact.filter(block => block.type === 'paragraph');
 
   return (
     <>
       <HeroSection
         headingText={headingText}
-        avatarUrl={avatarUrl}
-        avatarAlt={avatarAlt}
         paragraphs={paragraphs}
       />
 
@@ -67,9 +61,9 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         tools={tools}
       />
 
-      <ContactSection
+      <AboutSection
         heading={contactHeading?.children?.[0]?.text}
-        description={contactParagraph?.children?.[0]?.text}
+        paragraphs={contactParagraphs}
         email={aboutData.email}
       />
     </>

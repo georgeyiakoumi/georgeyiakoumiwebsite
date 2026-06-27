@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
-import { ProjectCardSkeleton, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
+import { ProjectCardSkeleton, ProjectCardList } from "@/components/project/project-card";
 import { Typography } from "@/components/ui/typography";
 import { ProjectCard } from "@/components/project/project-card";
 import { GalleryVerticalEndIcon, type GalleryVerticalEndIconHandle } from "@/components/ui/gallery-vertical-end";
@@ -26,12 +26,12 @@ export function FeaturedWorkSection({ projects }: FeaturedWorkSectionProps) {
         Featured work
       </Typography>
       <div className="w-full max-w-3xl">
-        <ProjectCardGrid className="lg:hidden">
+        <ProjectCardList className="md:hidden">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="thumb" />
           ))}
-        </ProjectCardGrid>
-        <ProjectCardList className="hidden lg:flex">
+        </ProjectCardList>
+        <ProjectCardList className="hidden md:flex">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
@@ -43,7 +43,7 @@ export function FeaturedWorkSection({ projects }: FeaturedWorkSectionProps) {
           onMouseEnter={() => galleryIconRef.current?.startAnimation()}
           onMouseLeave={() => galleryIconRef.current?.stopAnimation()}
         >
-          <GalleryVerticalEndIcon ref={galleryIconRef} size={16} />
+          <GalleryVerticalEndIcon ref={galleryIconRef}/>
           All projects
         </Link>
       </Button>

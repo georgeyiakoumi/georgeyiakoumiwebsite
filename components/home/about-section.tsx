@@ -10,13 +10,13 @@ import { Typography } from "@/components/ui/typography";
 const AtSignIcon = dynamic(() => import("@/components/ui/at-sign").then(mod => ({ default: mod.AtSignIcon })), { ssr: false });
 type AtSignIconHandle = import("@/components/ui/at-sign").AtSignIconHandle;
 
-interface ContactSectionProps {
+interface AboutSectionProps {
   heading?: string;
-  description?: string;
+  paragraphs: Array<{ children?: Array<{ text?: string }> }>;
   email?: string;
 }
 
-export function ContactSection({ heading, description, email }: ContactSectionProps) {
+export function AboutSection({ heading, paragraphs, email }: AboutSectionProps) {
   const atSignRef = useRef<AtSignIconHandle>(null);
 
   return (
@@ -24,9 +24,13 @@ export function ContactSection({ heading, description, email }: ContactSectionPr
       <Typography variant="h2" align="center">
         {heading}
       </Typography>
-      <Typography variant="lead" align="center">
-        {description}
-      </Typography>
+      <div className="flex flex-col gap-4 max-w-xl lg:max-w-xl">
+        {paragraphs.map((para, index) => (
+          <Typography key={index} variant="lead" align="left">
+            {para.children?.[0]?.text || ''}
+          </Typography>
+        ))}
+      </div>
       {email && (
         <Button
           size="lg"
@@ -44,10 +48,11 @@ export function ContactSection({ heading, description, email }: ContactSectionPr
   );
 }
 
-export function ContactSectionSkeleton() {
+export function AboutSectionSkeleton() {
   return (
     <Section>
       <Skeleton className="h-8 w-48" />
+      <Skeleton className="h-6 w-96" />
       <Skeleton className="h-6 w-80" />
       <Skeleton className="h-12 w-40" />
     </Section>

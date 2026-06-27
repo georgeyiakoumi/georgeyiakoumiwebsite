@@ -1,40 +1,63 @@
 "use client";
 
-import { ImageWithFallback } from "@/components/ui/image-with-fallback";
+import { useRef } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import { SplitText } from "gsap/SplitText";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { ScrollIndicator } from "@/components/scroll-indicator";
 
+gsap.registerPlugin(useGSAP, SplitText);
+
 interface HeroSectionProps {
   headingText?: string;
-  avatarUrl?: string;
-  avatarAlt: string;
   paragraphs: Array<{ children?: Array<{ text?: string }> }>;
 }
 
-export function HeroSection({ headingText, avatarUrl, avatarAlt, paragraphs }: HeroSectionProps) {
+export function HeroSection({ headingText, paragraphs }: HeroSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useGSAP(() => {
+    if (!sectionRef.current) return;
+
+    const heading = sectionRef.current.querySelector("[data-hero-heading]");
+    const body = sectionRef.current.querySelector("[data-hero-body]");
+    if (!heading && !body) return;
+
+    const tl = gsap.timeline();
+
+    if (heading) {
+      const headingSplit = SplitText.create(heading, { type: "words" });
+      tl.from(headingSplit.words, {
+        autoAlpha: 0,
+        y: 15,
+        stagger: 0.04,
+        duration: 0.5,
+        ease: "power2.out",
+      });
+    }
+
+    if (body) {
+      const bodySplit = SplitText.create(body, { type: "words" });
+      tl.from(bodySplit.words, {
+        autoAlpha: 0,
+        y: 10,
+        stagger: 0.03,
+        duration: 0.4,
+        ease: "power2.out",
+      }, "-=0.2");
+    }
+  }, { scope: sectionRef });
+
   return (
-    <Section as="header" className="relative">
-      {avatarUrl && (
-        <ImageWithFallback
-          src={avatarUrl}
-          alt={avatarAlt}
-          width={128}
-          height={128}
-          className="size-32 rounded-full mx-auto object-cover select-none"
-          draggable={false}
-          priority
-          fetchPriority="high"
-          placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTI4IiBoZWlnaHQ9IjEyOCIgZmlsbD0iI2VlZSIvPjwvc3ZnPg=="
-        />
-      )}
-      <Typography variant="h1">
+    <Section as="header" ref={sectionRef} className="relative">
+      <Typography variant="h1" data-hero-heading>
         {headingText}
       </Typography>
       {paragraphs.map((para, index) => (
-        <Typography key={index} variant="lead" align="center" className="max-w-xl">
+        <Typography key={index} variant="lead" align="center" className="max-w-xl" data-hero-body>
           {para.children?.[0]?.text || ''}
         </Typography>
       ))}
@@ -47,10 +70,8 @@ export function HeroSection({ headingText, avatarUrl, avatarAlt, paragraphs }: H
 export function HeroSectionSkeleton() {
   return (
     <Section as="header">
-      <Skeleton className="size-32 rounded-full" />
       <Skeleton className="h-10 w-64" />
       <Skeleton className="h-6 w-96" />
-      <Skeleton className="h-6 w-80" />
     </Section>
   );
 }

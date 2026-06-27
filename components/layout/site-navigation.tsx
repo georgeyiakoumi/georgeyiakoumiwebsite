@@ -59,7 +59,7 @@ export function SiteNavigation({ cvUrl, email }: SiteNavigationProps) {
               onMouseLeave={() => userIconRef.current?.stopAnimation()}
             >
               {isPending && pendingPathRef.current === NAV_LINKS.about.href ? (
-                <Spinner className="lg:hidden" />
+                <Spinner />
               ) : (
                 <UserIcon ref={userIconRef} />
               )}
@@ -77,7 +77,7 @@ export function SiteNavigation({ cvUrl, email }: SiteNavigationProps) {
               onMouseLeave={() => galleryIconRef.current?.stopAnimation()}
             >
               {isPending && pendingPathRef.current === NAV_LINKS.projects.href ? (
-                <Spinner className="lg:hidden" />
+                <Spinner />
               ) : (
                 <GalleryVerticalEndIcon ref={galleryIconRef} />
               )}
