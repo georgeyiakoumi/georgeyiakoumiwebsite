@@ -13,7 +13,7 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
   if (projects.length === 0) return null;
 
   return (
-    <section className="flex flex-col gap-8 h-screen lg:h-auto lg:py-16 items-center justify-center w-full border-t border-border bg-muted/10 px-0 lg:px-8">
+    <section className="flex flex-col gap-8 h-screen lg:h-auto lg:py-16 items-center justify-center w-full px-0 lg:px-8">
       <Typography variant="h2" align="center">
         {type === "article" ? "Other articles" : "Other projects"}
       </Typography>

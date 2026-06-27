@@ -4,15 +4,21 @@ import { useState, useMemo } from "react";
 import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
-import { List, LayoutGrid } from "lucide-react";
+import { List, LayoutGrid, GalleryHorizontal } from "lucide-react";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 type ProjectFilter = "client" | "personal" | "article";
 type ViewMode = "list" | "grid";
+type MobileViewMode = "carousel" | "list";
 
 const viewTabs: AnimatedTab[] = [
   { value: "list", label: "List", icon: <List className="size-4" /> },
   { value: "grid", label: "Grid", icon: <LayoutGrid className="size-4" /> },
+];
+
+const mobileViewTabs: AnimatedTab[] = [
+  { value: "carousel", icon: <GalleryHorizontal className="size-4" /> },
+  { value: "list", icon: <List className="size-4" /> },
 ];
 
 interface ProjectsContentProps {
@@ -22,6 +28,7 @@ interface ProjectsContentProps {
 export function ProjectsContent({ projects }: ProjectsContentProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("client");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [mobileViewMode, setMobileViewMode] = useState<MobileViewMode>("carousel");
 
   const clientCount = projects.filter((p) => (p.type || "client") === "client").length;
   const personalCount = projects.filter((p) => p.type === "personal").length;
@@ -46,13 +53,21 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="lg:sticky lg:top-16 z-10 py-2 w-full flex justify-center items-center gap-4">
+        <div className="lg:sticky lg:top-16 z-10 pb-2 w-full flex justify-between lg:justify-center items-center gap-4 px-4 lg:px-0">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
             onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
             ariaLabel="Filter projects by type"
           />
+          <div className="lg:hidden">
+            <AnimatedTabs
+              tabs={mobileViewTabs}
+              activeTab={mobileViewMode}
+              onTabChange={(v) => setMobileViewMode(v as MobileViewMode)}
+              ariaLabel="Switch mobile view layout"
+            />
+          </div>
           <div className="hidden xl:block">
             <AnimatedTabs
               tabs={viewTabs}
@@ -64,8 +79,16 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
         </div>
       )}
 
-      {/* Mobile Carousel */}
-      <ProjectCardCarousel projects={filteredProjects} className="lg:hidden" />
+      {/* Mobile: Carousel or List */}
+      {mobileViewMode === "carousel" ? (
+        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden" />
+      ) : (
+        <ProjectCardGrid className="lg:hidden w-full px-8 grid-cols-1 md:grid-cols-2">
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} variant="thumb" />
+          ))}
+        </ProjectCardGrid>
+      )}
 
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (

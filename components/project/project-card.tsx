@@ -87,7 +87,7 @@ function ProjectCardHeader({
   return (
     <div
       data-slot="project-card-header"
-      className={cn("relative flex flex-col justify-center p-6 gap-6", className)}
+      className={cn("relative flex flex-col justify-start p-4 gap-3", className)}
       {...props}
     >
       {children}
