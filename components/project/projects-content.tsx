@@ -12,8 +12,8 @@ type ViewMode = "list" | "grid";
 type MobileViewMode = "carousel" | "list";
 
 const viewTabs: AnimatedTab[] = [
-  { value: "list", label: "List", icon: <List className="size-4" /> },
-  { value: "grid", label: "Grid", icon: <LayoutGrid className="size-4" /> },
+  { value: "list", icon: <List className="size-4" /> },
+  { value: "grid", icon: <LayoutGrid className="size-4" /> },
 ];
 
 const mobileViewTabs: AnimatedTab[] = [
@@ -53,7 +53,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="lg:sticky lg:top-16 z-10 w-full flex justify-between items-center px-4 lg:px-0 max-w-3xl">
+        <div className="sticky top-0 z-10 w-full flex justify-between items-center px-4 -mt-24 pt-24 lg:pt-16 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16 bg-background">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -79,7 +79,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
       {/* Mobile: Carousel or List */}
       {mobileViewMode === "carousel" ? (
-        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden" />
+        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden overflow-x-hidden" />
       ) : (
         <ProjectCardGrid className="lg:hidden w-full px-5 flex flex-col">
           {filteredProjects.map((project) => (
@@ -89,7 +89,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Desktop (lg+) */}
-      <div className="hidden lg:block w-full max-w-3xl pt-16">
+      <div className="hidden lg:block w-full max-w-3xl pt-20">
         {viewMode === "list" ? (
           <ProjectCardList>
             {filteredProjects.map((project) => (

@@ -279,7 +279,7 @@ function ProjectCardGrid({
   return (
     <div
       data-slot="project-card-grid"
-      className={cn("grid md:grid-cols-2 xl:grid-cols-3 gap-6", className)}
+      className={cn("grid md:grid-cols-2 xl:grid-cols-2 gap-6", className)}
       {...props}
     >
       {children}
