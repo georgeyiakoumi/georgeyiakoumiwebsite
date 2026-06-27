@@ -47,7 +47,7 @@ export function SiteNavigation({ cvUrl, email }: SiteNavigationProps) {
   };
 
   return (
-    <NavigationMenu orientation="vertical" style={{ transform: `translateX(-50%) translateY(${navVisible ? '0' : '120%'})` }} className={`bg-background rounded-full border border-border lg:border-0 overflow-hidden lg:overflow-visible lg:rounded-md fixed box-border items-start left-1/2 lg:!transform-none lg:left-8 lg:left-16 bottom-8 lg:bottom-auto lg:top-8 lg:top-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${navVisible ? "opacity-100" : "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto"}`}>
+    <NavigationMenu orientation="vertical" style={{ transform: `translateX(-50%) translateY(${navVisible ? '0' : '120%'})` }} className={`bg-background rounded-full border border-border lg:border-0 overflow-hidden lg:overflow-visible lg:rounded-lg fixed box-border items-start left-1/2 lg:!transform-none lg:left-8 lg:left-16 bottom-8 lg:bottom-auto lg:top-8 lg:top-16 z-20 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${navVisible ? "opacity-100" : "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto"}`}>
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuLink asChild active={pathname === NAV_LINKS.about.href} className="pl-6">

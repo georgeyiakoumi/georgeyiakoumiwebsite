@@ -71,7 +71,7 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
               {activeTab === tab.value && (
                 <motion.div
                   layoutId={`tab-highlight-${layoutId}`}
-                  className="absolute inset-0 bg-muted rounded-md"
+                  className="absolute inset-0 bg-muted rounded-lg"
                   style={{ zIndex: -1 }}
                   transition={{ type: "spring", stiffness: 200, damping: 25 }}
                 />
