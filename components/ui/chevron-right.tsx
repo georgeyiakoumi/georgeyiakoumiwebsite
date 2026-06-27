@@ -19,6 +19,8 @@ interface ChevronRightIconProps extends HTMLAttributes<HTMLDivElement> {
 const DEFAULT_TRANSITION: Transition = {
   times: [0, 0.4, 1],
   duration: 0.5,
+  repeat: Infinity,
+  repeatDelay: 0.2,
 };
 
 const ChevronRightIcon = forwardRef<

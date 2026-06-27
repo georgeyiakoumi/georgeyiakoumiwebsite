@@ -4,9 +4,8 @@ import * as React from "react";
 import Link from "next/link";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ChevronRightIcon } from "@/components/ui/chevron-right";
+import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
 import { cn, getEntryPath } from "@/lib/utils";
@@ -116,13 +115,9 @@ function ProjectCardTags({ tags }: { tags?: { id: number; name: string }[] }) {
   if (!tags || tags.length === 0) return null;
 
   return (
-    <div data-slot="project-card-tags" className="flex flex-wrap gap-1">
-      {tags.map((tag) => (
-        <Badge key={tag.id} variant="outline">
-          {tag.name}
-        </Badge>
-      ))}
-    </div>
+    <p data-slot="project-card-tags" className="text-xs text-muted-foreground">
+      {tags.map((tag) => tag.name).join(" · ")}
+    </p>
   );
 }
 
@@ -154,6 +149,7 @@ interface ProjectCardProps {
 function ProjectCard({ project, variant = "thumb", className, showActions = true }: ProjectCardProps) {
   const thumbSrc = project.project_thumb?.url;
   const thumbAlt = project.project_thumb?.alternativeText || project.title;
+  const chevronRef = React.useRef<ChevronRightIconHandle>(null);
 
   if (variant === "list") {
     return (
@@ -163,6 +159,8 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
           "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
           className
         )}
+        onMouseEnter={() => chevronRef.current?.startAnimation()}
+        onMouseLeave={() => chevronRef.current?.stopAnimation()}
       >
         <ProjectCardLink
           project={project}
@@ -178,14 +176,14 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
               <ProjectCardActions className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
                 <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
                   {project.type === "article" ? "Read article" : "Read case study"}
-                  <ChevronRightIcon size={14} />
+                  <ChevronRightIcon ref={chevronRef} size={14} />
                 </Button>
               </ProjectCardActions>
             )}
           </ProjectCardThumb>
           <ProjectCardHeader className="flex-1 rounded-r-xl border-t border-r border-b border-border/0 transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
-            <ProjectCardTitle className="text-2xl">{project.title}</ProjectCardTitle>
             <ProjectCardTags tags={project.project_tags} />
+            <ProjectCardTitle className="text-2xl">{project.title}</ProjectCardTitle>
           </ProjectCardHeader>
         </ProjectCardLink>
       </ProjectCardRoot>
@@ -199,6 +197,8 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
         "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
         className
       )}
+      onMouseEnter={() => chevronRef.current?.startAnimation()}
+      onMouseLeave={() => chevronRef.current?.stopAnimation()}
     >
       <ProjectCardLink project={project} className="flex flex-col">
         <ProjectCardThumb
@@ -217,8 +217,8 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
           )}
         </ProjectCardThumb>
         <ProjectCardHeader className="flex-1 rounded-b-xl border-l border-r border-b border-border/0 transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-top before:scale-y-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-y-100 xl:group-hover:before:delay-200">
-          <ProjectCardTitle className="text-lg">{project.title}</ProjectCardTitle>
           <ProjectCardTags tags={project.project_tags} />
+          <ProjectCardTitle className="text-lg">{project.title}</ProjectCardTitle>
         </ProjectCardHeader>
       </ProjectCardLink>
     </ProjectCardRoot>
