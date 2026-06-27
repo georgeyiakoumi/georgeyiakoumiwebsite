@@ -24,7 +24,7 @@ function ZoomControls({ onClose }: { onClose: () => void }) {
         variant="ghost"
         size="icon"
         onClick={() => zoomIn()}
-        className="size-10 bg-black/50 text-white backdrop-blur-sm xl:hover:bg-black/70"
+        className="size-10 bg-white/15 text-white backdrop-blur-sm xl:hover:bg-white/25"
         aria-label="Zoom in"
       >
         <ZoomIn className="size-5" />
@@ -33,7 +33,7 @@ function ZoomControls({ onClose }: { onClose: () => void }) {
         variant="ghost"
         size="icon"
         onClick={() => zoomOut()}
-        className="size-10 bg-black/50 text-white backdrop-blur-sm xl:hover:bg-black/70"
+        className="size-10 bg-white/15 text-white backdrop-blur-sm xl:hover:bg-white/25"
         aria-label="Zoom out"
       >
         <ZoomOut className="size-5" />
@@ -42,7 +42,7 @@ function ZoomControls({ onClose }: { onClose: () => void }) {
         variant="ghost"
         size="icon"
         onClick={() => resetTransform()}
-        className="size-10 bg-black/50 text-white backdrop-blur-sm xl:hover:bg-black/70"
+        className="size-10 bg-white/15 text-white backdrop-blur-sm xl:hover:bg-white/25"
         aria-label="Reset zoom"
       >
         <RotateCcw className="size-4" />
@@ -51,7 +51,7 @@ function ZoomControls({ onClose }: { onClose: () => void }) {
         variant="ghost"
         size="icon"
         onClick={onClose}
-        className="size-10 bg-black/50 text-white backdrop-blur-sm xl:hover:bg-black/70"
+        className="size-10 bg-white/15 text-white backdrop-blur-sm xl:hover:bg-white/25"
         aria-label="Close zoom view"
       >
         <X className="size-5" />
@@ -89,7 +89,7 @@ export function ZoomableImage({ children, src, alt, width, height }: ZoomableIma
         aria-label={`Zoom into ${alt}`}
       >
         {children}
-        <span className="absolute bottom-3 right-3 flex items-center justify-center size-8 rounded-full bg-black/50 text-white backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none md:flex hidden">
+        <span className="absolute bottom-3 right-3 flex items-center justify-center size-8 rounded-full bg-black/50 text-white backdrop-blur-sm opacity-70 xl:group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
           <ZoomIn className="size-4" />
         </span>
       </button>

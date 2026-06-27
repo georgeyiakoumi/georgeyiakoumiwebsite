@@ -132,7 +132,7 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
 
         {/* Divider line on image */}
         <div
-          className="absolute top-0 bottom-0 w-px bg-background/80 pointer-events-none z-10"
+          className="absolute top-0 bottom-0 w-px bg-foreground/10 pointer-events-none z-10"
           style={{ left: `${sliderPosition}%` }}
         />
 

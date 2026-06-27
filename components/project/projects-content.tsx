@@ -1,20 +1,24 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard } from "@/components/project/project-card";
+import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
-import { List, LayoutGrid } from "lucide-react";
+import { List, LayoutGrid, GalleryHorizontal } from "lucide-react";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 type ProjectFilter = "client" | "personal" | "article";
 type ViewMode = "list" | "grid";
+type MobileViewMode = "carousel" | "list";
 
 const viewTabs: AnimatedTab[] = [
-  { value: "list", label: "List", icon: <List className="size-4" /> },
-  { value: "grid", label: "Grid", icon: <LayoutGrid className="size-4" /> },
+  { value: "list", icon: <List className="size-4" /> },
+  { value: "grid", icon: <LayoutGrid className="size-4" /> },
+];
+
+const mobileViewTabs: AnimatedTab[] = [
+  { value: "carousel", icon: <GalleryHorizontal className="size-4" /> },
+  { value: "list", icon: <List className="size-4" /> },
 ];
 
 interface ProjectsContentProps {
@@ -24,6 +28,7 @@ interface ProjectsContentProps {
 export function ProjectsContent({ projects }: ProjectsContentProps) {
   const [activeFilter, setActiveFilter] = useState<ProjectFilter>("client");
   const [viewMode, setViewMode] = useState<ViewMode>("list");
+  const [mobileViewMode, setMobileViewMode] = useState<MobileViewMode>("carousel");
 
   const clientCount = projects.filter((p) => (p.type || "client") === "client").length;
   const personalCount = projects.filter((p) => p.type === "personal").length;
@@ -48,65 +53,57 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="lg:sticky lg:top-16 z-10 py-2 w-full flex justify-center items-center gap-4">
+        <div className="sticky top-0 z-10 w-full flex justify-between items-center px-4 -mt-24 pt-24 lg:pt-16 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16 bg-background">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
             onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
             ariaLabel="Filter projects by type"
           />
-          <div className="hidden xl:block">
-            <AnimatedTabs
-              tabs={viewTabs}
-              activeTab={viewMode}
-              onTabChange={(v) => setViewMode(v as ViewMode)}
-              ariaLabel="Switch view layout"
-            />
-          </div>
+          <AnimatedTabs
+            className="lg:hidden"
+            tabs={mobileViewTabs}
+            activeTab={mobileViewMode}
+            onTabChange={(v) => setMobileViewMode(v as MobileViewMode)}
+            ariaLabel="Switch mobile view layout"
+          />
+          <AnimatedTabs
+            className="hidden lg:flex"
+            tabs={viewTabs}
+            activeTab={viewMode}
+            onTabChange={(v) => setViewMode(v as ViewMode)}
+            ariaLabel="Switch view layout"
+          />
         </div>
       )}
 
-      {/* Mobile Carousel */}
-      <Carousel opts={{ align: "center", loop: true, containScroll: false }} className="w-full lg:hidden">
-        <CarouselContent className="mx-4">
-          {filteredProjects.map((project) => (
-            <CarouselItem key={project.id} className="px-1.5">
-              <ProjectCard project={project} variant="thumb" showActions={false} />
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        {filteredProjects.length > 1 && (
-          <div className="flex items-center justify-between mt-4 px-8">
-            <CarouselPrevious className="static translate-y-0" />
-            <CarouselCounter />
-            <CarouselNext className="static translate-y-0" />
-          </div>
-        )}
-      </Carousel>
-
-      {/* Desktop List (lg default, xl togglable) */}
-      {viewMode === "list" ? (
-        <div className="hidden lg:flex flex-col w-full max-w-3xl gap-12">
-          {filteredProjects.map((project) => (
-            <ProjectCard key={project.id} project={project} variant="list" />
-          ))}
-        </div>
+      {/* Mobile: Carousel or List */}
+      {mobileViewMode === "carousel" ? (
+        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden overflow-x-hidden" />
       ) : (
-        <>
-          {/* lg–xl: always list (no toggle available) */}
-          <div className="hidden lg:flex xl:hidden flex-col w-full max-w-3xl gap-4">
+        <ProjectCardGrid className="lg:hidden w-full px-5 flex flex-col">
+          {filteredProjects.map((project) => (
+            <ProjectCard key={project.id} project={project} variant="thumb" />
+          ))}
+        </ProjectCardGrid>
+      )}
+
+      {/* Desktop (lg+) */}
+      <div className="hidden lg:block w-full xl:max-w-3xl pt-20">
+        {viewMode === "list" ? (
+          <ProjectCardList>
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} variant="list" />
             ))}
-          </div>
-          {/* xl+: grid when toggled */}
-          <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-8">
+          </ProjectCardList>
+        ) : (
+          <ProjectCardGrid>
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} variant="thumb" />
             ))}
-          </div>
-        </>
-      )}
+          </ProjectCardGrid>
+        )}
+      </div>
     </>
   );
 }

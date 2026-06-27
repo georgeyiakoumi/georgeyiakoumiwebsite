@@ -40,10 +40,11 @@ export async function fetchAPI<T>(
   }
 
   try {
+    const isDev = process.env.NODE_ENV === 'development';
     const response = await fetch(url.toString(), {
       headers,
-      cache,
-      next: { revalidate: 3600, ...(tags && { tags }) },
+      cache: isDev ? 'force-cache' : cache,
+      next: isDev ? undefined : { revalidate: 3600, ...(tags && { tags }) },
     });
 
     if (!response.ok) {

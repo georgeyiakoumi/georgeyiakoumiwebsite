@@ -63,7 +63,7 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
   return (
     <div
       className={cn(
-        "flex items-center gap-2 bg-card rounded-sm will-change-transform transition-all duration-200 origin-top-right xl:hover:scale-[1.1] xl:hover:bg-background",
+        "flex items-center gap-2 bg-card rounded-lg will-change-transform transition-all duration-200 origin-top-right xl:hover:scale-[1.1] xl:hover:bg-background",
         className
       )}
     >
@@ -74,7 +74,7 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
         onMouseEnter={() => leftRef.current?.startAnimation()}
         onMouseLeave={() => leftRef.current?.stopAnimation()}
         disabled={!canScrollPrev}
-        className="rounded-sm cursor-pointer dark:hover:bg-white/15"
+        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
       >
         <ChevronLeftIcon ref={leftRef} size={16} />
         <span className="sr-only">Previous slide</span>
@@ -89,7 +89,7 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
         onMouseEnter={() => rightRef.current?.startAnimation()}
         onMouseLeave={() => rightRef.current?.stopAnimation()}
         disabled={!canScrollNext}
-        className="rounded-sm cursor-pointer dark:hover:bg-white/15"
+        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
       >
         <ChevronRightIcon ref={rightRef} size={16} />
         <span className="sr-only">Next slide</span>

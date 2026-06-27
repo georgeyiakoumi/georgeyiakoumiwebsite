@@ -8,7 +8,7 @@ import { Badge } from "@/components/ui/badge";
 
 export interface AnimatedTab {
   value: string;
-  label: string;
+  label?: string;
   icon?: React.ReactNode;
   badge?: number;
 }
@@ -62,7 +62,7 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
               data-value={tab.value}
               onClick={() => onTabChange(tab.value)}
               aria-pressed={activeTab === tab.value}
-              aria-label={tab.icon ? tab.label : undefined}
+              aria-label={tab.icon ? (tab.label ?? tab.value) : undefined}
               className={cn(
                 "h-7 cursor-pointer relative hover:bg-transparent gap-1.5 z-1 whitespace-nowrap",
                 activeTab === tab.value && "text-foreground"
@@ -71,12 +71,13 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
               {activeTab === tab.value && (
                 <motion.div
                   layoutId={`tab-highlight-${layoutId}`}
-                  className="absolute inset-0 bg-muted rounded-md"
+                  className="absolute inset-0 bg-muted rounded-lg"
                   style={{ zIndex: -1 }}
                   transition={{ type: "spring", stiffness: 200, damping: 25 }}
                 />
               )}
-              {tab.icon ?? tab.label}
+              {tab.icon}
+              {tab.label}
               {tab.badge !== undefined && (
                 <Badge variant="secondary" className={cn("h-4 px-1 text-xs", activeTab === tab.value && "bg-background")}>{tab.badge}</Badge>
               )}

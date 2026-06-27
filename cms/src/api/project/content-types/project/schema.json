@@ -34,9 +34,6 @@
         "files"
       ]
     },
-    "hero_caption": {
-      "type": "string"
-    },
     "date": {
       "type": "date"
     },

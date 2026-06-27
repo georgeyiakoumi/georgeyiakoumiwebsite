@@ -190,7 +190,6 @@ export interface ProjectData {
     height?: number;
   };
   type?: 'client' | 'personal' | 'article';
-  hero_caption?: string;
   project_client?: string;
   project_role?: string;
   snapshot_items?: SnapshotItem[];

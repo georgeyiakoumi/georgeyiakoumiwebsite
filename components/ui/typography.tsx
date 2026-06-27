@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 const typographyVariants = cva("text-foreground", {
   variants: {
     variant: {
+      display: "text-3xl md:text-4xl lg:text-6xl font-medium leading-normal text-muted-foreground",
       h1: "text-3xl md:text-4xl font-semibold",
       h2: "text-2xl md:text-3xl font-semibold",
       h3: "text-xl md:text-2xl font-semibold",
