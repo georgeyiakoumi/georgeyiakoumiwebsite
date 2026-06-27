@@ -1,4 +1,4 @@
-import { Mulish } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
@@ -11,7 +11,7 @@ import { getAboutPage } from "@/lib/strapi-queries";
 // Import safelist to ensure Tailwind scans it for dynamic Strapi classes
 import "@/lib/tailwind-safelist";
 
-const mulish = Mulish({
+const font = Outfit({
   subsets: ["latin"],
   display: 'swap',
 });
@@ -33,7 +33,7 @@ export default async function RootLayout({
         <link rel="dns-prefetch" href="https://res.cloudinary.com" />
         <SEOScripts />
       </head>
-      <body className={mulish.className}>
+      <body className={font.className}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <ConditionalLayout cvUrl={aboutData?.cvUrl} email={aboutData?.email}>
             {children}
