@@ -89,7 +89,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Desktop (lg+) */}
-      <div className="hidden lg:block w-full max-w-3xl pt-20">
+      <div className="hidden lg:block w-full xl:max-w-3xl pt-20">
         {viewMode === "list" ? (
           <ProjectCardList>
             {filteredProjects.map((project) => (
