@@ -223,8 +223,39 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
   );
 }
 
+function ProjectCardSkeleton({ variant = "thumb" }: { variant?: "thumb" | "list" }) {
+  if (variant === "list") {
+    return (
+      <div className="rounded-xl grid grid-cols-[3fr_4fr_auto] items-stretch">
+        <Skeleton className="aspect-video w-full h-full rounded-xl" />
+        <div className="flex flex-col gap-3 justify-center p-6">
+          <Skeleton className="h-6 w-3/4" />
+          <div className="flex gap-1">
+            <Skeleton className="h-5 w-20 rounded-full" />
+            <Skeleton className="h-5 w-24 rounded-full" />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="rounded-xl">
+      <Skeleton className="aspect-video w-full rounded-xl" />
+      <div className="flex flex-col gap-3 p-6">
+        <Skeleton className="h-5 w-3/4" />
+        <div className="flex gap-1">
+          <Skeleton className="h-5 w-20 rounded-full" />
+          <Skeleton className="h-5 w-16 rounded-full" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export {
   ProjectCard,
+  ProjectCardSkeleton,
   ProjectCardRoot,
   ProjectCardLink,
   ProjectCardThumb,
