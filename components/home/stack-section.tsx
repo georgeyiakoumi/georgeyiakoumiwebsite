@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
-import { ThemedLogo } from "@/components/themed-logo";
+import { LogoCard } from "@/components/logo-card";
 import type { ToolData } from "@/lib/strapi-queries";
 
 interface StackSectionProps {
@@ -74,7 +74,7 @@ export function StackSection({ heading, tools }: StackSectionProps) {
                 }`}
                 style={{ willChange: isActive ? 'auto' : 'opacity, filter, transform' }}
               >
-                <ThemedLogo data={tool} />
+                <LogoCard data={tool} />
               </div>
             );
           })}

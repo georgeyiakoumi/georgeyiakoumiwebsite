@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
-import { ThemedLogo } from "@/components/themed-logo";
+import { LogoCard } from "@/components/logo-card";
 import type { BusinessData } from "@/lib/strapi-queries";
 
 interface CompaniesSectionProps {
@@ -54,7 +54,7 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
               } ${index > 5 ? "lazy-load" : ""}`}
               style={{ willChange: isActive ? 'auto' : 'opacity, filter, transform' }}
             >
-              <ThemedLogo data={business} />
+              <LogoCard data={business} />
             </div>
           );
         })}
