@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
-import { ProjectCardSkeleton } from "@/components/project/project-card";
+import { ProjectCardSkeleton, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { Typography } from "@/components/ui/typography";
 import { ProjectCard } from "@/components/project/project-card";
 import { GalleryVerticalEndIcon, type GalleryVerticalEndIconHandle } from "@/components/ui/gallery-vertical-end";
@@ -26,16 +26,16 @@ export function FeaturedWorkSection({ projects }: FeaturedWorkSectionProps) {
         Featured work
       </Typography>
       <div className="w-full max-w-3xl">
-        <div className="lg:hidden gap-4">
+        <ProjectCardGrid className="lg:hidden">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="thumb" />
           ))}
-        </div>
-        <div className="hidden lg:flex flex-col gap-8">
+        </ProjectCardGrid>
+        <ProjectCardList className="hidden lg:flex">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
-        </div>
+        </ProjectCardList>
       </div>
       <Button variant="outline" asChild>
         <Link
@@ -56,13 +56,13 @@ export function FeaturedWorkSectionSkeleton() {
     <Section>
       <Skeleton className="h-8 w-48" />
       <div className="w-full max-w-3xl">
-        <div className="lg:hidden">
+        <ProjectCardGrid className="lg:hidden">
           <ProjectCardSkeleton variant="thumb" />
-        </div>
-        <div className="hidden lg:flex flex-col gap-4">
+        </ProjectCardGrid>
+        <ProjectCardList className="hidden lg:flex">
           <ProjectCardSkeleton variant="list" />
           <ProjectCardSkeleton variant="list" />
-        </div>
+        </ProjectCardList>
       </div>
       <Skeleton className="h-10 w-32" />
     </Section>

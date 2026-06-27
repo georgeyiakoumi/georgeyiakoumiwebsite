@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard } from "@/components/project/project-card";
+import { ProjectCard, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { AnimatedTabs } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
 import { List, LayoutGrid } from "lucide-react";
@@ -86,25 +86,25 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
       {/* Desktop List (lg default, xl togglable) */}
       {viewMode === "list" ? (
-        <div className="hidden lg:flex flex-col w-full max-w-3xl gap-12">
+        <ProjectCardList className="hidden lg:flex w-full max-w-3xl">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
-        </div>
+        </ProjectCardList>
       ) : (
         <>
           {/* lg–xl: always list (no toggle available) */}
-          <div className="hidden lg:flex xl:hidden flex-col w-full max-w-3xl gap-4">
+          <ProjectCardList className="hidden lg:flex xl:hidden w-full max-w-3xl">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} variant="list" />
             ))}
-          </div>
+          </ProjectCardList>
           {/* xl+: grid when toggled */}
-          <div className="hidden xl:grid grid-cols-3 w-full max-w-5xl gap-8">
+          <ProjectCardGrid className="hidden xl:grid w-full max-w-5xl">
             {filteredProjects.map((project) => (
               <ProjectCard key={project.id} project={project} variant="thumb" />
             ))}
-          </div>
+          </ProjectCardGrid>
         </>
       )}
     </>

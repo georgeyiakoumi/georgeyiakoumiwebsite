@@ -1,6 +1,6 @@
 import { Section } from "@/components/layout/section";
 import { Skeleton } from "@/components/ui/skeleton";
-import { ProjectCardSkeleton } from "@/components/project/project-card";
+import { ProjectCardSkeleton, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 
 export default function PortfolioLoading() {
   return (
@@ -13,18 +13,18 @@ export default function PortfolioLoading() {
       </div>
 
       {/* Tablet card skeletons */}
-      <div className="hidden md:flex md:flex-col lg:hidden w-full max-w-3xl gap-8 px-8">
+      <ProjectCardGrid className="hidden md:grid lg:hidden w-full max-w-3xl px-8">
         {Array.from({ length: 4 }).map((_, i) => (
           <ProjectCardSkeleton key={i} variant="thumb" />
         ))}
-      </div>
+      </ProjectCardGrid>
 
       {/* Desktop list skeletons */}
-      <div className="hidden lg:flex flex-col w-full max-w-3xl gap-4">
+      <ProjectCardList className="hidden lg:flex w-full max-w-3xl">
         {Array.from({ length: 6 }).map((_, i) => (
           <ProjectCardSkeleton key={i} variant="list" />
         ))}
-      </div>
+      </ProjectCardList>
     </Section>
   );
 }

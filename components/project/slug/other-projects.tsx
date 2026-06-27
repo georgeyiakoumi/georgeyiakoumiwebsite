@@ -3,7 +3,7 @@
 import { Typography } from "@/components/ui/typography";
 import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
 import { CarouselCounter } from "@/components/ui/carousel-navigation";
-import { ProjectCard } from "@/components/project/project-card";
+import { ProjectCard, ProjectCardList } from "@/components/project/project-card";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 interface OtherProjectsProps {
@@ -37,11 +37,11 @@ export function OtherProjects({ projects, type }: OtherProjectsProps) {
       </Carousel>
 
       {/* Desktop List */}
-      <div className="hidden lg:flex flex-col w-full lg:max-w-xl xl:max-w-3xl gap-8">
+      <ProjectCardList className="hidden lg:flex w-full lg:max-w-xl xl:max-w-3xl">
         {projects.map((project) => (
           <ProjectCard key={project.id} project={project} variant="list" className="bg-background" />
         ))}
-      </div>
+      </ProjectCardList>
     </section>
   );
 }

@@ -253,9 +253,43 @@ function ProjectCardSkeleton({ variant = "thumb" }: { variant?: "thumb" | "list"
   );
 }
 
+function ProjectCardList({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card-list"
+      className={cn("flex flex-col gap-10", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
+function ProjectCardGrid({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      data-slot="project-card-grid"
+      className={cn("grid md:grid-cols-2 xl:grid-cols-3 gap-6", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
 export {
   ProjectCard,
   ProjectCardSkeleton,
+  ProjectCardList,
+  ProjectCardGrid,
   ProjectCardRoot,
   ProjectCardLink,
   ProjectCardThumb,
