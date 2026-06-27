@@ -61,6 +61,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
   return (
     <section className="place-items-center relative">
       <BackButton />
+
       <ProjectHero
         title={project.title}
         heroImageUrl={heroImageUrl}
@@ -71,7 +72,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
 
       <ProjectDescription description={project.description} />
 
-      <article className="flex flex-col w-full py-16">
+      <article className="flex flex-col w-full">
         {snapshotItems.length > 0 && (
           <SnapshotBlock
             items={snapshotItems}
