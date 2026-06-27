@@ -51,7 +51,7 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
         onMouseEnter={() => (copied ? checkRef : copyRef).current?.startAnimation()}
         onMouseLeave={() => (copied ? checkRef : copyRef).current?.stopAnimation()}
       >
-        {copied ? <CheckIcon ref={checkRef} size={16} /> : <CopyIcon ref={copyRef} size={16} />}
+        {copied ? <CheckIcon ref={checkRef} /> : <CopyIcon ref={copyRef} />}
         {copied ? "Copied!" : "Copy link"}
       </Button>
 
@@ -64,7 +64,7 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
           onMouseEnter={() => sendRef.current?.startAnimation()}
           onMouseLeave={() => sendRef.current?.stopAnimation()}
         >
-          <SendIcon ref={sendRef} size={16} />
+          <SendIcon ref={sendRef} />
           Share
         </Button>
       )}
@@ -78,7 +78,7 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
             onMouseEnter={() => linkedinRef.current?.startAnimation()}
             onMouseLeave={() => linkedinRef.current?.stopAnimation()}
           >
-            <LinkedinIcon ref={linkedinRef} size={16} />
+            <LinkedinIcon ref={linkedinRef}/>
             Share on LinkedIn
           </a>
         </Button>

@@ -43,7 +43,7 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
                 onMouseEnter={() => linkIconRef.current?.startAnimation()}
                 onMouseLeave={() => linkIconRef.current?.stopAnimation()}
               >
-                <LinkIcon ref={linkIconRef} size={16} />
+                <LinkIcon ref={linkIconRef}/>
                 View project
               </a>
             </Button>
@@ -58,7 +58,7 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
                 onMouseEnter={() => githubIconRef.current?.startAnimation()}
                 onMouseLeave={() => githubIconRef.current?.stopAnimation()}
               >
-                <GithubIcon ref={githubIconRef} size={16} />
+                <GithubIcon ref={githubIconRef}/>
                 GitHub Repo
               </a>
             </Button>

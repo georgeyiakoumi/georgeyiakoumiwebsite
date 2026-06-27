@@ -76,7 +76,7 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
         disabled={!canScrollPrev}
         className="rounded-lg cursor-pointer dark:hover:bg-white/15"
       >
-        <ChevronLeftIcon ref={leftRef} size={16} />
+        <ChevronLeftIcon ref={leftRef} />
         <span className="sr-only">Previous slide</span>
       </Button>
       <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
@@ -91,7 +91,7 @@ export function CarouselNavigation({ className }: CarouselNavigationProps) {
         disabled={!canScrollNext}
         className="rounded-lg cursor-pointer dark:hover:bg-white/15"
       >
-        <ChevronRightIcon ref={rightRef} size={16} />
+        <ChevronRightIcon ref={rightRef}/>
         <span className="sr-only">Next slide</span>
       </Button>
     </div>
