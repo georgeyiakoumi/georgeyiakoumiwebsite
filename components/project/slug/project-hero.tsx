@@ -26,7 +26,7 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
   const githubIconRef = useRef<GithubIconHandle>(null);
 
   return (
-    <header className="relative flex flex-col space-y-8 items-center justify-start pt-32 lg:pt-0 lg:justify-center w-full lg:max-w-2xl xl:max-w-3xl min-h-dvh mx-auto">
+    <header className="relative flex flex-col space-y-8 px-8 lg:px-0 items-center justify-start pt-32 lg:pt-0 lg:justify-center w-full lg:max-w-2xl xl:max-w-3xl min-h-dvh mx-auto">
       <Typography variant="h1" className="text-center max-w-2xl">
         {title}
       </Typography>
@@ -67,7 +67,7 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
       )}
 
       {heroImageUrl && (
-        <BlockFigure className="xl:max-w-3xl my-0">
+        <BlockFigure className="xl:max-w-3xl px-0 my-0">
           <ImageWithFallback
             src={heroImageUrl}
             alt={heroAlt}
