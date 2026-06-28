@@ -4,7 +4,7 @@ import { useState, useRef, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import { LogoCard } from "@/components/logo-card";
 import type { ToolData } from "@/lib/strapi-queries";
 
@@ -49,18 +49,19 @@ export function StackSection({ heading, tools }: StackSectionProps) {
 
   return (
     <Section>
-      <Typography variant="h2" align="center">
+      <Typography variant="h2" align="center" className="z-11">
         {heading}
       </Typography>
 
       <div className="flex flex-col items-center gap-8 w-full">
-        <AnimatedTabs
-          className="max-w-full sticky top-20 z-10 py-2"
-          tabs={categoryTabs}
-          activeTab={activeCategory}
-          onTabChange={handleCategoryChange}
-          ariaLabel="Filter tools by category"
-        />
+        <AnimatedTabsSticky>
+          <AnimatedTabs
+            tabs={categoryTabs}
+            activeTab={activeCategory}
+            onTabChange={handleCategoryChange}
+            ariaLabel="Filter tools by category"
+          />
+        </AnimatedTabsSticky>
 
         <div ref={toolsGridRef} className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
           {tools.map((tool) => {

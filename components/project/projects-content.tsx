@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
 import { List, LayoutGrid, GalleryHorizontal } from "lucide-react";
 import type { ProjectData } from "@/lib/strapi-queries";
@@ -53,12 +53,13 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="sticky top-0 z-10 w-full flex justify-between items-center px-4 -mt-24 pt-24 lg:pt-16 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16 bg-background">
+        <AnimatedTabsSticky className="flex justify-between items-center px-4 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
             onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
             ariaLabel="Filter projects by type"
+            fades={false}
           />
           <AnimatedTabs
             className="lg:hidden"
@@ -66,6 +67,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             activeTab={mobileViewMode}
             onTabChange={(v) => setMobileViewMode(v as MobileViewMode)}
             ariaLabel="Switch mobile view layout"
+            fades={false}
           />
           <AnimatedTabs
             className="hidden lg:flex"
@@ -73,8 +75,9 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             activeTab={viewMode}
             onTabChange={(v) => setViewMode(v as ViewMode)}
             ariaLabel="Switch view layout"
+            fades={false}
           />
-        </div>
+        </AnimatedTabsSticky>
       )}
 
       {/* Mobile: Carousel or List */}

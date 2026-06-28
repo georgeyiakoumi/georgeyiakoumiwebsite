@@ -4,7 +4,7 @@ import { useState, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import { LogoCard } from "@/components/logo-card";
 import type { BusinessData } from "@/lib/strapi-queries";
 
@@ -29,18 +29,19 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
 
   return (
     <Section className="px-0">
-      <Typography variant="h2" align="center">
+      <Typography variant="h2" align="center" className="z-11">
         {heading}
       </Typography>
 
       {sectorTabs.length > 2 && (
-        <AnimatedTabs
-          className="max-w-full sticky top-20 z-10 py-2"
-          tabs={sectorTabs}
-          activeTab={activeSector}
-          onTabChange={setActiveSector}
-          ariaLabel="Filter businesses by sector"
-        />
+        <AnimatedTabsSticky>
+          <AnimatedTabs
+            tabs={sectorTabs}
+            activeTab={activeSector}
+            onTabChange={setActiveSector}
+            ariaLabel="Filter businesses by sector"
+          />
+        </AnimatedTabsSticky>
       )}
 
       <div className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
