@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { SiteNavigation } from "@/components/layout/site-navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ModeToggle } from "@/components/layout/mode-toggle";
-import { BackButton } from "@/components/project/slug/back-button";
+import { BackButton } from "@/components/layout/back-button";
 
 interface LayoutChromeProps {
   isSlugPage: boolean;
@@ -33,7 +33,7 @@ export function LayoutChrome({ isSlugPage, cvUrl, email }: LayoutChromeProps) {
       <div
         style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }}
         className={cn(
-          "fixed top-0 left-0 right-0 p-4 z-45 lg:hidden",
+          "fixed top-0 left-0 right-0 p-4 md:px-24 z-45 lg:hidden",
           "grid grid-cols-[1fr_auto_1fr] items-center",
           "transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none",
           scrollVisible ? "opacity-100" : "opacity-0 pointer-events-none"

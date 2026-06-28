@@ -1,4 +1,5 @@
 import { renderStrapiRichText } from "@/lib/strapi-blocks-renderer";
+import { cn } from "@/lib/utils";
 import type { RichTextBlock as RichTextBlockType } from "@/lib/strapi-queries";
 
 interface RichTextBlockProps {
@@ -16,8 +17,11 @@ export function RichTextBlock({ block }: RichTextBlockProps) {
   const isNewSection = startsWithH2 || startsWithEyebrow;
 
   return (
-    <div className={`mx-auto w-full lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0 ${isNewSection ? 'mt-16 pt-16 border-border border-t first:mt-0 first:border-none' : ''}`}>
-      <section className="lg:max-w-xl xl:max-w-2xl mx-auto">
+    <div className={cn(
+      "mx-auto w-full lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0",
+      isNewSection && "mt-16 pt-16 border-border border-t first:mt-0 first:border-none"
+    )}>
+      <section className="md:max-w-xl xl:max-w-2xl mx-auto">
       {renderStrapiRichText(block.content)}
       </section>
     </div>

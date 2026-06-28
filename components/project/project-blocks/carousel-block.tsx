@@ -22,7 +22,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   const canLoop = usePeek && slideCount >= 2;
 
   return (
-    <BlockFigure className={cn(usePeek && "px-0 lg:px-0")}>
+    <BlockFigure className={cn(usePeek && "md:max-w-full lg:max-w-xl px-0")}>
       <Carousel
         opts={{
           align: "center",
@@ -39,7 +39,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             : "border border-border rounded-lg overflow-hidden"
         )}>
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
-          <CarouselContent className={cn(usePeek ? "mx-4 lg:mx-0 lg:-ml-4" : "ml-0")}>
+          <CarouselContent className={cn(usePeek ? "mx-auto max-w-2xl lg:mx-0 lg:-ml-4" : "ml-0")}>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');
@@ -81,7 +81,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <div className={cn("flex items-center justify-between mt-2 lg:hidden", usePeek && "px-8 lg:px-0")}>
+        <div className={cn("flex items-center justify-between mt-2 md:mx-auto md:max-w-2xl lg:hidden", usePeek && "px-8 lg:px-0")}>
           <CarouselPrevious className="static translate-y-0" />
           <CarouselCounter />
           <CarouselNext className="static translate-y-0" />

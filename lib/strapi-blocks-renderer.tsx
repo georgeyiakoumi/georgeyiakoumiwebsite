@@ -47,10 +47,6 @@ const INLINE_EFFECTS: Record<string, string> = {
   underline: 'underline decoration-primary decoration-2 underline-offset-4',
 };
 
-/**
- * Check if a paragraph block is a block-level custom tag (e.g. {{eyebrow:text}}).
- * Returns the tag name and content if it matches, null otherwise.
- */
 function extractBlockTag(block: RichTextBlock): { tag: string; content: string } | null {
   if (block.type !== 'paragraph') return null;
   if (!block.children || block.children.length !== 1) return null;
@@ -65,10 +61,6 @@ function extractBlockTag(block: RichTextBlock): { tag: string; content: string }
   return { tag: match[1].toLowerCase(), content: match[2].trim() };
 }
 
-/**
- * Parse inline custom tags within a text string.
- * Returns an array of React nodes with tags replaced by styled elements.
- */
 function parseInlineTags(text: string, keyPrefix: string): React.ReactNode[] {
   const parts: React.ReactNode[] = [];
   let lastIndex = 0;
@@ -78,7 +70,6 @@ function parseInlineTags(text: string, keyPrefix: string): React.ReactNode[] {
   let match: RegExpExecArray | null;
 
   while ((match = regex.exec(text)) !== null) {
-    // Add text before the match
     if (match.index > lastIndex) {
       parts.push(text.slice(lastIndex, match.index));
     }
@@ -94,7 +85,6 @@ function parseInlineTags(text: string, keyPrefix: string): React.ReactNode[] {
         </span>
       );
     } else {
-      // Unknown inline tag — render as plain text
       parts.push(match[0]);
     }
 
@@ -102,7 +92,6 @@ function parseInlineTags(text: string, keyPrefix: string): React.ReactNode[] {
     matchIndex++;
   }
 
-  // Add remaining text
   if (lastIndex < text.length) {
     parts.push(text.slice(lastIndex));
   }
@@ -110,9 +99,6 @@ function parseInlineTags(text: string, keyPrefix: string): React.ReactNode[] {
   return parts;
 }
 
-/**
- * Check if a text string contains any custom tag patterns.
- */
 function hasInlineTags(text: string): boolean {
   return CUSTOM_TAG_REGEX.test(text);
 }
@@ -120,7 +106,6 @@ function hasInlineTags(text: string): boolean {
 function renderChild(child: RichTextChild, index: number): React.ReactNode {
   if (!child.text && !child.children) return null;
 
-  // If this child has nested children (like in list-item), render them recursively
   if (child.children) {
     const nestedContent = child.children.map((nestedChild, i) => renderChild(nestedChild, i));
 
@@ -128,16 +113,14 @@ function renderChild(child: RichTextChild, index: number): React.ReactNode {
       case 'list-item':
         return <li key={index}>{nestedContent}</li>;
       case 'link':
-        return <a key={index} href={child.url} target="_blank" rel="noopener noreferrer" className="!underline hover:!no-underline !text-primary">{nestedContent}</a>;
+        return <a key={index} href={child.url} target="_blank" rel="noopener noreferrer">{nestedContent}</a>;
       default:
         return <span key={index}>{nestedContent}</span>;
     }
   }
 
-  // Handle text with formatting
   if (!child.text) return null;
 
-  // Check for inline custom tags
   let content: React.ReactNode;
   if (hasInlineTags(child.text)) {
     const parsed = parseInlineTags(child.text, `child-${index}`);
@@ -159,91 +142,66 @@ function renderChild(child: RichTextChild, index: number): React.ReactNode {
     content = <s key={index}>{content}</s>;
   }
   if (child.code) {
-    content = <Typography key={index} variant="code" as="code">{content}</Typography>;
+    content = <code key={index}>{content}</code>;
   }
 
   return <React.Fragment key={index}>{content}</React.Fragment>;
 }
 
 function renderBlock(block: RichTextBlock, index: number, followsEyebrow?: boolean): React.ReactNode {
+  const children = block.children?.map((child, i) => renderChild(child, i));
+
   switch (block.type) {
-    case 'paragraph': {
-      const paragraphChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <Typography key={index} variant="muted" className="!text-base leading-7 mb-4 last:mb-0">{paragraphChildren}</Typography>;
-    }
+    case 'paragraph':
+      return <p key={index}>{children}</p>;
 
     case 'heading': {
-      const headingChildren = block.children?.map((child, i) => renderChild(child, i));
-      const headingVariant = `h${block.level || 2}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
+      const Tag = `h${block.level || 2}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6';
       return (
-        <Typography
+        <Tag
           key={index}
-          variant={headingVariant}
-          className={cn(
-            "mb-4 last:mb-0",
-            followsEyebrow ? "mt-0" : "mt-8 first:mt-0"
-          )}
+          className={cn(followsEyebrow && "!mt-0")}
         >
-          {headingChildren}
-        </Typography>
+          {children}
+        </Tag>
       );
     }
 
     case 'list': {
-      const listItems = block.children?.map((child, i) => renderChild(child, i));
       const ListTag = block.format === 'ordered' ? 'ol' : 'ul';
-      return <ListTag key={index} className={`text-muted-foreground mb-4 last:mb-0 pl-5 space-y-2 ${block.format === 'ordered' ? 'list-decimal list-outside' : 'list-disc list-outside'}`}>{listItems}</ListTag>;
+      return <ListTag key={index}>{children}</ListTag>;
     }
 
-    case 'list-item': {
-      // This shouldn't normally be rendered directly as it's handled by renderChild
-      const listItemChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <li key={index} className="text-muted-foreground">{listItemChildren}</li>;
-    }
+    case 'list-item':
+      return <li key={index}>{children}</li>;
 
-    case 'quote': {
-      const quoteChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <Typography key={index} variant="blockquote" className="mb-4 last:mb-0">{quoteChildren}</Typography>;
-    }
+    case 'quote':
+      return <blockquote key={index}>{children}</blockquote>;
 
-    case 'code': {
-      const codeChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <pre key={index} className="bg-muted p-4 rounded-lg overflow-x-auto text-muted-foreground mb-4 last:mb-0"><code>{codeChildren}</code></pre>;
-    }
+    case 'code':
+      return <pre key={index}><code>{children}</code></pre>;
 
-    case 'link': {
-      const linkChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <a key={index} href={block.url} target="_blank" rel="noopener noreferrer" className="!underline hover:!no-underline !text-primary">{linkChildren}</a>;
-    }
+    case 'link':
+      return <a key={index} href={block.url} target="_blank" rel="noopener noreferrer">{children}</a>;
 
-    default: {
-      const defaultChildren = block.children?.map((child, i) => renderChild(child, i));
-      return <Typography key={index} variant="muted" className="!text-base leading-7">{defaultChildren}</Typography>;
-    }
+    default:
+      return <p key={index}>{children}</p>;
   }
 }
 
-/**
- * Render an eyebrow label — a small uppercase tag that sits above a heading.
- */
 function renderEyebrow(text: string, key: number): React.ReactNode {
   return (
     <Typography
       key={key}
       variant="overline"
       as="span"
-      className="mb-4 block text-xs font-extrabold uppercase tracking-widest text-foreground/70"
+      className="mb-4"
     >
       {text}
     </Typography>
   );
 }
 
-/**
- * Render blocks with custom tag awareness.
- * Block-level tags (eyebrow) are extracted and rendered separately,
- * with the following heading getting tightened spacing.
- */
 function renderBlocksWithCustomTags(blocks: RichTextBlock[]): React.ReactNode[] {
   const elements: React.ReactNode[] = [];
   let eyebrowPending = false;
@@ -259,7 +217,6 @@ function renderBlocksWithCustomTags(blocks: RichTextBlock[]): React.ReactNode[] 
           eyebrowPending = true;
           continue;
         default:
-          // Unknown block-level tag — render as normal paragraph
           break;
       }
     }
@@ -271,9 +228,6 @@ function renderBlocksWithCustomTags(blocks: RichTextBlock[]): React.ReactNode[] 
   return elements;
 }
 
-/**
- * Check if any blocks contain custom tag patterns.
- */
 function blocksHaveCustomTags(blocks: RichTextBlock[]): boolean {
   for (const block of blocks) {
     if (extractBlockTag(block)) return true;
@@ -286,44 +240,36 @@ function blocksHaveCustomTags(blocks: RichTextBlock[]): boolean {
   return false;
 }
 
+function renderBlocks(blocks: RichTextBlock[], className?: string): React.ReactNode {
+  const useCustomTags = blocksHaveCustomTags(blocks);
+  return (
+    <div className={cn("prose prose-lg dark:prose-invert max-w-none", className)}>
+      {useCustomTags
+        ? renderBlocksWithCustomTags(blocks)
+        : blocks.map((block, index) => renderBlock(block, index))
+      }
+    </div>
+  );
+}
+
 export function renderStrapiRichText(
   richTextBlock: StrapiRichTextBlock | RichTextBlock[] | undefined,
   className?: string
 ): React.ReactNode {
-  if (!richTextBlock) {
-    return null;
-  }
+  if (!richTextBlock) return null;
 
-  // Handle new blocks format (direct array)
   if (Array.isArray(richTextBlock)) {
-    const useCustomTags = blocksHaveCustomTags(richTextBlock);
-    return (
-      <div className={cn("prose prose-lg prose-gray dark:prose-invert max-w-none", className)}>
-        {useCustomTags
-          ? renderBlocksWithCustomTags(richTextBlock)
-          : richTextBlock.map((block, index) => renderBlock(block, index))
-        }
-      </div>
-    );
+    return renderBlocks(richTextBlock, className);
   }
 
-  // Handle old component-based format (object with content and Image)
-  if (!richTextBlock.content) {
-    return null;
-  }
+  if (!richTextBlock.content) return null;
 
   const hasImage = richTextBlock.Image && richTextBlock.Image.url;
   const imageUrl = hasImage ? getStrapiMediaURL(richTextBlock.Image?.url) : null;
-  const useCustomTags = blocksHaveCustomTags(richTextBlock.content);
 
   return (
     <>
-      <div className={cn("prose prose-lg prose-gray dark:prose-invert max-w-none", className)}>
-        {useCustomTags
-          ? renderBlocksWithCustomTags(richTextBlock.content)
-          : richTextBlock.content.map((block, index) => renderBlock(block, index))
-        }
-      </div>
+      {renderBlocks(richTextBlock.content, className)}
 
       {imageUrl && (
         <div className="relative aspect-video rounded-lg overflow-hidden bg-muted">
