@@ -2,14 +2,11 @@
 
 import { useId, useRef, useEffect } from "react";
 import { motion } from "motion/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useGSAP } from "@gsap/react";
+import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
+import { useStickyTrigger } from "@/hooks/use-sticky-trigger";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-
-gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export interface AnimatedTab {
   value: string;
@@ -152,42 +149,18 @@ export function AnimatedTabsSticky({
   mode = "scroll",
   ...props
 }: React.ComponentProps<"div"> & { mode?: "scroll" | "fixed" }) {
-  const sentinelRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
-
-  useGSAP(() => {
-    if (mode !== "scroll") return;
-    if (!stickyRef.current || !sentinelRef.current) return;
-    const scroller = document.querySelector("main");
-    if (!scroller) return;
-
-    const mm = gsap.matchMedia();
-    mm.add({
-      isMobile: "(max-width: 767px)",
-      isTablet: "(min-width: 768px) and (max-width: 1023px)",
-      isDesktop: "(min-width: 1024px)",
-    }, (context) => {
-      const { isTablet, isDesktop } = context.conditions!;
-      const start = isDesktop ? "top top" : isTablet ? "top 30%" : "top 25%";
-      const enterClasses = isDesktop ? ["-mt-16", "pt-16"] : ["-mt-24", "pt-24"];
-
-      ScrollTrigger.create({
-        trigger: sentinelRef.current,
-        scroller,
-        start,
-        onEnter: () => stickyRef.current?.classList.add(...enterClasses),
-        onLeaveBack: () => stickyRef.current?.classList.remove(...enterClasses),
-      });
-    });
-  }, { scope: sentinelRef, dependencies: [mode] });
+  const scrollVisible = useScrollVisibility();
+  const sentinelRef = useStickyTrigger(stickyRef, mode === "scroll");
 
   return (
     <>
-      {mode === "scroll" && <div ref={sentinelRef} className="h-0 w-full" aria-hidden="true" />}
+      {mode === "scroll" && <div ref={sentinelRef} className="h-0 w-full -mb-[inherit]" aria-hidden="true" />}
       <div
         ref={stickyRef}
         className={cn(
-          "py-4 bg-background w-full sticky top-0 z-10",
+          "py-4 bg-background w-full sticky z-10 transition-[top] duration-300 ease-out lg:top-0",
+          scrollVisible ? "top-16" : "top-0",
           className
         )}
         {...props}
