@@ -29,7 +29,7 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
 
   return (
     <Section className="px-0">
-      <Typography variant="h2" align="center">
+      <Typography variant="h2" align="center" className="z-11">
         {heading}
       </Typography>
 
