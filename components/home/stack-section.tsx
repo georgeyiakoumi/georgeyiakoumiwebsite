@@ -49,7 +49,7 @@ export function StackSection({ heading, tools }: StackSectionProps) {
 
   return (
     <Section>
-      <Typography variant="h2" align="center" className="z-11">
+      <Typography variant="h2" align="center">
         {heading}
       </Typography>
 
