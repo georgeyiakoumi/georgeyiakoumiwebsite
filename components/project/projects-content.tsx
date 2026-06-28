@@ -53,7 +53,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <AnimatedTabsSticky mode="fixed" className="flex justify-between items-center -mt-32 md:-mt-24 lg:-mt-17 pt-32 md:pt-24 lg:pt-17 px-5 lg:px-0 xl:max-w-4xl xl:px-16">
+        <AnimatedTabsSticky mode="fixed" className="flex justify-between items-center -mt-24 md:-mt-24 lg:-mt-17 pt-24 md:pt-24 lg:pt-17 px-5 lg:px-0 xl:max-w-4xl xl:px-16">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}

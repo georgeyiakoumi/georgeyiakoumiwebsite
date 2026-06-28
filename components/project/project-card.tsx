@@ -21,7 +21,7 @@ function ProjectCardRoot({
   return (
     <div
       data-slot="project-card"
-      className={cn("group rounded-xl overflow-hidden", className)}
+      className={cn("group overflow-hidden rounded-3xl", className)}
       {...props}
     >
       {children}
@@ -87,7 +87,7 @@ function ProjectCardHeader({
   return (
     <div
       data-slot="project-card-header"
-      className={cn("relative flex flex-col justify-start p-4 gap-3", className)}
+      className={cn("relative flex flex-col justify-start p-6 gap-3", className)}
       {...props}
     >
       {children}
@@ -170,10 +170,10 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
             src={thumbSrc}
             alt={thumbAlt}
             hoverEffects={showActions}
-            className="aspect-video border border-border w-full h-full rounded-xl transition-[border-radius,border-right-color] duration-200 ease-out delay-200 xl:group-hover:rounded-r-none xl:group-hover:border-r-transparent xl:group-hover:delay-0"
+            className="aspect-video border border-border w-full h-full rounded-3xl transition-[border-radius,border-right-color] duration-200 ease-out delay-200 xl:group-hover:rounded-r-none xl:group-hover:border-r-transparent xl:group-hover:delay-0"
           >
           </ProjectCardThumb>
-          <ProjectCardHeader className="flex-1 rounded-r-xl border-t border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
+          <ProjectCardHeader className="flex-1 rounded-r-3xl border-t border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
             <ProjectCardTags tags={project.project_tags} />
             <ProjectCardTitle className="text-xl">{project.title}</ProjectCardTitle>
             {showActions && (
@@ -205,7 +205,7 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
           src={thumbSrc}
           alt={thumbAlt}
           hoverEffects={showActions}
-          className="aspect-video w-full rounded-xl border border-border transition-[border-radius,border-bottom-color] duration-200 ease-out delay-200 xl:group-hover:rounded-b-none xl:group-hover:border-b-transparent xl:group-hover:delay-0"
+          className="aspect-video w-full rounded-3xl border border-border transition-[border-radius,border-bottom-color] duration-200 ease-out delay-200 xl:group-hover:rounded-b-none xl:group-hover:border-b-transparent xl:group-hover:delay-0"
         >
           {showActions && (
             <ProjectCardActions className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
@@ -216,7 +216,7 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
             </ProjectCardActions>
           )}
         </ProjectCardThumb>
-        <ProjectCardHeader className="flex-1 rounded-b-xl border-l border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-top before:scale-y-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-y-100 xl:group-hover:before:delay-200">
+        <ProjectCardHeader className="flex-1 rounded-b-3xl border-l border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-top before:scale-y-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-y-100 xl:group-hover:before:delay-200">
           <ProjectCardTags tags={project.project_tags} />
           <ProjectCardTitle className="text-lg">{project.title}</ProjectCardTitle>
         </ProjectCardHeader>
@@ -228,8 +228,8 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
 function ProjectCardSkeleton({ variant = "thumb" }: { variant?: "thumb" | "list" }) {
   if (variant === "list") {
     return (
-      <div className="rounded-xl grid grid-cols-[3fr_4fr_auto] items-stretch">
-        <Skeleton className="aspect-video w-full h-full rounded-xl" />
+      <div className="rounded-3xl grid grid-cols-[3fr_4fr_auto] items-stretch">
+        <Skeleton className="aspect-video w-full h-full rounded-3xl" />
         <div className="flex flex-col gap-3 justify-center p-6">
           <Skeleton className="h-6 w-3/4" />
           <div className="flex gap-1">
@@ -242,8 +242,8 @@ function ProjectCardSkeleton({ variant = "thumb" }: { variant?: "thumb" | "list"
   }
 
   return (
-    <div className="rounded-xl">
-      <Skeleton className="aspect-video w-full rounded-xl" />
+    <div className="rounded-3xl">
+      <Skeleton className="aspect-video w-full rounded-3xl" />
       <div className="flex flex-col gap-3 p-6">
         <Skeleton className="h-5 w-3/4" />
         <div className="flex gap-1">
@@ -279,7 +279,7 @@ function ProjectCardGrid({
   return (
     <div
       data-slot="project-card-grid"
-      className={cn("grid md:grid-cols-2 xl:grid-cols-2 gap-6", className)}
+      className={cn("grid md:grid-cols-2 xl:grid-cols-2 gap-8", className)}
       {...props}
     >
       {children}
