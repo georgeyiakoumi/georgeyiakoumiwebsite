@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
-import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 import { useTheme } from "next-themes";
 import { AUTHOR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -25,7 +24,6 @@ import {
 export function SiteFooter({ className }: { className?: string }) {
   const currentYear = new Date().getFullYear();
   const [open, setOpen] = useState(false);
-  const scrollVisible = useScrollVisibility();
   const { resolvedTheme } = useTheme();
   const lottieRef = useRef<LottieRefCurrentProps>(null);
 
@@ -51,7 +49,7 @@ export function SiteFooter({ className }: { className?: string }) {
   );
 
   return (
-    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={cn("fixed top-7 left-1/2 lg:!transform-none lg:translate-x-0 lg:bottom-16 lg:top-auto lg:right-16 lg:left-auto box-border flex flex-col items-start lg:items-end transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none", scrollVisible ? "opacity-100" : "opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto", className)}>
+    <footer className={cn("lg:fixed lg:bottom-16 lg:right-16 box-border flex flex-col items-start lg:items-end", className)}>
       {/* Mobile/Tablet: Drawer */}
       <div className="xl:hidden">
         <Drawer open={open} onOpenChange={setOpen}>
