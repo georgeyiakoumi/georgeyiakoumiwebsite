@@ -2,15 +2,18 @@
 
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 import { cn } from "@/lib/utils";
+import { SiteNavigation } from "@/components/layout/site-navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ModeToggle } from "@/components/layout/mode-toggle";
 import { BackButton } from "@/components/project/slug/back-button";
 
-interface LayoutHeaderProps {
+interface LayoutChromeProps {
   isSlugPage: boolean;
+  cvUrl?: string;
+  email?: string;
 }
 
-export function LayoutHeader({ isSlugPage }: LayoutHeaderProps) {
+export function LayoutChrome({ isSlugPage, cvUrl, email }: LayoutChromeProps) {
   const scrollVisible = useScrollVisibility();
 
   return (
@@ -40,6 +43,9 @@ export function LayoutHeader({ isSlugPage }: LayoutHeaderProps) {
         <SiteFooter className="col-start-2 justify-self-center" />
         <ModeToggle className="col-start-3 justify-self-end" />
       </div>
+
+      {/* Mobile/Tablet: Navigation (slides up from bottom) */}
+      <SiteNavigation cvUrl={cvUrl} email={email} className="z-45" />
 
       {/* Desktop */}
       <div className="hidden lg:block fixed inset-0 pointer-events-none z-45">

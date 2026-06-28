@@ -1,8 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { SiteNavigation } from "@/components/layout/site-navigation";
-import { LayoutHeader } from "@/components/layout/layout-header";
+import { LayoutChrome } from "@/components/layout/layout-chrome";
 import { ScrollVisibilityProvider } from "@/hooks/use-scroll-visibility";
 
 interface ConditionalLayoutProps {
@@ -17,8 +16,7 @@ export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutP
 
   return (
     <ScrollVisibilityProvider>
-      <SiteNavigation cvUrl={cvUrl} email={email} className="z-45" />
-      <LayoutHeader isSlugPage={isSlugPage} />
+      <LayoutChrome isSlugPage={isSlugPage} cvUrl={cvUrl} email={email} />
 
       <main className="h-dvh overflow-y-auto relative scrollbar-hide">
         {children}

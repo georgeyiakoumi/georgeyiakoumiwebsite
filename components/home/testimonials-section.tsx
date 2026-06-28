@@ -54,7 +54,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <Section>
+    <Section className="gap-16">
       <Typography variant="h2" align="center">
         What people say
       </Typography>
