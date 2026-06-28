@@ -1,8 +1,10 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { SiteNavigation } from "@/components/layout/site-navigation";
 import { SiteFooter } from "@/components/layout/site-footer";
 import { ModeToggle } from "@/components/layout/mode-toggle";
+import { BackButton } from "@/components/project/slug/back-button";
 import { ScrollVisibilityProvider } from "@/hooks/use-scroll-visibility";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 
@@ -25,9 +27,13 @@ interface ConditionalLayoutProps {
 }
 
 export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutProps) {
+  const pathname = usePathname();
+  const isSlugPage = pathname.startsWith("/project/") || pathname.startsWith("/article/");
+
   return (
     <ScrollVisibilityProvider>
       <SiteNavigation cvUrl={cvUrl} email={email} className="z-999" />
+      {isSlugPage && <BackButton className="z-999" />}
       <ModeToggle className="z-999" />
       <HeaderBackdrop />
 
