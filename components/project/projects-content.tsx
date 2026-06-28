@@ -53,7 +53,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <AnimatedTabsSticky mode="fixed" className="flex justify-between items-center -mt-24 md:-mt-24 lg:-mt-17 pt-24 md:pt-24 lg:pt-17 px-5 lg:px-0 xl:max-w-4xl xl:px-16">
+        <AnimatedTabsSticky mode="fixed" className="flex justify-between items-center lg:-mt-17 lg:pt-17 px-5 lg:px-0 xl:px-16 xl:pt-18 xl:max-w-4xl">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -92,7 +92,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
       )}
 
       {/* Desktop (lg+) */}
-      <div className="hidden lg:block w-full xl:max-w-3xl xl:pt-6">
+      <div className="hidden lg:block w-full xl:max-w-3xl">
         {viewMode === "list" ? (
           <ProjectCardList>
             {filteredProjects.map((project) => (
