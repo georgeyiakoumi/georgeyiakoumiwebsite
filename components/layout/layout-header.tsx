@@ -18,7 +18,7 @@ export function LayoutHeader({ isSlugPage }: LayoutHeaderProps) {
       {/* Mobile/Tablet: Backdrop (fades only) */}
       <div
         className={cn(
-          "fixed top-0 left-0 right-0 h-20 z-998 lg:hidden",
+          "fixed top-0 left-0 right-0 h-20 z-40 lg:hidden",
           "bg-background/90 backdrop-blur-sm",
           "transition-opacity duration-300 ease-out motion-reduce:transition-none",
           scrollVisible ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -30,7 +30,7 @@ export function LayoutHeader({ isSlugPage }: LayoutHeaderProps) {
       <div
         style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }}
         className={cn(
-          "fixed top-0 left-0 right-0 p-4 z-999 lg:hidden",
+          "fixed top-0 left-0 right-0 p-4 z-45 lg:hidden",
           "grid grid-cols-[1fr_auto_1fr] items-center",
           "transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none",
           scrollVisible ? "opacity-100" : "opacity-0 pointer-events-none"
@@ -42,7 +42,7 @@ export function LayoutHeader({ isSlugPage }: LayoutHeaderProps) {
       </div>
 
       {/* Desktop */}
-      <div className="hidden lg:block fixed inset-0 pointer-events-none z-999">
+      <div className="hidden lg:block fixed inset-0 pointer-events-none z-45">
         <div className="pointer-events-auto">
           {isSlugPage && <BackButton />}
           <SiteFooter />

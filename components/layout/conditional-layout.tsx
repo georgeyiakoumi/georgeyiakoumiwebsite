@@ -17,7 +17,7 @@ export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutP
 
   return (
     <ScrollVisibilityProvider>
-      <SiteNavigation cvUrl={cvUrl} email={email} className="z-999" />
+      <SiteNavigation cvUrl={cvUrl} email={email} className="z-45" />
       <LayoutHeader isSlugPage={isSlugPage} />
 
       <main className="h-dvh overflow-y-auto relative scrollbar-hide">
