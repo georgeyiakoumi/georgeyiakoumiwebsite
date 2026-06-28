@@ -39,7 +39,7 @@ export default async function Portfolio() {
   }
 
   return (
-    <Section className="px-0 py-32 lg:pt-0 lg:pb-16 justify-start">
+    <Section className="px-0 py-32 lg:pt-14 lg:pb-16 justify-start">
       <h1 className="hidden">
         Projects
       </h1>

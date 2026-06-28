@@ -149,11 +149,13 @@ function AnimatedTabsFade({ side, className }: { side: "left" | "right"; classNa
 export function AnimatedTabsSticky({
   className,
   children,
+  mode = "scroll",
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { mode?: "scroll" | "fixed" }) {
   const stickyRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
+    if (mode !== "scroll") return;
     if (!stickyRef.current) return;
     const scroller = document.querySelector("main");
     if (!scroller) return;
@@ -176,12 +178,15 @@ export function AnimatedTabsSticky({
         onLeaveBack: () => stickyRef.current?.classList.remove(...enterClasses),
       });
     });
-  }, { scope: stickyRef });
+  }, { scope: stickyRef, dependencies: [mode] });
 
   return (
     <div
       ref={stickyRef}
-      className={cn("py-4 bg-background w-full", className)}
+      className={cn(
+        "py-4 bg-background w-full sticky top-0 z-10",
+        className
+      )}
       {...props}
     >
       {children}
