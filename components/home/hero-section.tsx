@@ -26,7 +26,7 @@ export function HeroSection({ headingText, paragraphs }: HeroSectionProps) {
     const body = sectionRef.current.querySelector("[data-hero-body]");
     if (!heading && !body) return;
 
-    const tl = gsap.timeline();
+    const tl = gsap.timeline({ delay: 0.5 });
 
     if (heading) {
       const headingSplit = SplitText.create(heading, { type: "words" });
