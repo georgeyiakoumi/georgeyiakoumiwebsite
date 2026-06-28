@@ -8,16 +8,20 @@ import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 
 const AtSignIcon = dynamic(() => import("@/components/ui/at-sign").then(mod => ({ default: mod.AtSignIcon })), { ssr: false });
+const FileTextIcon = dynamic(() => import("@/components/ui/file-text").then(mod => ({ default: mod.FileTextIcon })), { ssr: false });
 type AtSignIconHandle = import("@/components/ui/at-sign").AtSignIconHandle;
+type FileTextIconHandle = import("@/components/ui/file-text").FileTextIconHandle;
 
 interface AboutSectionProps {
   heading?: string;
   paragraphs: Array<{ children?: Array<{ text?: string }> }>;
   email?: string;
+  cvUrl?: string;
 }
 
-export function AboutSection({ heading, paragraphs, email }: AboutSectionProps) {
+export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSectionProps) {
   const atSignRef = useRef<AtSignIconHandle>(null);
+  const fileTextRef = useRef<FileTextIconHandle>(null);
 
   return (
     <Section>
@@ -31,19 +35,35 @@ export function AboutSection({ heading, paragraphs, email }: AboutSectionProps) 
           </Typography>
         ))}
       </div>
-      {email && (
-        <Button
-          size="lg"
-          asChild
-          onMouseEnter={() => atSignRef.current?.startAnimation()}
-          onMouseLeave={() => atSignRef.current?.stopAnimation()}
-        >
-          <a href={`mailto:${email}`}>
-            <AtSignIcon ref={atSignRef} />
-            Email me
-          </a>
-        </Button>
-      )}
+      <div className="flex gap-3">
+        {email && (
+          <Button
+            size="lg"
+            asChild
+            onMouseEnter={() => atSignRef.current?.startAnimation()}
+            onMouseLeave={() => atSignRef.current?.stopAnimation()}
+          >
+            <a href={`mailto:${email}`}>
+              <AtSignIcon ref={atSignRef} />
+              Email me
+            </a>
+          </Button>
+        )}
+        {cvUrl && (
+          <Button
+            size="lg"
+            variant="outline"
+            asChild
+            onMouseEnter={() => fileTextRef.current?.startAnimation()}
+            onMouseLeave={() => fileTextRef.current?.stopAnimation()}
+          >
+            <a href={cvUrl} target="_blank" rel="noopener noreferrer">
+              <FileTextIcon ref={fileTextRef} />
+              View CV
+            </a>
+          </Button>
+        )}
+      </div>
     </Section>
   );
 }

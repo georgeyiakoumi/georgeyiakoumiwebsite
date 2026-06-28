@@ -24,6 +24,7 @@ interface AboutData {
     children?: Array<{ text?: string }>;
   }>;
   email?: string;
+  cvUrl?: string;
 }
 
 interface HomeContentProps {
@@ -58,17 +59,18 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects, te
         businesses={businesses}
       />
 
-      <StackSection
-        heading={aboutData.heading_tools}
-        tools={tools}
-      />
-
       <TestimonialsSection testimonials={testimonials} />
 
       <AboutSection
         heading={contactHeading?.children?.[0]?.text}
         paragraphs={contactParagraphs}
         email={aboutData.email}
+        cvUrl={aboutData.cvUrl}
+      />
+
+      <StackSection
+        heading={aboutData.heading_tools}
+        tools={tools}
       />
     </>
   );
