@@ -50,7 +50,7 @@ export function SiteFooter() {
   );
 
   return (
-    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-7 left-1/2 lg:!transform-none lg:translate-x-0 lg:bottom-16 lg:top-auto lg:right-16 lg:left-auto box-border flex flex-col items-start lg:items-end z-10 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto'}`}>
+    <footer style={{ transform: `translateX(-50%) translateY(${scrollVisible ? '0' : '-120%'})` }} className={`fixed top-7 left-1/2 lg:!transform-none lg:translate-x-0 lg:bottom-16 lg:top-auto lg:right-16 lg:left-auto box-border flex flex-col items-start lg:items-end z-999 transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0 pointer-events-none lg:opacity-100 lg:pointer-events-auto'}`}>
       {/* Mobile/Tablet: Drawer */}
       <div className="xl:hidden">
         <Drawer open={open} onOpenChange={setOpen}>

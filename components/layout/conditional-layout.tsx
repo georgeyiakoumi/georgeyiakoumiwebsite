@@ -13,7 +13,7 @@ function HeaderBackdrop() {
     <div
       aria-hidden="true"
       style={{ transform: scrollVisible ? 'translateY(0)' : 'translateY(-120%)' }}
-      className={`fixed top-0 left-0 right-0 h-20 z-9 pointer-events-none bg-background/90 backdrop-blur-sm lg:hidden transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0'}`}
+      className={`fixed top-0 left-0 right-0 h-20 z-998 pointer-events-none bg-background/90 backdrop-blur-sm lg:hidden transition-[transform,opacity] duration-300 ease-out will-change-transform motion-reduce:transition-none ${scrollVisible ? 'opacity-100' : 'opacity-0'}`}
     />
   );
 }

@@ -472,6 +472,38 @@ export interface BusinessData {
   publishedAt: string;
 }
 
+// --- Testimonials ---
+
+export interface TestimonialData {
+  id: number;
+  documentId: string;
+  message: string;
+  name: string;
+  role?: string;
+  business?: string;
+  reaction?: string;
+  reactionLabel?: string;
+}
+
+export async function getTestimonials() {
+  try {
+    const data = await fetchAPI<TestimonialData[]>({
+      endpoint: '/testimonials',
+      query: {
+        'pagination[pageSize]': 100,
+      },
+      cache: 'force-cache',
+      tags: ['testimonials'],
+    });
+    return data;
+  } catch (error) {
+    console.error('Error fetching testimonials:', error);
+    return [];
+  }
+}
+
+// --- Businesses ---
+
 export async function getBusinesses() {
   try {
     const data = await fetchAPI<BusinessData[]>({

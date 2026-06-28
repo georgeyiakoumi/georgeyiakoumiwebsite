@@ -2,9 +2,14 @@
 
 import { useId, useRef, useEffect } from "react";
 import { motion } from "motion/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 export interface AnimatedTab {
   value: string;
@@ -146,9 +151,37 @@ export function AnimatedTabsSticky({
   children,
   ...props
 }: React.ComponentProps<"div">) {
+  const stickyRef = useRef<HTMLDivElement>(null);
+
+  useGSAP(() => {
+    if (!stickyRef.current) return;
+    const scroller = document.querySelector("main");
+    if (!scroller) return;
+
+    const mm = gsap.matchMedia();
+    mm.add({
+      isMobile: "(max-width: 767px)",
+      isTablet: "(min-width: 768px) and (max-width: 1023px)",
+      isDesktop: "(min-width: 1024px)",
+    }, (context) => {
+      const { isTablet, isDesktop } = context.conditions!;
+      const start = isDesktop ? "top top" : isTablet ? "top 30%" : "top 25%";
+      const enterClasses = isDesktop ? ["sticky", "top-0", "z-10", "-mt-16", "pt-16"] : ["sticky", "top-0", "z-10", "-mt-24", "pt-24"];
+
+      ScrollTrigger.create({
+        trigger: stickyRef.current,
+        scroller,
+        start,
+        onEnter: () => stickyRef.current?.classList.add(...enterClasses),
+        onLeaveBack: () => stickyRef.current?.classList.remove(...enterClasses),
+      });
+    });
+  }, { scope: stickyRef });
+
   return (
     <div
-      className={cn("sticky top-0 z-10 -mt-24 py-4 pt-24 bg-background pb-4 w-full", className)}
+      ref={stickyRef}
+      className={cn("py-4 bg-background w-full", className)}
       {...props}
     >
       {children}

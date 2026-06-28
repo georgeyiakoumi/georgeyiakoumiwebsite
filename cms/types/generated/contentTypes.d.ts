@@ -778,6 +778,8 @@ export interface ApiTestimonialTestimonial
     message: Schema.Attribute.RichText;
     name: Schema.Attribute.String & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
+    reaction: Schema.Attribute.String;
+    reactionLabel: Schema.Attribute.String;
     role: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
