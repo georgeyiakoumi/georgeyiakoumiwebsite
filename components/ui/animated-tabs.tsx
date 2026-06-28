@@ -4,6 +4,7 @@ import { useId, useRef, useEffect } from "react";
 import { motion } from "motion/react";
 import { useScrollVisibility } from "@/hooks/use-scroll-visibility";
 import { useStickyTrigger } from "@/hooks/use-sticky-trigger";
+import { useMediaQuery } from "@/hooks/use-media-query";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -151,23 +152,21 @@ export function AnimatedTabsSticky({
 }: React.ComponentProps<"div"> & { mode?: "scroll" | "fixed" }) {
   const stickyRef = useRef<HTMLDivElement>(null);
   const scrollVisible = useScrollVisibility();
-  const sentinelRef = useStickyTrigger(stickyRef, mode === "scroll");
+  const isDesktop = useMediaQuery("(min-width: 1024px)");
+  useStickyTrigger(stickyRef, mode === "scroll");
 
   return (
-    <>
-      {mode === "scroll" && <div ref={sentinelRef} className="h-0 w-full -mb-[inherit]" aria-hidden="true" />}
-      <div
-        ref={stickyRef}
-        className={cn(
-          "py-4 bg-background w-full sticky z-10 transition-[top] duration-300 ease-out lg:top-0",
-          scrollVisible ? "top-16" : "top-0",
-          className
-        )}
-        {...props}
-      >
-        {children}
-      </div>
-    </>
+    <div
+      ref={stickyRef}
+      className={cn(
+        "py-4 bg-background w-full sticky z-10 transition-[top] duration-300 ease-out",
+        isDesktop ? "top-0" : (scrollVisible ? "top-16" : "top-0"),
+        className
+      )}
+      {...props}
+    >
+      {children}
+    </div>
   );
 }
 
