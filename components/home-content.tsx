@@ -1,10 +1,11 @@
 "use client";
 
-import { type ToolData, type BusinessData, type ProjectData } from "@/lib/strapi-queries";
+import { type ToolData, type BusinessData, type ProjectData, type TestimonialData } from "@/lib/strapi-queries";
 import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedWorkSection } from "@/components/home/featured-work-section";
 import { CompaniesSection } from "@/components/home/companies-section";
 import { StackSection } from "@/components/home/stack-section";
+import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { AboutSection } from "@/components/home/about-section";
 
 interface AboutData {
@@ -30,9 +31,10 @@ interface HomeContentProps {
   tools: ToolData[];
   businesses: BusinessData[];
   featuredProjects: ProjectData[];
+  testimonials: TestimonialData[];
 }
 
-export function HomeContent({ aboutData, tools, businesses, featuredProjects }: HomeContentProps) {
+export function HomeContent({ aboutData, tools, businesses, featuredProjects, testimonials }: HomeContentProps) {
   if (!aboutData) return null;
 
   const heading = aboutData.hero.find(block => block.type === 'heading');
@@ -60,6 +62,8 @@ export function HomeContent({ aboutData, tools, businesses, featuredProjects }: 
         heading={aboutData.heading_tools}
         tools={tools}
       />
+
+      <TestimonialsSection testimonials={testimonials} />
 
       <AboutSection
         heading={contactHeading?.children?.[0]?.text}
