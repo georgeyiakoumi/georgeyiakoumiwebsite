@@ -60,7 +60,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
 
   return (
     <section className="place-items-center relative">
-      <BackButton />
+      <BackButton className="z-30" />
 
       <ProjectHero
         title={project.title}

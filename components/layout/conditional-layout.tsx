@@ -27,15 +27,15 @@ interface ConditionalLayoutProps {
 export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutProps) {
   return (
     <ScrollVisibilityProvider>
-      <SiteNavigation cvUrl={cvUrl} email={email} />
-      <ModeToggle />
+      <SiteNavigation cvUrl={cvUrl} email={email} className="z-999" />
+      <ModeToggle className="z-999" />
       <HeaderBackdrop />
 
       <main className="h-dvh overflow-y-auto relative scrollbar-hide">
         {children}
       </main>
 
-      <SiteFooter />
+      <SiteFooter className="z-999" />
     </ScrollVisibilityProvider>
   );
 }
