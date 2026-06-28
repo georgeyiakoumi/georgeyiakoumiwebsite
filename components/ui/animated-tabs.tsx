@@ -21,6 +21,21 @@ interface AnimatedTabsProps {
   className?: string;
 }
 
+export function AnimatedTabsSticky({
+  className,
+  children,
+  ...props
+}: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("sticky top-0 z-10 -mt-24 pt-24 bg-background w-full", className)}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+}
+
 export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, className }: AnimatedTabsProps) {
   const layoutId = useId();
   const scrollRef = useRef<HTMLDivElement>(null);

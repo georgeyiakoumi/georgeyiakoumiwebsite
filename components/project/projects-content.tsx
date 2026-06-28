@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
-import { AnimatedTabs } from "@/components/ui/animated-tabs";
+import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
 import { List, LayoutGrid, GalleryHorizontal } from "lucide-react";
 import type { ProjectData } from "@/lib/strapi-queries";
@@ -53,7 +53,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <div className="sticky top-0 z-10 w-full flex justify-between items-center px-4 -mt-24 pt-24 lg:pt-16 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16 bg-background">
+        <AnimatedTabsSticky className="flex justify-between items-center px-4 lg:pb-4 lg:px-0 xl:max-w-4xl xl:px-16">
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -74,7 +74,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             onTabChange={(v) => setViewMode(v as ViewMode)}
             ariaLabel="Switch view layout"
           />
-        </div>
+        </AnimatedTabsSticky>
       )}
 
       {/* Mobile: Carousel or List */}
