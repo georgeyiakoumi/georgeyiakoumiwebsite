@@ -19,6 +19,7 @@ interface AnimatedTabsProps {
   onTabChange: (value: string) => void;
   ariaLabel: string;
   className?: string;
+  fades?: boolean;
 }
 
 export function AnimatedTabsSticky({
@@ -36,7 +37,7 @@ export function AnimatedTabsSticky({
   );
 }
 
-export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, className }: AnimatedTabsProps) {
+export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, className, fades = true }: AnimatedTabsProps) {
   const layoutId = useId();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -58,14 +59,14 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
   return (
     <div className={cn("relative", className)}>
       {/* Left fade */}
-      <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-r from-background to-transparent lg:hidden" aria-hidden="true" />
+      {fades && <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-r from-background to-transparent lg:hidden" aria-hidden="true" />}
 
       <div
           ref={scrollRef}
           className="overflow-x-auto scrollbar-hide flex justify-center bg-background rounded-xl overflow-hidden"
         >
         <div 
-          className="relative inline-flex h-9 items-center justify-center rounded-lg p-1 text-muted-foreground gap-1 mx-8 lg:mx-0"
+          className={cn("relative inline-flex h-9 items-center justify-center rounded-lg p-1 text-muted-foreground gap-1", fades && "mx-8 lg:mx-0")}
           role="group"
           aria-label={ariaLabel}
         >
@@ -102,7 +103,7 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
       </div>
 
       {/* Right fade */}
-      <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-l from-background to-transparent lg:hidden" aria-hidden="true" />
+      {fades && <div className="pointer-events-none absolute right-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-l from-background to-transparent lg:hidden" aria-hidden="true" />}
     </div>
   );
 }

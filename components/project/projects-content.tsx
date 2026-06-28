@@ -59,6 +59,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             activeTab={activeFilter}
             onTabChange={(v) => setActiveFilter(v as ProjectFilter)}
             ariaLabel="Filter projects by type"
+            fades={false}
           />
           <AnimatedTabs
             className="lg:hidden"
@@ -66,6 +67,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             activeTab={mobileViewMode}
             onTabChange={(v) => setMobileViewMode(v as MobileViewMode)}
             ariaLabel="Switch mobile view layout"
+            fades={false}
           />
           <AnimatedTabs
             className="hidden lg:flex"
@@ -73,6 +75,7 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
             activeTab={viewMode}
             onTabChange={(v) => setViewMode(v as ViewMode)}
             ariaLabel="Switch view layout"
+            fades={false}
           />
         </AnimatedTabsSticky>
       )}
