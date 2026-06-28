@@ -56,13 +56,13 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
   }, [activeTab]);
 
   return (
-    <div className={cn("-mx-8 lg:-mx-0 relative", className)}>
+    <div className={cn("relative", className)}>
       {/* Left fade */}
       <div className="pointer-events-none absolute left-0 top-0 bottom-0 w-8 z-10 bg-gradient-to-r from-background to-transparent lg:hidden" aria-hidden="true" />
 
       <div
           ref={scrollRef}
-          className="overflow-x-auto scrollbar-hide lg:flex lg:justify-center bg-background rounded-xl overflow-hidden"
+          className="overflow-x-auto scrollbar-hide flex justify-center bg-background rounded-xl overflow-hidden"
         >
         <div 
           className="relative inline-flex h-9 items-center justify-center rounded-lg p-1 text-muted-foreground gap-1 mx-8 lg:mx-0"
