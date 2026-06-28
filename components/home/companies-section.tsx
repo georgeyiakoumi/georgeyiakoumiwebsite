@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useRef, useMemo } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import { LogoCard } from "@/components/logo-card";
+import { scrollToCategory } from "@/lib/scroll-to-category";
 import type { BusinessData } from "@/lib/strapi-queries";
 
 interface CompaniesSectionProps {
@@ -15,6 +16,12 @@ interface CompaniesSectionProps {
 
 export function CompaniesSection({ heading, businesses }: CompaniesSectionProps) {
   const [activeSector, setActiveSector] = useState<string>("all");
+  const gridRef = useRef<HTMLDivElement>(null);
+
+  const handleSectorChange = (sector: string) => {
+    setActiveSector(sector);
+    scrollToCategory(gridRef, sector, "data-sector");
+  };
 
   const sectorTabs = useMemo(() => {
     const sectors = businesses
@@ -38,18 +45,19 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
           <AnimatedTabs
             tabs={sectorTabs}
             activeTab={activeSector}
-            onTabChange={setActiveSector}
+            onTabChange={handleSectorChange}
             ariaLabel="Filter businesses by sector"
           />
         </AnimatedTabsSticky>
       )}
 
-      <div className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div ref={gridRef} className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {businesses.map((business, index) => {
           const isActive = activeSector === "all" || business.sector?.name === activeSector;
           return (
             <div
               key={business.id}
+              data-sector={business.sector?.name}
               className={`aspect-auto transition-all duration-300 ease-out motion-reduce:transition-none ${
                 !isActive ? "opacity-50 blur-sm pointer-events-none scale-90 saturate-50" : "scale-100 saturate-100 opacity-100 blur-0"
               } ${index > 5 ? "lazy-load" : ""}`}

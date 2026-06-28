@@ -6,6 +6,7 @@ import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import { LogoCard } from "@/components/logo-card";
+import { scrollToCategory } from "@/lib/scroll-to-category";
 import type { ToolData } from "@/lib/strapi-queries";
 
 interface StackSectionProps {
@@ -33,18 +34,7 @@ export function StackSection({ heading, tools }: StackSectionProps) {
 
   const handleCategoryChange = (category: string) => {
     setActiveCategory(category);
-    if (window.innerWidth >= 1280) return;
-    requestAnimationFrame(() => {
-      const target = category === "all"
-        ? toolsGridRef.current
-        : toolsGridRef.current?.querySelector<HTMLElement>(`[data-category="${category}"]`);
-      if (!target) return;
-      const scrollContainer = document.querySelector("main");
-      if (!scrollContainer) return;
-      const offset = 140;
-      const top = target.getBoundingClientRect().top + scrollContainer.scrollTop - offset;
-      scrollContainer.scrollTo({ top, behavior: "smooth" });
-    });
+    scrollToCategory(toolsGridRef, category, "data-category");
   };
 
   return (
