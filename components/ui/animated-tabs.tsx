@@ -152,11 +152,12 @@ export function AnimatedTabsSticky({
   mode = "scroll",
   ...props
 }: React.ComponentProps<"div"> & { mode?: "scroll" | "fixed" }) {
+  const sentinelRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
 
   useGSAP(() => {
     if (mode !== "scroll") return;
-    if (!stickyRef.current) return;
+    if (!stickyRef.current || !sentinelRef.current) return;
     const scroller = document.querySelector("main");
     if (!scroller) return;
 
@@ -168,29 +169,32 @@ export function AnimatedTabsSticky({
     }, (context) => {
       const { isTablet, isDesktop } = context.conditions!;
       const start = isDesktop ? "top top" : isTablet ? "top 30%" : "top 25%";
-      const enterClasses = isDesktop ? ["sticky", "top-0", "z-10", "-mt-16", "pt-16"] : ["sticky", "top-0", "z-10", "-mt-24", "pt-24"];
+      const enterClasses = isDesktop ? ["-mt-16", "pt-16"] : ["-mt-24", "pt-24"];
 
       ScrollTrigger.create({
-        trigger: stickyRef.current,
+        trigger: sentinelRef.current,
         scroller,
         start,
         onEnter: () => stickyRef.current?.classList.add(...enterClasses),
         onLeaveBack: () => stickyRef.current?.classList.remove(...enterClasses),
       });
     });
-  }, { scope: stickyRef, dependencies: [mode] });
+  }, { scope: sentinelRef, dependencies: [mode] });
 
   return (
-    <div
-      ref={stickyRef}
-      className={cn(
-        "py-4 bg-background w-full sticky top-0 z-10",
-        className
-      )}
-      {...props}
-    >
-      {children}
-    </div>
+    <>
+      {mode === "scroll" && <div ref={sentinelRef} className="h-0 w-full" aria-hidden="true" />}
+      <div
+        ref={stickyRef}
+        className={cn(
+          "py-4 bg-background w-full sticky top-0 z-10",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </div>
+    </>
   );
 }
 
