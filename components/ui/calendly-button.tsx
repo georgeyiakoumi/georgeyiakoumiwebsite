@@ -12,7 +12,7 @@ interface CalendlyButtonProps {
   label?: string;
 }
 
-export function CalendlyButton({ label = "Book a 30 minute call" }: CalendlyButtonProps) {
+export function CalendlyButton({ label = "Book a 30 min call" }: CalendlyButtonProps) {
   const [open, setOpen] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
   const calendarIconRef = useRef<CalendarDaysIconHandle>(null);

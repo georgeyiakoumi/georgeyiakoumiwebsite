@@ -50,7 +50,7 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
             </a>
           </Button>
         )}
-        <CalendlyButton url="https://calendly.com/georgeyiakoumi/30min" />
+        <CalendlyButton />
         {cvUrl && (
           <Button
             size="lg"
