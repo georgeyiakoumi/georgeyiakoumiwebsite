@@ -22,7 +22,6 @@ interface AnimatedTabsProps {
   onTabChange: (value: string) => void;
   ariaLabel: string;
   className?: string;
-  fades?: boolean;
 }
 
 function AnimatedTabBadge({
@@ -106,7 +105,7 @@ function AnimatedTabsScroll({
 }: React.ComponentProps<"div"> & { ref?: React.Ref<HTMLDivElement> }) {
   return (
     <div
-      className={cn("overflow-x-auto scrollbar-hide flex justify-center rounded-lg overflow-hidden", className)}
+      className={cn("overflow-x-auto scrollbar-hide lg:scroll-fade-none scroll-fade-x flex rounded-lg", className)}
       {...props}
     >
       {children}
@@ -121,7 +120,7 @@ function AnimatedTabsGroup({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("relative inline-flex h-auto items-center justify-center rounded-lg text-muted-foreground gap-1", className)}
+      className={cn("relative flex h-auto items-center justify-center rounded-lg text-muted-foreground gap-1 min-w-max mx-auto px-4 lg:px-0", className)}
       role="group"
       {...props}
     >
@@ -130,19 +129,6 @@ function AnimatedTabsGroup({
   );
 }
 
-function AnimatedTabsFade({ side, className }: { side: "left" | "right"; className?: string }) {
-  return (
-    <div
-      className={cn(
-        "pointer-events-none absolute top-0 bottom-0 w-8 z-10 lg:hidden",
-        side === "left" && "left-0 bg-gradient-to-r from-background to-transparent",
-        side === "right" && "right-0 bg-gradient-to-l from-background to-transparent",
-        className
-      )}
-      aria-hidden="true"
-    />
-  );
-}
 
 export function AnimatedTabsSticky({
   className,
@@ -170,7 +156,7 @@ export function AnimatedTabsSticky({
   );
 }
 
-export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, className, fades = true }: AnimatedTabsProps) {
+export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, className }: AnimatedTabsProps) {
   const layoutId = useId();
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -190,10 +176,8 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
 
   return (
     <AnimatedTabsRoot className={className}>
-      {fades && <AnimatedTabsFade side="left" />}
-
       <AnimatedTabsScroll ref={scrollRef}>
-        <AnimatedTabsGroup className={cn(fades && "mx-8 lg:mx-0")} aria-label={ariaLabel}>
+        <AnimatedTabsGroup aria-label={ariaLabel}>
           {tabs.map((tab) => (
             <AnimatedTabButton
               key={tab.value}
@@ -205,10 +189,8 @@ export function AnimatedTabs({ tabs, activeTab, onTabChange, ariaLabel, classNam
           ))}
         </AnimatedTabsGroup>
       </AnimatedTabsScroll>
-
-      {fades && <AnimatedTabsFade side="right" />}
     </AnimatedTabsRoot>
   );
 }
 
-export { AnimatedTabsRoot, AnimatedTabBadge, AnimatedTabButton, AnimatedTabsFade, AnimatedTabsScroll, AnimatedTabsGroup };
+export { AnimatedTabsRoot, AnimatedTabBadge, AnimatedTabButton, AnimatedTabsScroll, AnimatedTabsGroup };
