@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
+import { CalendlyButton } from "@/components/ui/calendly-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
@@ -35,7 +36,7 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
           </Typography>
         ))}
       </div>
-      <div className="flex gap-3">
+      <div className="flex flex-col md:flex-row w-full md:w-auto gap-3">
         {email && (
           <Button
             size="lg"
@@ -49,10 +50,11 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
             </a>
           </Button>
         )}
+        <CalendlyButton url="https://calendly.com/georgeyiakoumi/30min" />
         {cvUrl && (
           <Button
             size="lg"
-            variant="outline"
+            variant="ghost"
             asChild
             onMouseEnter={() => fileTextRef.current?.startAnimation()}
             onMouseLeave={() => fileTextRef.current?.stopAnimation()}

@@ -24,7 +24,7 @@ export function LayoutChrome({ isSlugPage, cvUrl, email }: LayoutChromeProps) {
           "fixed top-0 left-0 right-0 h-20 z-40 lg:hidden",
           "bg-background/90 backdrop-blur-sm",
           "transition-opacity duration-300 ease-out motion-reduce:transition-none",
-          scrollVisible ? "opacity-100" : "opacity-0 pointer-events-none"
+          scrollVisible ? "opacity-100 " : "opacity-0 pointer-events-none"
         )}
         aria-hidden="true"
       />
