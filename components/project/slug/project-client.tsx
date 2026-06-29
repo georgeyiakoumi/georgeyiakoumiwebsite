@@ -1,7 +1,6 @@
 "use client";
 
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { BackButton } from "@/components/project/slug/back-button";
 import { ProjectHero } from "@/components/project/slug/project-hero";
 import { ProjectDescription } from "@/components/project/slug/project-description";
 import { ToolBadge } from "@/components/project/slug/tool-badge";
@@ -60,8 +59,6 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
 
   return (
     <section className="place-items-center relative">
-      <BackButton className="z-30" />
-
       <ProjectHero
         title={project.title}
         heroImageUrl={heroImageUrl}

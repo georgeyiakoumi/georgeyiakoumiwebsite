@@ -54,13 +54,13 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
   if (!testimonials || testimonials.length === 0) return null;
 
   return (
-    <Section>
+    <Section className="gap-8">
       <Typography variant="h2" align="center">
         What people say
       </Typography>
 
-      <div className="w-full max-w-2xl">
-        <MessageGroup className=" gap-8">
+      <div className="w-full md:max-w-xl lg:max-w-2xl xl:max-w-4xl bg-gradient-to-b from-background to-muted/50 p-5 md:p-8 rounded-4xl border border-border/50 shadow-2xl shadow-primary/15 dark:shadow-foreground/5">
+        <MessageGroup className="gap-5 md:gap-8">
           <Message align="end">
             <MessageContent>
               <Bubble variant="default">

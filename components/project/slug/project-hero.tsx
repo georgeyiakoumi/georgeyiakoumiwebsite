@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef } from "react";
+import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Button } from "@/components/ui/button";
 import { LinkIcon, type LinkIconHandle } from "@/components/ui/link";
@@ -26,7 +27,11 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
   const githubIconRef = useRef<GithubIconHandle>(null);
 
   return (
-    <header className="relative flex flex-col space-y-8 px-8 lg:px-0 items-center justify-start pt-32 lg:pt-0 lg:justify-center w-full lg:max-w-2xl xl:max-w-3xl min-h-dvh mx-auto">
+    <header className={cn(
+      "relative flex flex-col gap-8 items-center mx-auto min-h-dvh w-full",
+      "px-8 pt-24 justify-start",
+      "lg:px-0 md:pt-0 md:justify-center md:max-w-2xl xl:max-w-3xl"
+    )}>
       <Typography variant="h1" className="text-center max-w-2xl">
         {title}
       </Typography>

@@ -160,7 +160,7 @@ export function AnimatedTabsSticky({
       ref={stickyRef}
       className={cn(
         "py-4 bg-background w-full sticky z-10 transition-[top] duration-300 ease-out",
-        isDesktop ? "top-0" : (scrollVisible ? "top-16" : "top-0"),
+        isDesktop ? "top-0" : (scrollVisible ? "top-20" : "top-0"),
         className
       )}
       {...props}

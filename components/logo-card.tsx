@@ -59,7 +59,7 @@ export function LogoCard({ data }: LogoCardProps) {
   const logoItem = (
     <Item
       variant="default"
-      className="size-full justify-center opacity-80 hover:opacity-100 transition-[colors,opacity] lg:hover:border-primary/50"
+      className="size-full justify-center xl:opacity-80 xl:hover:opacity-100 xl:transition-[colors,opacity] xl:lg:hover:border-primary/50"
       role="img"
       aria-label={`Logo for ${data.name}`}
       style={cssVariables}

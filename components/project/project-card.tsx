@@ -290,15 +290,17 @@ function ProjectCardGrid({
 function ProjectCardCarousel({
   projects,
   className,
+  contentClassName,
   cardClassName,
 }: {
   projects: ProjectData[];
   className?: string;
+  contentClassName?: string;
   cardClassName?: string;
 }) {
   return (
     <Carousel opts={{ align: "center", loop: true, containScroll: false }} className={cn("w-full", className)}>
-      <CarouselContent className="mx-4">
+      <CarouselContent className={cn("mx-4", contentClassName)}>
         {projects.map((project) => (
           <CarouselItem key={project.id} className="px-1.5">
             <ProjectCard project={project} variant="thumb" showActions={false} className={cardClassName} />
@@ -306,7 +308,7 @@ function ProjectCardCarousel({
         ))}
       </CarouselContent>
       {projects.length > 1 && (
-        <div className="flex items-center justify-between mt-4 px-8">
+        <div className="flex items-center justify-between mt-4 px-8 md:px-24">
           <CarouselPrevious className="static translate-y-0" />
           <CarouselCounter />
           <CarouselNext className="static translate-y-0" />
