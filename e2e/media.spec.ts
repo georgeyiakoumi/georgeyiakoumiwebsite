@@ -20,9 +20,15 @@ interface ImageInfo {
 
 /** Collect all rendered <img> src/alt pairs from the page. */
 async function getRenderedImages(page: Page): Promise<ImageInfo[]> {
+  // Wait for all images in the viewport to finish loading
+  await page.waitForFunction(() => {
+    const imgs = Array.from(document.querySelectorAll('img'))
+    return imgs.length > 0 && imgs.every((img) => img.complete)
+  }, { timeout: 10000 }).catch(() => {/* timeout is fine — collect what we have */})
+
   return page.evaluate(() => {
     return Array.from(document.querySelectorAll('img'))
-      .filter((img) => img.src && img.complete)
+      .filter((img) => img.src && img.naturalWidth > 0)
       .map((img) => ({ src: img.src, alt: img.alt || '' }))
   })
 }
