@@ -53,7 +53,7 @@ export function StackSection({ heading, tools }: StackSectionProps) {
           />
         </AnimatedTabsSticky>
 
-        <div ref={toolsGridRef} className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
+        <div ref={toolsGridRef} className="w-full grid gap-2 md:gap-2 lg:gap-4 xl:gap-2 2xl:gap-6 md:max-w-xl xl:max-w-3xl 2xl:max-w-4xl md:mx-auto grid-cols-4 md:grid-cols-7 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8">
           {tools.map((tool) => {
             const isActive = activeCategory === "all" || tool.category === activeCategory;
             return (

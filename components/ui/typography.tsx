@@ -8,7 +8,7 @@ const typographyVariants = cva("text-foreground", {
     variant: {
       display: "text-3xl md:text-4xl lg:text-6xl font-medium leading-normal text-muted-foreground",
       h1: "text-3xl md:text-4xl font-semibold",
-      h2: "text-2xl md:text-3xl lg:text-xl font-semibold",
+      h2: "text-2xl md:text-3xl font-semibold",
       h3: "text-xl md:text-2xl font-semibold",
       h4: "text-lg md:text-xl font-semibold",
       h5: "text-base md:text-lg font-semibold",

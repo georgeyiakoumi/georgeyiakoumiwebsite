@@ -39,7 +39,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             : "border border-border rounded-lg overflow-hidden"
         )}>
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
-          <CarouselContent className={cn(usePeek ? "mx-auto max-w-2xl lg:mx-0 lg:-ml-4" : "ml-0")}>
+          <CarouselContent className={cn(usePeek ? "max-w-2xl lg:mx-0 lg:-ml-4" : "ml-0")}>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');

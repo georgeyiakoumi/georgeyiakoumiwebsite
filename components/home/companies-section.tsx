@@ -51,7 +51,7 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
         </AnimatedTabsSticky>
       )}
 
-      <div ref={gridRef} className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <div ref={gridRef} className="w-full px-8 md:px-0 grid gap-8 md:gap-2 lg:gap-12 2xl:gap-6 md:max-w-xl xl:max-w-3xl 2xl:max-w-4xl  grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {businesses.map((business, index) => {
           const isActive = activeSector === "all" || business.sector?.name === activeSector;
           return (

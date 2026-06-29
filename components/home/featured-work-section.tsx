@@ -31,7 +31,7 @@ export function FeaturedWorkSection({ projects }: FeaturedWorkSectionProps) {
             <ProjectCard key={project.id} project={project} variant="thumb" />
           ))}
         </ProjectCardList>
-        <ProjectCardList className="hidden md:flex">
+        <ProjectCardList className="hidden md:flex md:max-w-xl md:mx-auto lg:max-w-full">
           {projects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="list" />
           ))}
