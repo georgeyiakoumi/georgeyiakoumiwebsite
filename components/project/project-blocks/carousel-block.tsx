@@ -1,5 +1,4 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { cn } from "@/lib/utils";
 import Fade from "embla-carousel-fade";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
 import { CarouselNavigation, CarouselCounter } from "@/components/ui/carousel-navigation";
@@ -22,46 +21,25 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   const canLoop = usePeek && slideCount >= 2;
 
   return (
-    <BlockFigure className={cn(usePeek && "md:max-w-full lg:max-w-xl px-0")}>
+    <BlockFigure className="px-0">
       <Carousel
-        opts={{
-          align: "center",
-          loop: canLoop,
-          containScroll: false,
-        }}
+        opts={{ align: "center", loop: canLoop, containScroll: false }}
         plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 1024px)": { active: true } } })] : []}
         className="w-full"
+        style={usePeek ? { "--carousel-slide-size": "100%", "--carousel-peek": "2rem", "--carousel-gap": "1rem" } as React.CSSProperties : undefined}
       >
-        <div className={cn(
-          "relative",
-          usePeek
-            ? "lg:border lg:border-border lg:rounded-lg lg:overflow-hidden"
-            : "border border-border rounded-lg overflow-hidden"
-        )}>
+        <div className="relative">
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
-          <CarouselContent className={cn(usePeek ? "max-w-2xl lg:mx-0 lg:-ml-4" : "ml-0")}>
+          <CarouselContent>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');
 
               return (
-                <CarouselItem key={slide.id} className={cn(
-                  usePeek
-                    ? "px-1.5 lg:px-0 lg:pl-4"
-                    : "pl-0"
-                )}>
-                  <div className={cn(
-                    usePeek
-                      ? "border border-border rounded-lg overflow-hidden lg:border-0 lg:rounded-none"
-                      : ""
-                  )}>
+                <CarouselItem key={slide.id}>
+                  <div className="border border-border rounded-lg overflow-hidden">
                     {isVideo ? (
-                      <video
-                        src={slideUrl || ''}
-                        className="w-full h-auto"
-                        controls
-                        playsInline
-                      >
+                      <video src={slideUrl || ''} className="w-full h-auto" controls playsInline>
                         Your browser does not support the video tag.
                       </video>
                     ) : (
@@ -81,14 +59,14 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <div className={cn("flex items-center justify-between mt-2 md:mx-auto md:max-w-2xl lg:hidden", usePeek && "px-8 lg:px-0")}>
+        <div className="flex items-center justify-between mt-2 px-8 lg:px-0 md:mx-auto md:max-w-2xl lg:hidden">
           <CarouselPrevious className="static translate-y-0" />
           <CarouselCounter />
           <CarouselNext className="static translate-y-0" />
         </div>
       </Carousel>
       {block.caption && (
-        <BlockCaption className={cn(usePeek && "px-8 lg:px-0")}>{block.caption}</BlockCaption>
+        <BlockCaption className="px-8 lg:px-0">{block.caption}</BlockCaption>
       )}
     </BlockFigure>
   );

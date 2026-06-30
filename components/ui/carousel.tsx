@@ -142,11 +142,12 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
       data-slot="carousel-content"
     >
       <div
-        className={cn(
-          "flex",
-          orientation === "horizontal" ? "mx-6 md:mx-24 " : "-mt-4 flex-col",
-          className
-        )}
+        className={cn("flex touch-pan-y pinch-zoom", orientation === "vertical" && "flex-col", className)}
+        style={
+          orientation === "horizontal"
+            ? { marginLeft: "calc(var(--carousel-gap, 0px) * -1)" }
+            : { marginTop: "calc(var(--carousel-gap, 0px) * -1)" }
+        }
         {...props}
       />
     </div>
@@ -162,8 +163,10 @@ function CarouselItem({ className, ...props }: React.ComponentProps<"div">) {
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 basis-full",
-        orientation === "horizontal" ? "pl-4" : "pt-4",
+        "min-w-0 shrink-0 grow-0 [transform:translate3d(0,0,0)]",
+        orientation === "horizontal"
+          ? "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] [padding-left:var(--carousel-gap,0px)]"
+          : "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] [padding-top:var(--carousel-gap,0px)]",
         className
       )}
       {...props}

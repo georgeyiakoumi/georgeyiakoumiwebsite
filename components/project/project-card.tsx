@@ -299,10 +299,14 @@ function ProjectCardCarousel({
   cardClassName?: string;
 }) {
   return (
-    <Carousel opts={{ align: "center", loop: true, containScroll: false }} className={cn("w-full", className)}>
-      <CarouselContent className={cn("mx-4", contentClassName)}>
+    <Carousel
+      opts={{ align: "center", loop: true, containScroll: false }}
+      className={cn("w-full", className)}
+      style={{ "--carousel-slide-size": "100%", "--carousel-peek": "2rem", "--carousel-gap": "0.75rem" } as React.CSSProperties}
+    >
+      <CarouselContent className={contentClassName}>
         {projects.map((project) => (
-          <CarouselItem key={project.id} className="px-1.5">
+          <CarouselItem key={project.id}>
             <ProjectCard project={project} variant="thumb" showActions={false} className={cardClassName} />
           </CarouselItem>
         ))}
