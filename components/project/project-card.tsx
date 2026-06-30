@@ -6,8 +6,7 @@ import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
-import { Carousel, CarouselContent, CarouselItem, CarouselPrevious, CarouselNext } from "@/components/ui/carousel";
-import { CarouselCounter } from "@/components/ui/carousel-navigation";
+import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/components/ui/carousel";
 import { cn, getEntryPath } from "@/lib/utils";
 import type { ProjectData } from "@/lib/strapi-queries";
 
@@ -299,21 +298,18 @@ function ProjectCardCarousel({
   cardClassName?: string;
 }) {
   return (
-    <Carousel opts={{ align: "center", loop: true, containScroll: false }} className={cn("w-full", className)}>
-      <CarouselContent className={cn("mx-4", contentClassName)}>
-        {projects.map((project) => (
-          <CarouselItem key={project.id} className="px-1.5">
+    <Carousel
+      opts={{ align: "center", loop: true, containScroll: false }}
+      className={cn("w-full [--carousel-slide-size:100%] [--carousel-peek:2rem]", className)}
+    >
+      <CarouselContent className={contentClassName}>
+        {projects.map((project, i) => (
+          <CarouselItem key={project.id} index={i}>
             <ProjectCard project={project} variant="thumb" showActions={false} className={cardClassName} />
           </CarouselItem>
         ))}
       </CarouselContent>
-      {projects.length > 1 && (
-        <div className="flex items-center justify-between mt-4 px-8 md:px-24">
-          <CarouselPrevious className="static translate-y-0" />
-          <CarouselCounter />
-          <CarouselNext className="static translate-y-0" />
-        </div>
-      )}
+      <CarouselNavigation variant="inline" className="mt-4 px-8 md:px-24" />
     </Carousel>
   );
 }

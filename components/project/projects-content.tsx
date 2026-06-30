@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { cn } from "@/lib/utils";
 import { ProjectCard, ProjectCardCarousel, ProjectCardList, ProjectCardGrid } from "@/components/project/project-card";
 import { AnimatedTabs, AnimatedTabsSticky } from "@/components/ui/animated-tabs";
 import type { AnimatedTab } from "@/components/ui/animated-tabs";
@@ -53,7 +54,15 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
   return (
     <>
       {hasFilters && (
-        <AnimatedTabsSticky mode="fixed" className="flex justify-between items-center lg:-mt-17 lg:pt-17 px-5 md:px-24 lg:px-0 xl:px-16 xl:pt-18 xl:max-w-4xl">
+        <AnimatedTabsSticky
+          mode="fixed"
+          className={cn(
+            "flex items-center justify-between w-full px-8",
+            "md:max-w-xl md:px-0",
+            "lg:max-w-4xl lg:-mt-17 lg:pt-17 lg:px-0",
+            "xl:pt-18 xl:px-16",
+          )}
+        >
           <AnimatedTabs
             tabs={tabs}
             activeTab={activeFilter}
@@ -82,9 +91,9 @@ export function ProjectsContent({ projects }: ProjectsContentProps) {
 
       {/* Mobile: Carousel or List */}
       {mobileViewMode === "carousel" ? (
-        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden overflow-x-hidden" contentClassName="md:mx-24" />
+        <ProjectCardCarousel projects={filteredProjects} className="lg:hidden overflow-x-hidden" />
       ) : (
-        <ProjectCardList className="flex flex-col lg:hidden w-full px-5 md:px-24 lg:px-0">
+        <ProjectCardList className="flex flex-col lg:hidden w-full max-w-xl px-8 md:px-0">
           {filteredProjects.map((project) => (
             <ProjectCard key={project.id} project={project} variant="thumb" />
           ))}

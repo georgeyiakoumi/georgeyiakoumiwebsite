@@ -69,7 +69,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
 
       <ProjectDescription description={project.description} />
 
-      <article className="flex flex-col w-full">
+      <article className="flex flex-col w-full space-y-12">
         {snapshotItems.length > 0 && (
           <SnapshotBlock
             items={snapshotItems}
