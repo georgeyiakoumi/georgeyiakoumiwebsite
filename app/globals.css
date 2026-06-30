@@ -266,6 +266,11 @@ a {
   --scroll-fade-size: --value([length], [percentage]);
 }
 
+@utility carousel-gap-* {
+  --carousel-gap: calc(var(--spacing) * --value(integer));
+  --carousel-gap: --value([length], [percentage]);
+}
+
 
 @layer utilities {
 .scrollbar-hide {

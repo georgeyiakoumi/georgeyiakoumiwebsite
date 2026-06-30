@@ -28,11 +28,13 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
 
   return (
     <header className={cn(
-      "relative flex flex-col gap-8 items-center mx-auto min-h-dvh w-full",
-      "px-8 pt-24 justify-start",
-      "lg:px-0 md:pt-0 md:justify-center md:max-w-2xl xl:max-w-3xl"
+      "relative flex flex-col justify-start items-center min-h-dvh w-full",
+      "gap-8 mx-auto px-8 pt-24",
+      "md:pt-0 md:justify-center md:max-w-2xl",
+      "lg:px-0",
+      "xl:max-w-3xl",
     )}>
-      <Typography variant="h1" className="text-center max-w-2xl">
+      <Typography variant="h1" className="text-center max-w-xl">
         {title}
       </Typography>
 
@@ -90,8 +92,6 @@ export function ProjectHero({ title, heroImageUrl, heroAlt, websiteUrl, githubUr
           />
         </BlockFigure>
       )}
-
-      
 
       <ScrollIndicator />
     </header>

@@ -120,7 +120,7 @@ function AnimatedTabsGroup({
 }: React.ComponentProps<"div">) {
   return (
     <div
-      className={cn("relative flex h-auto items-center justify-center rounded-lg text-muted-foreground gap-1 min-w-max mx-auto px-4 lg:px-0", className)}
+      className={cn("relative flex h-auto items-center justify-center rounded-lg text-muted-foreground gap-1 min-w-max mx-auto", className)}
       role="group"
       {...props}
     >

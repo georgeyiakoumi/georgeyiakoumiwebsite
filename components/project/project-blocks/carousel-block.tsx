@@ -1,7 +1,5 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
-import Fade from "embla-carousel-fade";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselControls } from "@/components/ui/carousel";
-import { CarouselNavigation, CarouselCounter } from "@/components/ui/carousel-navigation";
+import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/components/ui/carousel";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { BlockFigure } from "./block-figure";
 import { BlockCaption } from "./block-caption";
@@ -24,19 +22,18 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
     <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
       <Carousel
         opts={{ align: "center", loop: canLoop, containScroll: false }}
-        plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 1280px)": { active: true } } })] : []}
-        className="w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] [--carousel-gap:1rem] md:[--carousel-slide-size:36.5rem] md:[--carousel-peek:0px] md:[--carousel-gap:0.5rem] xl:[--carousel-slide-size:100%] xl:[--carousel-gap:0px]"
+        fade={usePeek}
       >
         <div className="relative">
-          <CarouselNavigation className="hidden xl:flex absolute top-1 right-1 z-10" />
+          <CarouselNavigation variant="overlay" className="hidden lg:flex absolute top-1 right-1 z-10" />
           <CarouselContent>
-            {block.slides.map((slide) => {
+            {block.slides.map((slide, i) => {
               const slideUrl = getStrapiMediaURL(slide.url);
               const isVideo = slide.mime?.startsWith('video/');
 
               return (
-                <CarouselItem key={slide.id}>
-                  <div className="border border-border rounded-lg overflow-hidden">
+                <CarouselItem key={slide.id} index={i}>
+                  <div className="border border-border rounded-lg overflow-hidden ">
                     {isVideo ? (
                       <video src={slideUrl || ''} className="w-full h-auto" controls playsInline>
                         Your browser does not support the video tag.
@@ -58,11 +55,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <CarouselControls className="mt-2 px-8 xl:px-0 md:mx-auto md:max-w-2xl xl:hidden">
-          <CarouselPrevious className="static translate-y-0" />
-          <CarouselCounter />
-          <CarouselNext className="static translate-y-0" />
-        </CarouselControls>
+        <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-2xl xl:hidden" />
       </Carousel>
       {block.caption && (
         <BlockCaption className="px-8 lg:px-0">{block.caption}</BlockCaption>
