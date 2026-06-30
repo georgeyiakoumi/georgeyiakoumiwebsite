@@ -10,7 +10,7 @@
       "type": "string",
       "required": true
     },
-    "value": {
+    "content": {
       "type": "dynamiczone",
       "components": [
         "project-blocks.string-value",
