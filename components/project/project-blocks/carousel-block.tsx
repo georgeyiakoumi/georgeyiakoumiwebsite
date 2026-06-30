@@ -1,6 +1,6 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
 import Fade from "embla-carousel-fade";
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, CarouselControls } from "@/components/ui/carousel";
 import { CarouselNavigation, CarouselCounter } from "@/components/ui/carousel-navigation";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { BlockFigure } from "./block-figure";
@@ -21,12 +21,11 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   const canLoop = usePeek && slideCount >= 2;
 
   return (
-    <BlockFigure className="px-0">
+    <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl">
       <Carousel
         opts={{ align: "center", loop: canLoop, containScroll: false }}
         plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 1024px)": { active: true } } })] : []}
-        className="w-full"
-        style={usePeek ? { "--carousel-slide-size": "100%", "--carousel-peek": "2rem", "--carousel-gap": "1rem" } as React.CSSProperties : undefined}
+        className="w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] [--carousel-gap:1rem] md:[--carousel-slide-size:37rem] md:[--carousel-peek:0px] lg:[--carousel-slide-size:100%] lg:[--carousel-gap:0px]"
       >
         <div className="relative">
           <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
@@ -59,11 +58,11 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <div className="flex items-center justify-between mt-2 px-8 lg:px-0 md:mx-auto md:max-w-2xl lg:hidden">
+        <CarouselControls className="mt-2 px-8 lg:px-0 md:mx-auto md:max-w-2xl lg:hidden">
           <CarouselPrevious className="static translate-y-0" />
           <CarouselCounter />
           <CarouselNext className="static translate-y-0" />
-        </div>
+        </CarouselControls>
       </Carousel>
       {block.caption && (
         <BlockCaption className="px-8 lg:px-0">{block.caption}</BlockCaption>

@@ -234,6 +234,15 @@ function CarouselNext({
   )
 }
 
+function CarouselControls({ className, ...props }: React.ComponentProps<"div">) {
+  return (
+    <div
+      className={cn("flex items-center justify-between", className)}
+      {...props}
+    />
+  )
+}
+
 export {
   type CarouselApi,
   Carousel,
@@ -241,5 +250,6 @@ export {
   CarouselItem,
   CarouselPrevious,
   CarouselNext,
+  CarouselControls,
   useCarousel,
 }

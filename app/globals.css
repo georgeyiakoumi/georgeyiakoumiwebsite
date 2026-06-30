@@ -266,8 +266,9 @@ a {
   --scroll-fade-size: --value([length], [percentage]);
 }
 
+
 @layer utilities {
-  .scrollbar-hide {
+.scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
