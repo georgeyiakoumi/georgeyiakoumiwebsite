@@ -167,6 +167,7 @@ export interface StringValue {
   __component: 'project-blocks.string-value';
   id: number;
   text: string;
+  subtext?: string;
 }
 
 export interface BadgeValue {

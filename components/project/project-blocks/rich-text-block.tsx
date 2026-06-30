@@ -4,9 +4,10 @@ import type { RichTextBlock as RichTextBlockType } from "@/lib/strapi-queries";
 
 interface RichTextBlockProps {
   block: RichTextBlockType;
+  isFirst?: boolean;
 }
 
-export function RichTextBlock({ block }: RichTextBlockProps) {
+export function RichTextBlock({ block, isFirst }: RichTextBlockProps) {
   if (!block.content) return null;
 
   const firstBlock = Array.isArray(block.content) ? block.content[0] : null;
@@ -18,8 +19,8 @@ export function RichTextBlock({ block }: RichTextBlockProps) {
 
   return (
     <div className={cn(
-      "mx-auto w-full lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0",
-      isNewSection && "pt-12 border-border border-t first:mt-0 first:border-none"
+      "mx-auto w-full lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 pt-12 lg:px-0",
+      isNewSection && !isFirst && "border-border border-t"
     )}>
       <section className="md:max-w-xl xl:max-w-2xl mx-auto">
       {renderStrapiRichText(block.content)}

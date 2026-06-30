@@ -19,11 +19,11 @@ export function ProjectBlockRenderer({ blocks, projectTitle }: ProjectBlockRende
 
   return (
     <>
-      {blocks.map((block) => {
+      {blocks.map((block, index) => {
         const key = `${block.__component}-${block.id}`;
         switch (block.__component) {
           case 'project-blocks.rich-text':
-            return <RichTextBlock key={key} block={block} />;
+            return <RichTextBlock key={key} block={block} isFirst={index === 0} />;
 
           case 'project-blocks.image':
             return <ImageBlock key={key} block={block} projectTitle={projectTitle} />;
