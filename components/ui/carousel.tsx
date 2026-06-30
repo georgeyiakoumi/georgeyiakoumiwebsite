@@ -1,17 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { useRef, useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 import Fade from "embla-carousel-fade"
-import { ArrowLeft, ArrowRight } from "lucide-react"
-
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, type ChevronLeftIconHandle } from "@/components/ui/chevron-left"
-import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right"
+import { ArrowLeftIcon, type ArrowLeftIconHandle } from "@/components/ui/arrow-left"
+import { ArrowRightIcon, type ArrowRightIconHandle } from "@/components/ui/arrow-right"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -222,87 +219,66 @@ function useCarouselCounter() {
   return { current, total }
 }
 
+function CarouselNavButton({ direction, overlay, className, ...props }: React.ComponentProps<"button"> & { direction: "prev" | "next"; overlay?: boolean }) {
+  const iconRef = useRef<ArrowLeftIconHandle | ArrowRightIconHandle>(null)
+  const iconSize = overlay ? 14 : 16
+
+  return (
+    <button
+      type="button"
+      aria-label={direction === "prev" ? "Previous slide" : "Next slide"}
+      className={cn(
+        "inline-flex items-center justify-center transition-colors dark:xl:hover:bg-muted xl:hover:bg-muted",
+        "disabled:pointer-events-none disabled:opacity-50",
+        "active:scale-[0.97]",
+        overlay
+          ? cn(
+              "size-7 cursor-pointer",
+              direction === "prev"
+                ? "rounded-l-md rounded-r-none"
+                : "rounded-r-md rounded-l-none"
+            )
+          : "size-10 rounded-full",
+        className
+      )}
+      onMouseEnter={() => iconRef.current?.startAnimation()}
+      onMouseLeave={() => iconRef.current?.stopAnimation()}
+      {...props}
+    >
+      {direction === "prev"
+        ? <ArrowLeftIcon ref={iconRef as React.Ref<ArrowLeftIconHandle>} size={iconSize} />
+        : <ArrowRightIcon ref={iconRef as React.Ref<ArrowRightIconHandle>} size={iconSize} />
+      }
+    </button>
+  )
+}
+
 function CarouselNavigation({ variant = "overlay", className }: { variant?: "overlay" | "inline"; className?: string }) {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel()
   const { current, total } = useCarouselCounter()
-  const leftRef = useRef<ChevronLeftIconHandle>(null)
-  const rightRef = useRef<ChevronRightIconHandle>(null)
+  const isOverlay = variant === "overlay"
 
   if (total <= 1) return null
 
-  // Mobile — prev/counter/next bar below the carousel
-  if (variant === "inline") {
-    return (
-      <div 
-        className={cn(
-          "flex items-center justify-between",
-          "md:max-w-3xl md:mx-auto",
-          "lg:hidden",
-          className
-          )}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="static translate-y-0 rounded-full"
-          disabled={!canScrollPrev}
-          onClick={scrollPrev}
-        >
-          <ArrowLeft />
-          <span className="sr-only">Previous slide</span>
-        </Button>
-        <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
-          {current + 1} / {total}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="static translate-y-0 rounded-full"
-          disabled={!canScrollNext}
-          onClick={scrollNext}
-        >
-          <ArrowRight />
-          <span className="sr-only">Next slide</span>
-        </Button>
-      </div>
-    )
-  }
-
-  // lg+ — compact pill overlaid on the carousel image
   return (
-    <div 
+    <div
       className={cn(
-        "flex items-center gap-2 bg-card rounded-lg origin-top-right",
-        "will-change-transform transition-all duration-200",
-        "xl:hover:scale-[1.1] xl:hover:bg-background", 
+        "flex items-center",
+        isOverlay
+          ? cn(
+              "gap-2 bg-card rounded-md origin-top-right",
+              "will-change-transform transition-all duration-200",
+              "xl:hover:scale-[1.1] xl:hover:bg-background xl:hover:shadow-xl"
+            )
+          : "justify-between md:max-w-3xl md:mx-auto lg:hidden",
         className
-      )}>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        onClick={scrollPrev}
-        onMouseEnter={() => leftRef.current?.startAnimation()}
-        onMouseLeave={() => leftRef.current?.stopAnimation()}
-        disabled={!canScrollPrev}
-        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
-      >
-        <ChevronLeftIcon ref={leftRef} />
-        <span className="sr-only">Previous slide</span>
-      </Button>
+      )}
+    >
+      <CarouselNavButton direction="prev" overlay={isOverlay} disabled={!canScrollPrev} onClick={scrollPrev} />
       <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
         {current + 1} / {total}
       </span>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        onClick={scrollNext}
-        onMouseEnter={() => rightRef.current?.startAnimation()}
-        onMouseLeave={() => rightRef.current?.stopAnimation()}
-        disabled={!canScrollNext}
-        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
-      >
-        <ChevronRightIcon ref={rightRef} />
-        <span className="sr-only">Next slide</span>
-      </Button>
+      <CarouselNavButton direction="next" overlay={isOverlay} disabled={!canScrollNext} onClick={scrollNext} />
     </div>
   )
 }
