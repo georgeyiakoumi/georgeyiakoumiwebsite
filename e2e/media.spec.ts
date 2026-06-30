@@ -22,7 +22,7 @@ interface ImageInfo {
 async function getRenderedImages(page: Page): Promise<ImageInfo[]> {
   return page.evaluate(() => {
     return Array.from(document.querySelectorAll('img'))
-      .filter((img) => img.src && img.complete)
+      .filter((img) => !!img.src)
       .map((img) => ({ src: img.src, alt: img.alt || '' }))
   })
 }

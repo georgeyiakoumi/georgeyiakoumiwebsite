@@ -18,7 +18,7 @@ export function ConditionalLayout({ children, cvUrl, email }: ConditionalLayoutP
     <ScrollVisibilityProvider>
       <LayoutChrome isSlugPage={isSlugPage} cvUrl={cvUrl} email={email} />
 
-      <main className="h-dvh overflow-y-auto relative scrollbar-hide">
+      <main className="h-dvh overflow-y-auto relative scrollbar-hide scroll-fade-y">
         {children}
       </main>
     </ScrollVisibilityProvider>
