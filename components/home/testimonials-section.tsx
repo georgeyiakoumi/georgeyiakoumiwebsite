@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { Section } from "@/components/layout/section";
+import { Skeleton } from "@/components/ui/skeleton";
 import { Typography } from "@/components/ui/typography";
 import { Button } from "@/components/ui/button";
 import { LinkedinIcon, type LinkedinIconHandle } from "@/components/ui/linkedin";
@@ -64,7 +65,7 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           <Message align="end">
             <MessageContent>
               <Bubble variant="default">
-                <BubbleContent className="!bg-blue-500">Tell me about George...</BubbleContent>
+                <BubbleContent className="!bg-blue-500 dark:text-foreground">Tell me about George...</BubbleContent>
               </Bubble>
             </MessageContent>
           </Message>
@@ -86,6 +87,28 @@ export function TestimonialsSection({ testimonials }: TestimonialsSectionProps) 
           View all on LinkedIn
         </a>
       </Button>
+    </Section>
+  );
+}
+
+export function TestimonialsSectionSkeleton() {
+  return (
+    <Section className="gap-8">
+      <Skeleton className="h-8 w-48" />
+      <div className="w-full md:max-w-xl lg:max-w-2xl xl:max-w-4xl p-5 md:p-8 rounded-4xl border border-border/50">
+        <div className="flex flex-col gap-5 md:gap-8">
+          <div className="flex justify-end">
+            <Skeleton className="h-10 w-48 rounded-2xl" />
+          </div>
+          {Array.from({ length: 3 }).map((_, i) => (
+            <div key={i} className="flex items-start gap-3">
+              <Skeleton className="size-8 rounded-full shrink-0" />
+              <Skeleton className="h-20 w-full max-w-sm rounded-2xl" />
+            </div>
+          ))}
+        </div>
+      </div>
+      <Skeleton className="h-10 w-44 rounded-lg" />
     </Section>
   );
 }

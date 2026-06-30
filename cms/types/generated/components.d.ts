@@ -169,7 +169,11 @@ export interface ProjectBlocksSnapshotItem extends Struct.ComponentSchema {
   };
   attributes: {
     label: Schema.Attribute.String & Schema.Attribute.Required;
-    value: Schema.Attribute.String & Schema.Attribute.Required;
+    members: Schema.Attribute.Component<'project-blocks.team-member', true>;
+    value: Schema.Attribute.String;
+    valueType: Schema.Attribute.Enumeration<['string', 'badges']> &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<'string'>;
   };
 }
 
@@ -232,6 +236,17 @@ export interface ProjectBlocksStats extends Struct.ComponentSchema {
   };
 }
 
+export interface ProjectBlocksTeamMember extends Struct.ComponentSchema {
+  collectionName: 'components_project_blocks_team_members';
+  info: {
+    description: 'A team member badge for the snapshot block';
+    displayName: 'team-member';
+  };
+  attributes: {
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ProjectBlocksVideo extends Struct.ComponentSchema {
   collectionName: 'components_project_blocks_videos';
   info: {
@@ -261,6 +276,7 @@ declare module '@strapi/strapi' {
       'project-blocks.snapshot-item': ProjectBlocksSnapshotItem;
       'project-blocks.stat-item': ProjectBlocksStatItem;
       'project-blocks.stats': ProjectBlocksStats;
+      'project-blocks.team-member': ProjectBlocksTeamMember;
       'project-blocks.video': ProjectBlocksVideo;
     }
   }

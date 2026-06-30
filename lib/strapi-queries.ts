@@ -144,6 +144,13 @@ export interface CodeBlockType {
   caption?: string;
 }
 
+export interface FigmaEmbedBlock {
+  __component: 'project-blocks.figma-embed';
+  id: number;
+  url: string;
+  caption?: string;
+}
+
 export interface LottieBlock {
   __component: 'project-blocks.lottie';
   id: number;
@@ -167,6 +174,7 @@ export interface StringValue {
   __component: 'project-blocks.string-value';
   id: number;
   text: string;
+  subtext?: string;
 }
 
 export interface BadgeValue {
@@ -191,7 +199,8 @@ export type ProjectBlock =
   | ComparisonSliderBlock
   | StatsBlock
   | CodeBlockType
-  | LottieBlock;
+  | LottieBlock
+  | FigmaEmbedBlock;
 
 export interface ProjectData {
   id: number;

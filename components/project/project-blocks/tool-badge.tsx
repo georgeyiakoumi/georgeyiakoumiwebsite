@@ -35,7 +35,7 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
 
   const badge = (
     <Badge
-      variant="secondary"
+      variant="outline"
       className={`gap-2 select-none cursor-pointer ${tool.classes || ""}`}
       style={cssVariables}
     >

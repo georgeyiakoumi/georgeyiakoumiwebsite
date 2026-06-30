@@ -3,6 +3,7 @@ import { FeaturedWorkSectionSkeleton } from "@/components/home/featured-work-sec
 import { CompaniesSectionSkeleton } from "@/components/home/companies-section";
 import { StackSectionSkeleton } from "@/components/home/stack-section";
 import { AboutSectionSkeleton } from "@/components/home/about-section";
+import { TestimonialsSectionSkeleton } from "@/components/home/testimonials-section";
 
 export default function HomeLoading() {
   return (
@@ -10,8 +11,9 @@ export default function HomeLoading() {
       <HeroSectionSkeleton />
       <FeaturedWorkSectionSkeleton />
       <CompaniesSectionSkeleton />
-      <StackSectionSkeleton />
+      <TestimonialsSectionSkeleton />
       <AboutSectionSkeleton />
+      <StackSectionSkeleton />
     </>
   );
 }

@@ -1,17 +1,14 @@
 "use client"
 
 import * as React from "react"
-import { useRef, useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import useEmblaCarousel, {
   type UseEmblaCarouselType,
 } from "embla-carousel-react"
 import Fade from "embla-carousel-fade"
-import { ArrowLeft, ArrowRight } from "lucide-react"
-
 import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
-import { ChevronLeftIcon, type ChevronLeftIconHandle } from "@/components/ui/chevron-left"
-import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right"
+import { ArrowLeftIcon, type ArrowLeftIconHandle } from "@/components/ui/arrow-left"
+import { ArrowRightIcon, type ArrowRightIconHandle } from "@/components/ui/arrow-right"
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>
@@ -21,9 +18,9 @@ type CarouselPlugin = UseCarouselParameters[1]
 type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
-  orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
   fade?: boolean
+  navigation?: "overlay" | "inline"
 }
 
 type CarouselContextProps = {
@@ -34,7 +31,8 @@ type CarouselContextProps = {
   canScrollPrev: boolean
   canScrollNext: boolean
   selectedIndex: number
-} & CarouselProps
+  fade: boolean
+} & Omit<CarouselProps, "fade">
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
@@ -49,24 +47,20 @@ function useCarousel() {
 }
 
 function Carousel({
-  orientation = "horizontal",
   opts,
   setApi,
   plugins,
   fade = false,
+  navigation,
   className,
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
-  const fadePlugin = fade
-    ? [Fade({ active: false, breakpoints: { "(min-width: 1024px)": { active: true } } })]
-    : []
+  const fadePlugin = fade ? [Fade()] : []
+
   const allPlugins: CarouselPlugin = [...(plugins ?? []), ...fadePlugin]
   const [carouselRef, api] = useEmblaCarousel(
-    {
-      ...opts,
-      axis: orientation === "horizontal" ? "x" : "y",
-    },
+    { ...opts },
     allPlugins
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
@@ -123,8 +117,7 @@ function Carousel({
         carouselRef,
         api: api,
         opts,
-        orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
+        fade,
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -134,29 +127,41 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] md:[--carousel-slide-size:36.5rem] md:[--carousel-peek:0px] xl:[--carousel-slide-size:100%]", className)}
+        className={cn("relative w-full", className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
         {...props}
       >
+        {/* lg+ overlay nav — sits inside the carousel image */}
+        {navigation === "overlay" && (
+          <CarouselNavigation variant="overlay" className="absolute top-1 right-1 z-10" />
+        )}
         {children}
+        {/* Mobile / md inline nav — sits below the carousel, hidden at lg+ */}
+        {navigation === "inline" && (
+          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-xl" />
+        )}
       </div>
     </CarouselContext.Provider>
   )
 }
 
-function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
-  const { carouselRef, orientation } = useCarousel()
+function CarouselContent({ className, viewportClassName, ...props }: React.ComponentProps<"div"> & { viewportClassName?: string }) {
+  const { carouselRef, fade } = useCarousel()
 
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      className={cn("overflow-clip w-full", viewportClassName)}
       data-slot="carousel-content"
     >
       <div
-        className={cn("flex touch-pan-y pinch-zoom", orientation === "horizontal" ? "space-x-4" : "space-y-4", orientation === "vertical" && "flex-col", className)}
+        className={cn(
+          "flex touch-pan-y pinch-zoom",
+          !fade && "space-x-4 md:space-x-8",
+          className
+        )}
         {...props}
       />
     </div>
@@ -164,7 +169,7 @@ function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
 }
 
 function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"> & { index?: number }) {
-  const { selectedIndex } = useCarousel()
+  const { selectedIndex, fade } = useCarousel()
   const isActive = index === undefined || index === selectedIndex
 
   return (
@@ -173,8 +178,15 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 last:mr-4 [transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300",
-        !isActive && "opacity-40",
+        "min-w-0 [transform:translate3d(0,0,0)] transition-opacity duration-50",
+        fade
+          ? "[flex:0_0_100%]"
+          : cn(
+              "md:max-w-xl",
+              "last:mr-4 md:last:mr-8",
+              "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
+              !isActive && "opacity-40"
+            ),
         className
       )}
       {...props}
@@ -207,74 +219,103 @@ function useCarouselCounter() {
   return { current, total }
 }
 
+function CarouselNavButton({ direction, overlay, className, ...props }: React.ComponentProps<"button"> & { direction: "prev" | "next"; overlay?: boolean }) {
+  const iconRef = useRef<ArrowLeftIconHandle | ArrowRightIconHandle>(null)
+  const iconSize = overlay ? 14 : 16
+
+  return (
+    <button
+      type="button"
+      aria-label={direction === "prev" ? "Previous slide" : "Next slide"}
+      className={cn(
+        "inline-flex items-center justify-center transition-colors dark:xl:hover:bg-muted xl:hover:bg-muted",
+        "disabled:pointer-events-none disabled:opacity-50",
+        "active:scale-[0.97] [&_svg]:pointer-events-none",
+        overlay
+          ? cn(
+              "size-7 cursor-pointer",
+              direction === "prev"
+                ? "rounded-l-md rounded-r-none"
+                : "rounded-r-md rounded-l-none"
+            )
+          : "size-10 rounded-full",
+        className
+      )}
+      onMouseEnter={() => iconRef.current?.startAnimation()}
+      onMouseLeave={() => iconRef.current?.stopAnimation()}
+      {...props}
+    >
+      {direction === "prev"
+        ? <ArrowLeftIcon ref={iconRef as React.Ref<ArrowLeftIconHandle>} size={iconSize} />
+        : <ArrowRightIcon ref={iconRef as React.Ref<ArrowRightIconHandle>} size={iconSize} />
+      }
+    </button>
+  )
+}
+
 function CarouselNavigation({ variant = "overlay", className }: { variant?: "overlay" | "inline"; className?: string }) {
   const { scrollPrev, scrollNext, canScrollPrev, canScrollNext } = useCarousel()
   const { current, total } = useCarouselCounter()
-  const leftRef = useRef<ChevronLeftIconHandle>(null)
-  const rightRef = useRef<ChevronRightIconHandle>(null)
+  const isOverlay = variant === "overlay"
 
   if (total <= 1) return null
 
-  if (variant === "inline") {
-    return (
-      <div className={cn("flex items-center justify-between", className)}>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="static translate-y-0 rounded-full"
-          disabled={!canScrollPrev}
-          onClick={scrollPrev}
-        >
-          <ArrowLeft />
-          <span className="sr-only">Previous slide</span>
-        </Button>
-        <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
-          {current + 1} / {total}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="static translate-y-0 rounded-full"
-          disabled={!canScrollNext}
-          onClick={scrollNext}
-        >
-          <ArrowRight />
-          <span className="sr-only">Next slide</span>
-        </Button>
-      </div>
-    )
-  }
-
   return (
-    <div className={cn("flex items-center gap-2 bg-card rounded-lg will-change-transform transition-all duration-200 origin-top-right xl:hover:scale-[1.1] xl:hover:bg-background", className)}>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        onClick={scrollPrev}
-        onMouseEnter={() => leftRef.current?.startAnimation()}
-        onMouseLeave={() => leftRef.current?.stopAnimation()}
-        disabled={!canScrollPrev}
-        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
-      >
-        <ChevronLeftIcon ref={leftRef} />
-        <span className="sr-only">Previous slide</span>
-      </Button>
+    <div
+      className={cn(
+        "flex items-center",
+        isOverlay
+          ? cn(
+              "gap-2 bg-card rounded-md origin-top-right",
+              "will-change-transform transition-all duration-200",
+              "xl:hover:scale-[1.1] xl:hover:bg-background xl:hover:shadow-xl"
+            )
+          : "justify-between md:max-w-3xl md:mx-auto lg:hidden",
+        className
+      )}
+    >
+      <CarouselNavButton direction="prev" overlay={isOverlay} disabled={!canScrollPrev} onClick={scrollPrev} />
       <span className="text-xs font-mono text-muted-foreground tracking-tighter tabular-nums select-none">
         {current + 1} / {total}
       </span>
-      <Button
-        variant="ghost"
-        size="icon-sm"
-        onClick={scrollNext}
-        onMouseEnter={() => rightRef.current?.startAnimation()}
-        onMouseLeave={() => rightRef.current?.stopAnimation()}
-        disabled={!canScrollNext}
-        className="rounded-lg cursor-pointer dark:hover:bg-white/15"
-      >
-        <ChevronRightIcon ref={rightRef} />
-        <span className="sr-only">Next slide</span>
-      </Button>
+      <CarouselNavButton direction="next" overlay={isOverlay} disabled={!canScrollNext} onClick={scrollNext} />
     </div>
+  )
+}
+
+// Responsive carousel — peek on mobile/md, fade on lg+
+// CSS visibility handles which instance is active; context-aware classes prevent style conflicts
+function ResponsiveCarousel({ loop, children }: { loop?: boolean; children: React.ReactNode }) {
+  const slides = React.Children.toArray(children)
+
+  const slideItems = slides.map((child, i) => (
+    <CarouselItem key={i} index={i}>
+      {child}
+    </CarouselItem>
+  ))
+
+  return (
+    <>
+      <Carousel
+        opts={{ align: "center", loop, containScroll: false }}
+        navigation="inline"
+        className="lg:hidden"
+      >
+        <CarouselContent viewportClassName="px-8 md:px-0">
+          {slideItems}
+        </CarouselContent>
+      </Carousel>
+      <Carousel
+        opts={{ align: "center", loop, containScroll: false }}
+        fade
+        navigation="overlay"
+        className="hidden lg:flex"
+      >
+        <CarouselContent>
+          {slideItems}
+        </CarouselContent>
+      </Carousel>
+    </>
   )
 }
 
@@ -284,5 +325,6 @@ export {
   CarouselContent,
   CarouselItem,
   CarouselNavigation,
+  ResponsiveCarousel,
   useCarousel,
 }

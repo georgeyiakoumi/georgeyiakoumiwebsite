@@ -9,7 +9,9 @@ export function BlockFigure({ children, className }: BlockFigureProps) {
   return (
     <figure
       className={cn(
-        "flex flex-col gap-4 items-center w-full md:max-w-xl xl:max-w-2xl mx-auto px-8 md:px-0",
+        "flex flex-col gap-4 items-center w-full mx-auto px-8",
+        "md:max-w-xl md:px-0",
+        "xl:max-w-2xl",
         className
       )}
     >

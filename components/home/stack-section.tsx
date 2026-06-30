@@ -79,7 +79,8 @@ export function StackSectionSkeleton() {
   return (
     <Section>
       <Skeleton className="h-8 w-32" />
-      <div className="w-full grid gap-8 grid-cols-4 md:grid-cols-7 lg:grid-cols-5 xl:grid-cols-7 2xl:grid-cols-8">
+      <Skeleton className="h-9 w-64 rounded-full" />
+      <div className="w-full grid gap-2 md:gap-2 lg:gap-4 xl:gap-2 2xl:gap-6 md:max-w-xl xl:max-w-3xl 2xl:max-w-4xl md:mx-auto grid-cols-4 md:grid-cols-7 lg:grid-cols-6 xl:grid-cols-7 2xl:grid-cols-8">
         {Array.from({ length: 16 }).map((_, i) => (
           <Skeleton key={i} className="h-16 w-full" />
         ))}

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_project_blocks_figma_embeds",
+  "info": {
+    "displayName": "figma-embed",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "caption": {
+      "type": "text"
+    }
+  }
+}

@@ -10,21 +10,31 @@ import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/c
 import { cn, getEntryPath } from "@/lib/utils";
 import type { ProjectData } from "@/lib/strapi-queries";
 
+// --- Context ---
+
+type CardVariant = "thumb" | "list";
+const CardVariantContext = React.createContext<CardVariant>("thumb");
+function useCardVariant() { return React.useContext(CardVariantContext); }
+
 // --- Primitives ---
 
 function ProjectCardRoot({
+  variant = "thumb",
   className,
   children,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentProps<"div"> & { variant?: CardVariant }) {
   return (
-    <div
-      data-slot="project-card"
-      className={cn("group overflow-hidden rounded-3xl", className)}
-      {...props}
-    >
-      {children}
-    </div>
+    <CardVariantContext.Provider value={variant}>
+      <div
+        data-slot="project-card"
+        data-variant={variant}
+        className={cn("group overflow-hidden rounded-3xl", className)}
+        {...props}
+      >
+        {children}
+      </div>
+    </CardVariantContext.Provider>
   );
 }
 
@@ -59,8 +69,21 @@ function ProjectCardThumb({
   children?: React.ReactNode;
   hoverEffects?: boolean;
 }) {
+  const variant = useCardVariant();
+  const isList = variant === "list";
+
   return (
-    <div data-slot="project-card-thumb" className={cn("relative overflow-hidden", className)}>
+    <div
+      data-slot="project-card-thumb"
+      className={cn(
+        "relative overflow-hidden aspect-video w-full border border-border rounded-3xl",
+        "transition-[border-radius,border-right-color,border-bottom-color] duration-200 ease-out",
+        isList
+          ? "h-full delay-100 xl:group-hover:rounded-r-none xl:group-hover:border-r-transparent xl:group-hover:delay-0"
+          : "xl:group-hover:rounded-b-none xl:group-hover:border-b-transparent xl:group-hover:delay-0",
+        className
+      )}
+    >
       {src ? (
         <ImageWithFallback
           src={src} alt={alt} fill
@@ -83,10 +106,31 @@ function ProjectCardHeader({
   children,
   ...props
 }: React.ComponentProps<"div">) {
+  const variant = useCardVariant();
+  const isList = variant === "list";
+
   return (
     <div
       data-slot="project-card-header"
-      className={cn("relative flex flex-col justify-start p-6 gap-3", className)}
+      className={cn(
+        "relative flex flex-col justify-start p-6 gap-3 flex-1 border-transparent",
+        "transition-[border-color] duration-200 ease-out",
+        "xl:group-hover:border-border xl:group-hover:delay-350",
+        "before:absolute before:inset-0 before:bg-muted/70 before:-z-10",
+        "before:transition-transform before:duration-100 before:ease-out",
+        isList
+          ? cn(
+              "rounded-r-3xl border-t border-r border-b",
+              "before:origin-left before:scale-x-0",
+              "xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200"
+            )
+          : cn(
+              "rounded-b-3xl border-l border-r border-b",
+              "before:origin-top before:scale-y-0",
+              "xl:group-hover:before:scale-y-100 xl:group-hover:before:delay-200"
+            ),
+        className
+      )}
       {...props}
     >
       {children}
@@ -120,15 +164,39 @@ function ProjectCardTags({ tags }: { tags?: { id: number; name: string }[] }) {
   );
 }
 
+function ProjectCardActionButton({
+  label,
+  chevronRef,
+}: {
+  label: string;
+  chevronRef?: React.RefObject<ChevronRightIconHandle | null>;
+}) {
+  return (
+    <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
+      {label}
+      <ChevronRightIcon ref={chevronRef} />
+    </Button>
+  );
+}
+
 function ProjectCardActions({
   className,
   children,
   ...props
 }: React.ComponentProps<"div">) {
+  const variant = useCardVariant();
+  const isList = variant === "list";
+
   return (
     <div
       data-slot="project-card-actions"
-      className={cn("flex items-center", className)}
+      className={cn(
+        "absolute flex items-center opacity-0 transition-opacity ease-out group-hover:opacity-100 z-10 duration-100",
+        isList
+          ? "bottom-4 left-4 items-end justify-start"
+          : "inset-0 justify-center",
+        className
+      )}
       {...props}
     >
       {children}
@@ -149,75 +217,42 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
   const thumbSrc = project.project_thumb?.url;
   const thumbAlt = project.project_thumb?.alternativeText || project.title;
   const chevronRef = React.useRef<ChevronRightIconHandle>(null);
-
-  if (variant === "list") {
-    return (
-      <ProjectCardRoot
-        data-variant="list"
-        className={cn(
-          "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
-          className
-        )}
-        onMouseEnter={() => chevronRef.current?.startAnimation()}
-        onMouseLeave={() => chevronRef.current?.stopAnimation()}
-      >
-        <ProjectCardLink
-          project={project}
-          className="relative z-10 grid grid-cols-[4fr_3fr_auto] items-stretch"
-        >
-          <ProjectCardThumb
-            src={thumbSrc}
-            alt={thumbAlt}
-            hoverEffects={showActions}
-            className="aspect-video border border-border w-full h-full rounded-3xl transition-[border-radius,border-right-color] duration-200 ease-out delay-200 xl:group-hover:rounded-r-none xl:group-hover:border-r-transparent xl:group-hover:delay-0"
-          >
-          </ProjectCardThumb>
-          <ProjectCardHeader className="flex-1 rounded-r-3xl border-t border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-left before:scale-x-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-x-100 xl:group-hover:before:delay-200">
-            <ProjectCardTags tags={project.project_tags} />
-            <ProjectCardTitle className="text-xl">{project.title}</ProjectCardTitle>
-            {showActions && (
-              <ProjectCardActions className="absolute bottom-4 left-4 z-10 flex items-end justify-start opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
-                <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
-                  {project.type === "article" ? "Read article" : "Read case study"}
-                  <ChevronRightIcon ref={chevronRef} />
-                </Button>
-              </ProjectCardActions>
-            )}
-          </ProjectCardHeader>
-        </ProjectCardLink>
-      </ProjectCardRoot>
-    );
-  }
+  const isList = variant === "list";
+  const ctaLabel = project.type === "article" ? "Read article" : "Read case study";
 
   return (
     <ProjectCardRoot
-      data-variant="thumb"
+      variant={variant}
       className={cn(
-        "transition-transform duration-300 ease-out will-change-transform motion-reduce:transition-none xl:hover:scale-[1.02] active:scale-[0.97]",
+        "transition-transform duration-200 ease-out will-change-transform motion-reduce:transition-none",
+        "motion-safe:xl:hover:scale-105 motion-safe:xl:hover:shadow-xl",
         className
       )}
       onMouseEnter={() => chevronRef.current?.startAnimation()}
       onMouseLeave={() => chevronRef.current?.stopAnimation()}
     >
-      <ProjectCardLink project={project} className="flex flex-col">
-        <ProjectCardThumb
-          src={thumbSrc}
-          alt={thumbAlt}
-          hoverEffects={showActions}
-          className="aspect-video w-full rounded-3xl border border-border transition-[border-radius,border-bottom-color] duration-200 ease-out delay-200 xl:group-hover:rounded-b-none xl:group-hover:border-b-transparent xl:group-hover:delay-0"
-        >
-          {showActions && (
-            <ProjectCardActions className="absolute inset-0 z-10 flex items-center justify-center opacity-0 transition-opacity duration-200 ease-out group-hover:opacity-100">
-              <Button variant="outline" size="sm" tabIndex={-1} className="pointer-events-none">
-                {project.type === "article" ? "Read article" : "Read case study"}
-                <ChevronRightIcon />
-              </Button>
+      <ProjectCardLink
+        project={project}
+        className={isList
+          ? "relative z-10 grid grid-cols-[4fr_3fr_auto] items-stretch"
+          : "flex flex-col"
+        }
+      >
+        <ProjectCardThumb src={thumbSrc} alt={thumbAlt} hoverEffects={showActions}>
+          {showActions && !isList && (
+            <ProjectCardActions>
+              <ProjectCardActionButton label={ctaLabel} chevronRef={chevronRef} />
             </ProjectCardActions>
           )}
         </ProjectCardThumb>
-        <ProjectCardHeader className="flex-1 rounded-b-3xl border-l border-r border-b border-transparent transition-[border-color] duration-200 ease-out xl:group-hover:border-border xl:group-hover:delay-350 before:absolute before:inset-0 before:origin-top before:scale-y-0 before:bg-muted/70 before:transition-transform before:duration-200 before:ease-out before:-z-10 xl:group-hover:before:scale-y-100 xl:group-hover:before:delay-200">
+        <ProjectCardHeader>
           <ProjectCardTags tags={project.project_tags} />
-          <ProjectCardTitle className="text-lg">{project.title}</ProjectCardTitle>
+          <ProjectCardTitle className={isList ? "text-xl" : "text-lg"}>{project.title}</ProjectCardTitle>
+          {showActions && isList && (
+            <ProjectCardActions>
+              <ProjectCardActionButton label={ctaLabel} chevronRef={chevronRef} />
+            </ProjectCardActions>
+          )}
         </ProjectCardHeader>
       </ProjectCardLink>
     </ProjectCardRoot>
@@ -227,7 +262,7 @@ function ProjectCard({ project, variant = "thumb", className, showActions = true
 function ProjectCardSkeleton({ variant = "thumb" }: { variant?: "thumb" | "list" }) {
   if (variant === "list") {
     return (
-      <div className="rounded-3xl grid grid-cols-[3fr_4fr_auto] items-stretch">
+      <div className="rounded-3xl grid grid-cols-[4fr_3fr_auto] items-stretch">
         <Skeleton className="aspect-video w-full h-full rounded-3xl" />
         <div className="flex flex-col gap-3 justify-center p-6">
           <Skeleton className="h-6 w-3/4" />
@@ -278,7 +313,7 @@ function ProjectCardGrid({
   return (
     <div
       data-slot="project-card-grid"
-      className={cn("grid md:grid-cols-2 xl:grid-cols-2 gap-8", className)}
+      className={cn("grid gap-8 md:grid-cols-2 xl:grid-cols-2", className)}
       {...props}
     >
       {children}
