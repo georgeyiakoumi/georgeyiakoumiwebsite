@@ -1,5 +1,5 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
+import { CarouselItem, PeekCarousel, FadeCarousel } from "@/components/ui/carousel";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { BlockFigure } from "./block-figure";
 import { BlockCaption } from "./block-caption";
@@ -39,27 +39,20 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
     return { id: slide.id, i, media };
   });
 
-  return (
-    <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
-      <Carousel opts={{ align: "center", loop: canLoop, containScroll: false }} navigation="inline" className="lg:hidden">
-        <CarouselContent viewportClassName="px-8 md:px-0">
-          {slides.map(({ id, i, media }) => (
-            <CarouselItem key={id} index={i}>
-              <div className="border border-border rounded-lg overflow-hidden">{media}</div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+  const slideItems = slides.map(({ id, i, media }) => (
+    <CarouselItem key={id} index={i}>
+      <div className="border border-border rounded-lg overflow-hidden">{media}</div>
+    </CarouselItem>
+  ));
 
-      <Carousel opts={{ align: "center", loop: canLoop, containScroll: false }} fade navigation="overlay" className="hidden lg:flex [--carousel-slide-size:100%] [--carousel-peek:0px]">
-        <CarouselContent>
-          {slides.map(({ id, i, media }) => (
-            <CarouselItem key={id} index={i}>
-              <div className="border border-border rounded-lg overflow-hidden">{media}</div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-      </Carousel>
+  return (
+    <BlockFigure className="md:!max-w-full xl:!max-w-2xl px-0">
+
+      {/* Mobile / md — peek carousel with inline navigation */}
+      <PeekCarousel loop={canLoop}>{slideItems}</PeekCarousel>
+
+      {/* lg+ — fade carousel with overlay navigation */}
+      <FadeCarousel loop={canLoop}>{slideItems}</FadeCarousel>
 
       {block.caption && (
         <BlockCaption className="px-8 lg:px-0">{block.caption}</BlockCaption>

@@ -21,7 +21,6 @@ type CarouselPlugin = UseCarouselParameters[1]
 type CarouselProps = {
   opts?: CarouselOptions
   plugins?: CarouselPlugin
-  orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
   fade?: boolean
   navigation?: "overlay" | "inline"
@@ -50,7 +49,6 @@ function useCarousel() {
 }
 
 function Carousel({
-  orientation = "horizontal",
   opts,
   setApi,
   plugins,
@@ -64,10 +62,7 @@ function Carousel({
 
   const allPlugins: CarouselPlugin = [...(plugins ?? []), ...fadePlugin]
   const [carouselRef, api] = useEmblaCarousel(
-    {
-      ...opts,
-      axis: orientation === "horizontal" ? "x" : "y",
-    },
+    { ...opts },
     allPlugins
   )
   const [canScrollPrev, setCanScrollPrev] = React.useState(false)
@@ -124,8 +119,6 @@ function Carousel({
         carouselRef,
         api: api,
         opts,
-        orientation:
-          orientation || (opts?.axis === "y" ? "vertical" : "horizontal"),
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -141,12 +134,21 @@ function Carousel({
         data-slot="carousel"
         {...props}
       >
+        {/* lg+ overlay nav — sits inside the carousel image */}
         {navigation === "overlay" && (
-          <CarouselNavigation variant="overlay" className="absolute top-1 right-1 z-10" />
+          <CarouselNavigation 
+            variant="overlay" className="absolute top-1 right-1 z-10" />
         )}
         {children}
+        {/* Mobile inline nav — sits below the carousel */}
         {navigation === "inline" && (
-          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-xl" />
+          <CarouselNavigation 
+            variant="inline" 
+            className={cn(
+              "mt-2 px-8",
+              "md:mx-auto md:max-w-xl", 
+              className
+            )} />
         )}
       </div>
     </CarouselContext.Provider>
@@ -154,16 +156,20 @@ function Carousel({
 }
 
 function CarouselContent({ className, viewportClassName, ...props }: React.ComponentProps<"div"> & { viewportClassName?: string }) {
-  const { carouselRef, orientation } = useCarousel()
+  const { carouselRef } = useCarousel()
 
   return (
     <div
       ref={carouselRef}
-      className={cn("overflow-clip", viewportClassName)}
+      className={cn("overflow-clip w-full", viewportClassName)}
       data-slot="carousel-content"
     >
       <div
-        className={cn("flex touch-pan-y pinch-zoom", orientation === "horizontal" ? "space-x-4 md:space-x-8" : "space-y-4 md:space-y-8", orientation === "vertical" && "flex-col", className)}
+        className={cn(
+          "flex touch-pan-y pinch-zoom space-x-4",
+          "md:space-x-8", 
+          className
+        )}
         {...props}
       />
     </div>
@@ -180,7 +186,10 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 last:mr-4 md:last:mr-8 [transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300 md:max-w-xl",
+        "min-w-0 shrink-0 grow-0",
+        "md:max-w-xl lg:max-w-2xl",
+        "last:mr-4 md:last:mr-8",
+        "[transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300",
         !isActive && "opacity-40",
         className
       )}
@@ -222,9 +231,16 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
 
   if (total <= 1) return null
 
+  // Mobile — prev/counter/next bar below the carousel
   if (variant === "inline") {
     return (
-      <div className={cn("flex items-center justify-between lg:hidden", className)}>
+      <div 
+        className={cn(
+          "flex items-center justify-between",
+          "md:max-w-3xl md:mx-auto",
+          "lg:hidden",
+          className
+          )}>
         <Button
           variant="ghost"
           size="icon"
@@ -252,8 +268,15 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
     )
   }
 
+  // lg+ — compact pill overlaid on the carousel image
   return (
-    <div className={cn("flex items-center gap-2 bg-card rounded-lg will-change-transform transition-all duration-200 origin-top-right xl:hover:scale-[1.1] xl:hover:bg-background", className)}>
+    <div 
+      className={cn(
+        "flex items-center gap-2 bg-card rounded-lg origin-top-right",
+        "will-change-transform transition-all duration-200",
+        "xl:hover:scale-[1.1] xl:hover:bg-background", 
+        className
+      )}>
       <Button
         variant="ghost"
         size="icon-sm"
@@ -285,11 +308,46 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
   )
 }
 
+// Mobile / md — peek carousel with inline nav below
+function PeekCarousel({ loop, className, children }: { loop?: boolean; className?: string; children: React.ReactNode }) {
+  return (
+    <Carousel 
+      opts={{ align: "center", loop, containScroll: false }} 
+      navigation="inline" 
+      className={cn("lg:hidden", className)}
+      >
+      <CarouselContent viewportClassName="px-8 md:px-0">
+        {children}
+      </CarouselContent>
+    </Carousel>
+  )
+}
+
+// lg+ — fade carousel with overlay nav
+function FadeCarousel({ loop, className, children }: { loop?: boolean; className?: string; children: React.ReactNode }) {
+  return (
+    <Carousel 
+      opts={{ align: "center", loop, containScroll: false }} 
+      fade 
+      navigation="overlay" 
+      className={cn(
+        "hidden lg:flex lg:max-w-xl xl:max-w-2xl",
+        className
+      )}>
+      <CarouselContent>
+        {children}
+      </CarouselContent>
+    </Carousel>
+  )
+}
+
 export {
   type CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,
   CarouselNavigation,
+  PeekCarousel,
+  FadeCarousel,
   useCarousel,
 }
