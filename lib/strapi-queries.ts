@@ -158,10 +158,29 @@ export interface LottieBlock {
   autoplay?: boolean;
 }
 
+export interface TeamMember {
+  id: number;
+  name: string;
+}
+
+export interface StringValue {
+  __component: 'project-blocks.string-value';
+  id: number;
+  text: string;
+}
+
+export interface BadgeValue {
+  __component: 'project-blocks.badge-value';
+  id: number;
+  badges: TeamMember[];
+}
+
+export type SnapshotContent = StringValue | BadgeValue;
+
 export interface SnapshotItem {
   id: number;
   label: string;
-  value: string;
+  content: SnapshotContent[];
 }
 
 export type ProjectBlock =
@@ -338,7 +357,7 @@ export async function getProjectBySlug(slug: string) {
         'populate[project_thumb][fields][2]': 'width',
         'populate[project_thumb][fields][3]': 'height',
         'populate[tools][populate]': '*',
-        'populate[snapshot_items]': '*',
+        'populate[snapshot_items][populate][content][populate]': '*',
         'populate[project_tags][fields][0]': 'name',
       },
       tags: ['projects', `project-${slug}`],

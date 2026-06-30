@@ -23,8 +23,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
   const snapshotItems: SnapshotItem[] = (() => {
     const items: SnapshotItem[] = [];
     let id = 1;
-    if (project.project_role) items.push({ id: id++, label: 'Role', value: project.project_role });
-    if (project.project_client) items.push({ id: id++, label: 'Client', value: project.project_client });
+    if (project.project_client) items.push({ id: id++, label: 'Client', content: [{ __component: 'project-blocks.string-value', id: 0, text: project.project_client }] });
     if (project.date) {
       const startDate = new Date(project.date);
       const dateFormat: Intl.DateTimeFormatOptions = {
@@ -47,11 +46,11 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
         }
       }
 
-      items.push({ id: id++, label: 'Date', value: dateValue });
+      items.push({ id: id++, label: 'Date', content: [{ __component: 'project-blocks.string-value', id: 0, text: dateValue }] });
     }
     if (project.snapshot_items) {
       for (const item of project.snapshot_items) {
-        items.push({ id: id++, label: item.label, value: item.value });
+        items.push(item);
       }
     }
     return items;
@@ -73,6 +72,7 @@ export function ProjectClient({ project, otherProjects }: ProjectClientProps) {
         {snapshotItems.length > 0 && (
           <SnapshotBlock
             items={snapshotItems}
+            projectRole={project.project_role}
             toolsContent={project.tools && project.tools.length > 0
               ? project.tools.map((tool) => <ToolBadge key={tool.id} tool={tool} />)
               : undefined
