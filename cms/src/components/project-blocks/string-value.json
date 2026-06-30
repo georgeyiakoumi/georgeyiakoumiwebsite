@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_project_blocks_string_values",
+  "info": {
+    "displayName": "string-value",
+    "description": "A plain text value for a snapshot item"
+  },
+  "options": {},
+  "attributes": {
+    "text": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
