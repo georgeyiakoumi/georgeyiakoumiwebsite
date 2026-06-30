@@ -1,0 +1,14 @@
+{
+  "collectionName": "components_project_blocks_team_members",
+  "info": {
+    "displayName": "team-member",
+    "description": "A team member badge for the snapshot block"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
