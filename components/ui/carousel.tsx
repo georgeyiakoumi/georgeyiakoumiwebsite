@@ -24,6 +24,7 @@ type CarouselProps = {
   orientation?: "horizontal" | "vertical"
   setApi?: (api: CarouselApi) => void
   fade?: boolean
+  navigation?: "overlay" | "inline"
 }
 
 type CarouselContextProps = {
@@ -54,13 +55,13 @@ function Carousel({
   setApi,
   plugins,
   fade = false,
+  navigation,
   className,
   children,
   ...props
 }: React.ComponentProps<"div"> & CarouselProps) {
-  const fadePlugin = fade
-    ? [Fade({ active: false, breakpoints: { "(min-width: 1024px)": { active: true } } })]
-    : []
+  const fadePlugin = fade ? [Fade()] : []
+
   const allPlugins: CarouselPlugin = [...(plugins ?? []), ...fadePlugin]
   const [carouselRef, api] = useEmblaCarousel(
     {
@@ -134,25 +135,31 @@ function Carousel({
     >
       <div
         onKeyDownCapture={handleKeyDown}
-        className={cn("relative w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] md:[--carousel-slide-size:36.5rem] md:[--carousel-peek:0px] xl:[--carousel-slide-size:100%]", className)}
+        className={cn("relative w-full", className)}
         role="region"
         aria-roledescription="carousel"
         data-slot="carousel"
         {...props}
       >
+        {navigation === "overlay" && (
+          <CarouselNavigation variant="overlay" className="absolute top-1 right-1 z-10" />
+        )}
         {children}
+        {navigation === "inline" && (
+          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-2xl" />
+        )}
       </div>
     </CarouselContext.Provider>
   )
 }
 
-function CarouselContent({ className, ...props }: React.ComponentProps<"div">) {
+function CarouselContent({ className, viewportClassName, ...props }: React.ComponentProps<"div"> & { viewportClassName?: string }) {
   const { carouselRef, orientation } = useCarousel()
 
   return (
     <div
       ref={carouselRef}
-      className="overflow-hidden"
+      className={cn("overflow-hidden", viewportClassName)}
       data-slot="carousel-content"
     >
       <div
@@ -217,7 +224,7 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
 
   if (variant === "inline") {
     return (
-      <div className={cn("flex items-center justify-between", className)}>
+      <div className={cn("flex items-center justify-between lg:hidden", className)}>
         <Button
           variant="ghost"
           size="icon"

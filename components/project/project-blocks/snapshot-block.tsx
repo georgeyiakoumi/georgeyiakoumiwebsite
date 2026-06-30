@@ -95,7 +95,7 @@ export function SnapshotBlock({ items: rawItems, projectRole, tools, websiteUrl,
 
   return (
     
-      <section className="bg-gradient-to-b from-background to-muted/70 -mb-0">
+      <section className="bg-gradient-to-b from-background to-muted/70 -mb-0 border-b border-border">
         <DataList orientation="horizontal" className="px-8 py-12 md:px-0">
           {items.map((item) => (
             <DataList.Item key={item.id}>

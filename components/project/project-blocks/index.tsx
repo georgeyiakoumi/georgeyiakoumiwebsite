@@ -9,6 +9,7 @@ import { ComparisonSliderBlock as LegacyComparisonSliderBlock } from "@/componen
 import { StatsBlock } from "./stats-block";
 import { CodeBlock } from "./code-block";
 import { LottieBlock } from "./lottie-block";
+import { FigmaEmbedBlock } from "./figma-embed-block";
 interface ProjectBlockRendererProps {
   blocks: ProjectBlock[];
   projectTitle: string;
@@ -47,6 +48,9 @@ export function ProjectBlockRenderer({ blocks, projectTitle }: ProjectBlockRende
 
           case 'project-blocks.lottie':
             return <LottieBlock key={key} block={block} />;
+
+          case 'project-blocks.figma-embed':
+            return <FigmaEmbedBlock key={key} block={block} />;
 
           default:
             console.warn(`Unknown block type: ${(block as any).__component}`);

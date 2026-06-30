@@ -42,7 +42,7 @@ export function ShareBar({ url: urlProp, type }: ShareBarProps) {
   const linkedInUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(`${linkedInCopy}\n\n${url}`)}`;
 
   return (
-    <div className="flex items-center justify-center gap-2 mx-auto w-full md:max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0 py-8 mt-16 border-t border-border">
+    <div className="flex items-center justify-center gap-2 mx-auto w-full md:max-w-lg lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0 py-16">
       <Button
         variant="outline"
         size="sm"

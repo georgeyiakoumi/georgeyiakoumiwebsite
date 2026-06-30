@@ -689,7 +689,6 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     end_date: Schema.Attribute.Date;
     featured_position: Schema.Attribute.Integer;
     github_url: Schema.Attribute.String;
-    hero_caption: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -717,6 +716,39 @@ export interface ApiProjectProject extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     website_url: Schema.Attribute.String;
+  };
+}
+
+export interface ApiTestimonialTestimonial extends Struct.CollectionTypeSchema {
+  collectionName: 'testimonials';
+  info: {
+    displayName: 'Testimonial';
+    pluralName: 'testimonials';
+    singularName: 'testimonial';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    business: Schema.Attribute.String;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::testimonial.testimonial'
+    > &
+      Schema.Attribute.Private;
+    message: Schema.Attribute.RichText;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    publishedAt: Schema.Attribute.DateTime;
+    reaction: Schema.Attribute.String;
+    reactionLabel: Schema.Attribute.String;
+    role: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -750,40 +782,6 @@ export interface ApiToolTool extends Struct.CollectionTypeSchema {
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     url: Schema.Attribute.String;
-  };
-}
-
-export interface ApiTestimonialTestimonial
-  extends Struct.CollectionTypeSchema {
-  collectionName: 'testimonials';
-  info: {
-    displayName: 'Testimonial';
-    pluralName: 'testimonials';
-    singularName: 'testimonial';
-  };
-  options: {
-    draftAndPublish: true;
-  };
-  attributes: {
-    business: Schema.Attribute.String;
-    createdAt: Schema.Attribute.DateTime;
-    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
-    locale: Schema.Attribute.String & Schema.Attribute.Private;
-    localizations: Schema.Attribute.Relation<
-      'oneToMany',
-      'api::testimonial.testimonial'
-    > &
-      Schema.Attribute.Private;
-    message: Schema.Attribute.RichText;
-    name: Schema.Attribute.String & Schema.Attribute.Required;
-    publishedAt: Schema.Attribute.DateTime;
-    reaction: Schema.Attribute.String;
-    reactionLabel: Schema.Attribute.String;
-    role: Schema.Attribute.String;
-    updatedAt: Schema.Attribute.DateTime;
-    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
-      Schema.Attribute.Private;
   };
 }
 

@@ -59,7 +59,7 @@ export function CodeBlock({ block }: CodeBlockProps) {
         </div>
       )}
       <div
-        className={`w-full [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:rounded-lg [&_pre]:border [&_pre]:border-border ${block.filename ? "[&_pre]:rounded-t-none [&_pre]:border-t-0 -mt-2" : ""}`}
+        className={`w-full [&_pre]:overflow-x-auto [&_pre]:p-4 [&_pre]:text-sm [&_pre]:leading-relaxed [&_pre]:rounded-lg [&_pre]:border [&_pre]:border-border [&_code]:whitespace-pre-wrap [&_code]:break-words ${block.filename ? "[&_pre]:rounded-t-none [&_pre]:border-t-0 -mt-2" : ""}`}
         dangerouslySetInnerHTML={{ __html: html }}
       />
       {block.caption && (

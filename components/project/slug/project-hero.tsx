@@ -15,9 +15,9 @@ interface ProjectHeroProps {
 export function ProjectHero({ title, heroImageUrl, heroAlt }: ProjectHeroProps) {
   return (
     <header className={cn(
-      "relative flex flex-col justify-start items-center min-h-dvh w-full",
+      "relative flex flex-col justify-center items-center min-h-dvh w-full",
       "gap-8 mx-auto px-8 pt-24",
-      "md:pt-0 md:justify-center md:max-w-2xl",
+      "md:pt-0 md:max-w-2xl",
       "lg:px-0",
       "xl:max-w-3xl",
     )}>
