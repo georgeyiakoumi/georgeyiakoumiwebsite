@@ -230,7 +230,7 @@ function CarouselNavButton({ direction, overlay, className, ...props }: React.Co
       className={cn(
         "inline-flex items-center justify-center transition-colors dark:xl:hover:bg-muted xl:hover:bg-muted",
         "disabled:pointer-events-none disabled:opacity-50",
-        "active:scale-[0.97]",
+        "active:scale-[0.97] [&_svg]:pointer-events-none",
         overlay
           ? cn(
               "size-7 cursor-pointer",

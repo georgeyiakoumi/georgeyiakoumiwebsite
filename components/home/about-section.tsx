@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
 import { CalendlyButton } from "@/components/ui/calendly-button";
 import { Skeleton } from "@/components/ui/skeleton";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Section } from "@/components/layout/section";
 import { Typography } from "@/components/ui/typography";
 
@@ -38,32 +39,49 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
       </div>
       <div className="flex flex-col md:flex-row w-full md:w-auto gap-3">
         {email && (
-          <Button
-            size="lg"
-            asChild
-            onMouseEnter={() => atSignRef.current?.startAnimation()}
-            onMouseLeave={() => atSignRef.current?.stopAnimation()}
-          >
-            <a href={`mailto:${email}`}>
-              <AtSignIcon ref={atSignRef} />
-              Email me
-            </a>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="lg"
+                asChild
+                onMouseEnter={() => atSignRef.current?.startAnimation()}
+                onMouseLeave={() => atSignRef.current?.stopAnimation()}
+              >
+                <a href={`mailto:${email}`}>
+                  <AtSignIcon ref={atSignRef} />
+                  Email me
+                </a>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">{email}</TooltipContent>
+          </Tooltip>
         )}
-        <CalendlyButton />
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span>
+              <CalendlyButton />
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="bottom">Calendly</TooltipContent>
+        </Tooltip>
         {cvUrl && (
-          <Button
-            size="lg"
-            variant="ghost"
-            asChild
-            onMouseEnter={() => fileTextRef.current?.startAnimation()}
-            onMouseLeave={() => fileTextRef.current?.stopAnimation()}
-          >
-            <a href={cvUrl} target="_blank" rel="noopener noreferrer">
-              <FileTextIcon ref={fileTextRef} />
-              View CV
-            </a>
-          </Button>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button
+                size="lg"
+                variant="ghost"
+                asChild
+                onMouseEnter={() => fileTextRef.current?.startAnimation()}
+                onMouseLeave={() => fileTextRef.current?.stopAnimation()}
+              >
+                <a href={cvUrl} target="_blank" rel="noopener noreferrer">
+                  <FileTextIcon ref={fileTextRef} />
+                  View CV
+                </a>
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent side="bottom">Google Drive</TooltipContent>
+          </Tooltip>
         )}
       </div>
     </Section>
