@@ -10,19 +10,14 @@
       "type": "string",
       "required": true
     },
-    "valueType": {
-      "type": "enumeration",
-      "enum": ["string", "badges"],
-      "default": "string",
-      "required": true
-    },
     "value": {
-      "type": "string"
-    },
-    "members": {
-      "type": "component",
-      "repeatable": true,
-      "component": "project-blocks.team-member"
+      "type": "dynamiczone",
+      "components": [
+        "project-blocks.string-value",
+        "project-blocks.badge-value"
+      ],
+      "min": 1,
+      "max": 1
     }
   }
 }

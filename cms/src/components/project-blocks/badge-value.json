@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_project_blocks_badge_values",
+  "info": {
+    "displayName": "badge-value",
+    "description": "A list of badge items for a snapshot item"
+  },
+  "options": {},
+  "attributes": {
+    "badges": {
+      "type": "component",
+      "repeatable": true,
+      "required": true,
+      "component": "project-blocks.team-member"
+    }
+  }
+}
