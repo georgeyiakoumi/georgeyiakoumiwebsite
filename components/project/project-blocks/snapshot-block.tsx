@@ -1,53 +1,43 @@
 import React from "react";
-import type { SnapshotItem } from "@/lib/strapi-queries";
+import type { SnapshotItem, SnapshotContent } from "@/lib/strapi-queries";
 import { Badge } from "@/components/ui/badge";
 
 interface SnapshotBlockProps {
   items: SnapshotItem[];
+  projectRole?: string;
   toolsContent?: React.ReactNode;
 }
 
-/**
- * Parse snapshot value text for inline tags like {{me}}.
- * Returns the original string if no tags are found.
- */
-function parseSnapshotValue(value: string): React.ReactNode {
-  const ME_REGEX = /\{\{me\}\}/gi;
-  if (!ME_REGEX.test(value)) return value;
+function SnapshotValue({ content, projectRole }: { content: SnapshotContent[]; projectRole?: string }) {
+  const component = content[0];
+  if (!component) return null;
 
-  const parts: React.ReactNode[] = [];
-  let lastIndex = 0;
-  let matchIndex = 0;
-
-  const regex = new RegExp(ME_REGEX.source, 'gi');
-  let match: RegExpExecArray | null;
-
-  while ((match = regex.exec(value)) !== null) {
-    if (match.index > lastIndex) {
-      parts.push(value.slice(lastIndex, match.index));
-    }
-    parts.push(
-      <Badge key={`me-${matchIndex}`} variant="secondary" className="text-xs">
-        <span aria-hidden="true">&#x1F64B;</span> me
-      </Badge>
+  if (component.__component === 'project-blocks.badge-value') {
+    return (
+      <div className="flex flex-wrap gap-1.5">
+        {component.badges.map((badge) => (
+          <Badge key={badge.id} variant="secondary">{badge.name}</Badge>
+        ))}
+        {projectRole && (
+          <Badge variant="secondary">
+            <span aria-hidden="true">&#x1F64B;</span> {projectRole}
+          </Badge>
+        )}
+      </div>
     );
-    lastIndex = match.index + match[0].length;
-    matchIndex++;
   }
 
-  if (lastIndex < value.length) {
-    parts.push(value.slice(lastIndex));
+  if (component.__component === 'project-blocks.string-value') {
+    return <span>{component.text}</span>;
   }
 
-  return <>{parts}</>;
+  return null;
 }
 
-export function SnapshotBlock({ items: rawItems, toolsContent }: SnapshotBlockProps) {
-  const items = rawItems.filter(
-    (item) => item.label?.trim() && item.value?.trim()
-  );
+export function SnapshotBlock({ items: rawItems, projectRole, toolsContent }: SnapshotBlockProps) {
+  const items = rawItems.filter((item) => item.label?.trim() && item.content?.length > 0);
 
-  if (items.length === 0) return null;
+  if (items.length === 0 && !toolsContent) return null;
 
   return (
     <div className="mx-auto w-full md:max-w-2xl xl:max-w-2xl px-8 md:px-0">
@@ -59,7 +49,10 @@ export function SnapshotBlock({ items: rawItems, toolsContent }: SnapshotBlockPr
                 {item.label}
               </dt>
               <dd className="text-sm text-foreground">
-                {parseSnapshotValue(item.value)}
+                <SnapshotValue
+                  content={item.content}
+                  projectRole={item.content[0]?.__component === 'project-blocks.badge-value' ? projectRole : undefined}
+                />
               </dd>
             </React.Fragment>
           ))}
