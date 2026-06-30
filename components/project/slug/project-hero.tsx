@@ -16,7 +16,7 @@ export function ProjectHero({ title, heroImageUrl, heroAlt }: ProjectHeroProps) 
   return (
     <header className={cn(
       "relative flex flex-col justify-center items-center min-h-dvh w-full",
-      "gap-8 mx-auto px-8 pt-24",
+      "gap-8 mx-auto px-8",
       "md:pt-0 md:max-w-2xl",
       "lg:px-0",
       "xl:max-w-3xl",

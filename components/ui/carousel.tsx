@@ -34,7 +34,8 @@ type CarouselContextProps = {
   canScrollPrev: boolean
   canScrollNext: boolean
   selectedIndex: number
-} & CarouselProps
+  fade: boolean
+} & Omit<CarouselProps, "fade">
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
@@ -119,6 +120,7 @@ function Carousel({
         carouselRef,
         api: api,
         opts,
+        fade,
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -136,19 +138,12 @@ function Carousel({
       >
         {/* lg+ overlay nav — sits inside the carousel image */}
         {navigation === "overlay" && (
-          <CarouselNavigation 
-            variant="overlay" className="absolute top-1 right-1 z-10" />
+          <CarouselNavigation variant="overlay" className="absolute top-1 right-1 z-10" />
         )}
         {children}
-        {/* Mobile inline nav — sits below the carousel */}
+        {/* Mobile / md inline nav — sits below the carousel, hidden at lg+ */}
         {navigation === "inline" && (
-          <CarouselNavigation 
-            variant="inline" 
-            className={cn(
-              "mt-2 px-8",
-              "md:mx-auto md:max-w-xl", 
-              className
-            )} />
+          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-xl" />
         )}
       </div>
     </CarouselContext.Provider>
@@ -156,7 +151,7 @@ function Carousel({
 }
 
 function CarouselContent({ className, viewportClassName, ...props }: React.ComponentProps<"div"> & { viewportClassName?: string }) {
-  const { carouselRef } = useCarousel()
+  const { carouselRef, fade } = useCarousel()
 
   return (
     <div
@@ -166,8 +161,8 @@ function CarouselContent({ className, viewportClassName, ...props }: React.Compo
     >
       <div
         className={cn(
-          "flex touch-pan-y pinch-zoom space-x-4",
-          "md:space-x-8", 
+          "flex touch-pan-y pinch-zoom",
+          !fade && "space-x-4 md:space-x-8",
           className
         )}
         {...props}
@@ -177,7 +172,7 @@ function CarouselContent({ className, viewportClassName, ...props }: React.Compo
 }
 
 function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"> & { index?: number }) {
-  const { selectedIndex } = useCarousel()
+  const { selectedIndex, fade } = useCarousel()
   const isActive = index === undefined || index === selectedIndex
 
   return (
@@ -186,11 +181,15 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0",
-        "md:max-w-xl lg:max-w-2xl",
-        "last:mr-4 md:last:mr-8",
-        "[transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300",
-        !isActive && "opacity-40",
+        "min-w-0 [transform:translate3d(0,0,0)] transition-opacity duration-50",
+        fade
+          ? "[flex:0_0_100%]"
+          : cn(
+              "md:max-w-xl",
+              "last:mr-4 md:last:mr-8",
+              "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
+              !isActive && "opacity-40"
+            ),
         className
       )}
       {...props}
@@ -308,36 +307,39 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
   )
 }
 
-// Mobile / md — peek carousel with inline nav below
-function PeekCarousel({ loop, className, children }: { loop?: boolean; className?: string; children: React.ReactNode }) {
-  return (
-    <Carousel 
-      opts={{ align: "center", loop, containScroll: false }} 
-      navigation="inline" 
-      className={cn("lg:hidden", className)}
-      >
-      <CarouselContent viewportClassName="px-8 md:px-0">
-        {children}
-      </CarouselContent>
-    </Carousel>
-  )
-}
+// Responsive carousel — peek on mobile/md, fade on lg+
+// CSS visibility handles which instance is active; context-aware classes prevent style conflicts
+function ResponsiveCarousel({ loop, children }: { loop?: boolean; children: React.ReactNode }) {
+  const slides = React.Children.toArray(children)
 
-// lg+ — fade carousel with overlay nav
-function FadeCarousel({ loop, className, children }: { loop?: boolean; className?: string; children: React.ReactNode }) {
+  const slideItems = slides.map((child, i) => (
+    <CarouselItem key={i} index={i}>
+      {child}
+    </CarouselItem>
+  ))
+
   return (
-    <Carousel 
-      opts={{ align: "center", loop, containScroll: false }} 
-      fade 
-      navigation="overlay" 
-      className={cn(
-        "hidden lg:flex lg:max-w-xl xl:max-w-2xl",
-        className
-      )}>
-      <CarouselContent>
-        {children}
-      </CarouselContent>
-    </Carousel>
+    <>
+      <Carousel
+        opts={{ align: "center", loop, containScroll: false }}
+        navigation="inline"
+        className="lg:hidden"
+      >
+        <CarouselContent viewportClassName="px-8 md:px-0">
+          {slideItems}
+        </CarouselContent>
+      </Carousel>
+      <Carousel
+        opts={{ align: "center", loop, containScroll: false }}
+        fade
+        navigation="overlay"
+        className="hidden lg:flex"
+      >
+        <CarouselContent>
+          {slideItems}
+        </CarouselContent>
+      </Carousel>
+    </>
   )
 }
 
@@ -347,7 +349,6 @@ export {
   CarouselContent,
   CarouselItem,
   CarouselNavigation,
-  PeekCarousel,
-  FadeCarousel,
+  ResponsiveCarousel,
   useCarousel,
 }
