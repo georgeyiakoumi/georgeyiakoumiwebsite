@@ -21,14 +21,14 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   const canLoop = usePeek && slideCount >= 2;
 
   return (
-    <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl">
+    <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
       <Carousel
         opts={{ align: "center", loop: canLoop, containScroll: false }}
-        plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 1024px)": { active: true } } })] : []}
-        className="w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] [--carousel-gap:1rem] md:[--carousel-slide-size:37rem] md:[--carousel-peek:0px] lg:[--carousel-slide-size:100%] lg:[--carousel-gap:0px]"
+        plugins={usePeek ? [Fade({ active: false, breakpoints: { "(min-width: 1280px)": { active: true } } })] : []}
+        className="w-full [--carousel-slide-size:100%] [--carousel-peek:2rem] [--carousel-gap:1rem] md:[--carousel-slide-size:36.5rem] md:[--carousel-peek:0px] md:[--carousel-gap:0.5rem] xl:[--carousel-slide-size:100%] xl:[--carousel-gap:0px]"
       >
         <div className="relative">
-          <CarouselNavigation className="hidden lg:flex absolute top-1 right-1 z-10" />
+          <CarouselNavigation className="hidden xl:flex absolute top-1 right-1 z-10" />
           <CarouselContent>
             {block.slides.map((slide) => {
               const slideUrl = getStrapiMediaURL(slide.url);
@@ -58,7 +58,7 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
             })}
           </CarouselContent>
         </div>
-        <CarouselControls className="mt-2 px-8 lg:px-0 md:mx-auto md:max-w-2xl lg:hidden">
+        <CarouselControls className="mt-2 px-8 xl:px-0 md:mx-auto md:max-w-2xl xl:hidden">
           <CarouselPrevious className="static translate-y-0" />
           <CarouselCounter />
           <CarouselNext className="static translate-y-0" />
