@@ -92,9 +92,17 @@ export function AboutSectionSkeleton() {
   return (
     <Section>
       <Skeleton className="h-8 w-48" />
-      <Skeleton className="h-6 w-96" />
-      <Skeleton className="h-6 w-80" />
-      <Skeleton className="h-12 w-40" />
+      <div className="flex flex-col gap-4 max-w-xl w-full">
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-5/6" />
+        <Skeleton className="h-6 w-full" />
+        <Skeleton className="h-6 w-3/4" />
+      </div>
+      <div className="flex flex-col md:flex-row gap-3">
+        <Skeleton className="h-10 w-36 rounded-lg" />
+        <Skeleton className="h-10 w-44 rounded-lg" />
+        <Skeleton className="h-10 w-28 rounded-lg" />
+      </div>
     </Section>
   );
 }

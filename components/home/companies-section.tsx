@@ -74,9 +74,10 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
 
 export function CompaniesSectionSkeleton() {
   return (
-    <Section>
+    <Section className="px-0">
       <Skeleton className="h-8 w-48" />
-      <div className="w-full px-8 grid gap-8 grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+      <Skeleton className="h-9 w-64 rounded-full" />
+      <div className="w-full px-8 md:px-0 grid gap-8 md:gap-2 lg:gap-12 2xl:gap-6 md:max-w-xl xl:max-w-3xl 2xl:max-w-4xl grid-cols-2 sm:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
         {Array.from({ length: 9 }).map((_, i) => (
           <Skeleton key={i} className="h-16 w-full" />
         ))}
