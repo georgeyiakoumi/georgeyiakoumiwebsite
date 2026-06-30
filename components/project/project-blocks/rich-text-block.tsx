@@ -19,7 +19,7 @@ export function RichTextBlock({ block }: RichTextBlockProps) {
   return (
     <div className={cn(
       "mx-auto w-full lg:max-w-2xl xl:max-w-4xl 2xl:max-w-6xl px-8 lg:px-0",
-      isNewSection && "mt-16 pt-16 border-border border-t first:mt-0 first:border-none"
+      isNewSection && "pt-12 border-border border-t first:mt-0 first:border-none"
     )}>
       <section className="md:max-w-xl xl:max-w-2xl mx-auto">
       {renderStrapiRichText(block.content)}
