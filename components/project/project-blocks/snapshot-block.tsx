@@ -51,7 +51,7 @@ export function SnapshotBlock({ items: rawItems, projectRole, toolsContent }: Sn
               <dd className="text-sm text-foreground">
                 <SnapshotValue
                   content={item.content}
-                  projectRole={item.content[0]?.__component === 'project-blocks.badge-value' ? projectRole : undefined}
+                  projectRole={item.label.toLowerCase() === 'team' ? projectRole : undefined}
                 />
               </dd>
             </React.Fragment>
