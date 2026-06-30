@@ -146,7 +146,7 @@ function Carousel({
         )}
         {children}
         {navigation === "inline" && (
-          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-2xl" />
+          <CarouselNavigation variant="inline" className="mt-2 px-8 md:mx-auto md:max-w-xl" />
         )}
       </div>
     </CarouselContext.Provider>
@@ -159,11 +159,11 @@ function CarouselContent({ className, viewportClassName, ...props }: React.Compo
   return (
     <div
       ref={carouselRef}
-      className={cn("overflow-hidden", viewportClassName)}
+      className={cn("overflow-clip", viewportClassName)}
       data-slot="carousel-content"
     >
       <div
-        className={cn("flex touch-pan-y pinch-zoom", orientation === "horizontal" ? "space-x-4" : "space-y-4", orientation === "vertical" && "flex-col", className)}
+        className={cn("flex touch-pan-y pinch-zoom", orientation === "horizontal" ? "space-x-4 md:space-x-8" : "space-y-4 md:space-y-8", orientation === "vertical" && "flex-col", className)}
         {...props}
       />
     </div>
@@ -180,7 +180,7 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
       aria-roledescription="slide"
       data-slot="carousel-item"
       className={cn(
-        "min-w-0 shrink-0 grow-0 last:mr-4 [transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300",
+        "min-w-0 shrink-0 grow-0 last:mr-4 md:last:mr-8 [transform:translate3d(0,0,0)] [flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)] transition-opacity duration-300 md:max-w-xl",
         !isActive && "opacity-40",
         className
       )}

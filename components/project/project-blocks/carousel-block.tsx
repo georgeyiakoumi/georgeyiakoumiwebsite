@@ -40,9 +40,9 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
   });
 
   return (
-    <BlockFigure className="lg:!max-w-xl xl:!max-w-2xl px-0">
-      <Carousel opts={{ align: "center", orientation:"horizontal", loop: canLoop, containScroll: false }} navigation="inline" className="lg:hidden">
-        <CarouselContent>
+    <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
+      <Carousel opts={{ align: "center", loop: canLoop, containScroll: false }} navigation="inline" className="lg:hidden">
+        <CarouselContent viewportClassName="px-8 md:px-0">
           {slides.map(({ id, i, media }) => (
             <CarouselItem key={id} index={i}>
               <div className="border border-border rounded-lg overflow-hidden">{media}</div>
