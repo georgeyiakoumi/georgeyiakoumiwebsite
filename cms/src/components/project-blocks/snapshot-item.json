@@ -10,9 +10,19 @@
       "type": "string",
       "required": true
     },
-    "value": {
-      "type": "string",
+    "valueType": {
+      "type": "enumeration",
+      "enum": ["string", "badges"],
+      "default": "string",
       "required": true
+    },
+    "value": {
+      "type": "string"
+    },
+    "members": {
+      "type": "component",
+      "repeatable": true,
+      "component": "project-blocks.team-member"
     }
   }
 }
