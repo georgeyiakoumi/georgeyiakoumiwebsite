@@ -7,34 +7,67 @@ on:
     branches: ['main', 'claude-audit']
 
 jobs:
-  unit-tests:
-    name: Unit & Component Tests
+  changes:
+    name: Detect changes
     runs-on: ubuntu-latest
-    timeout-minutes: 10
-
+    outputs:
+      code: ${{ steps.filter.outputs.code }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Check for code changes
+        uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            code:
+              - '**/*.ts'
+              - '**/*.tsx'
+              - '**/*.js'
+              - '**/*.mjs'
+              - '**/*.json'
+              - '**/*.css'
+              - '!**/*.md'
+
+  unit-tests:
+    name: Unit & Component Tests
+    needs: changes
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Skip — docs only
+        if: needs.changes.outputs.code != 'true'
+        run: echo "No code changes — skipping tests"
+
+      - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
+        uses: actions/checkout@v4
+
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Run unit tests
+        if: needs.changes.outputs.code == 'true'
         run: npm run test:run
 
       - name: Generate coverage report
+        if: needs.changes.outputs.code == 'true'
         run: npm run test:coverage
         continue-on-error: true
 
       - name: Upload coverage reports
         uses: actions/upload-artifact@v4
-        if: always()
+        if: needs.changes.outputs.code == 'true'
         with:
           name: coverage-report
           path: coverage/
@@ -42,31 +75,42 @@ jobs:
 
   e2e-tests:
     name: E2E Tests
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 20
 
     steps:
+      - name: Skip — docs only
+        if: needs.changes.outputs.code != 'true'
+        run: echo "No code changes — skipping E2E"
+
       - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Install Playwright browsers
+        if: needs.changes.outputs.code == 'true'
         run: npx playwright install --with-deps chromium
 
       - name: Build Next.js app
+        if: needs.changes.outputs.code == 'true'
         run: npm run build
         env:
           STRAPI_API_URL: https://portfolio-cms-n9hb.onrender.com/api
 
       - name: Run E2E tests
+        if: needs.changes.outputs.code == 'true'
         run: npx playwright test --project=chromium
         env:
           CI: true
@@ -74,7 +118,7 @@ jobs:
 
       - name: Upload Playwright report
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: failure() && needs.changes.outputs.code == 'true'
         with:
           name: playwright-report
           path: playwright-report/
@@ -82,7 +126,7 @@ jobs:
 
       - name: Upload test results
         uses: actions/upload-artifact@v4
-        if: failure()
+        if: failure() && needs.changes.outputs.code == 'true'
         with:
           name: test-results
           path: test-results/
@@ -90,24 +134,34 @@ jobs:
 
   lint:
     name: Lint & Typecheck
+    needs: changes
     runs-on: ubuntu-latest
     timeout-minutes: 10
 
     steps:
+      - name: Skip — docs only
+        if: needs.changes.outputs.code != 'true'
+        run: echo "No code changes — skipping lint & typecheck"
+
       - name: Checkout code
+        if: needs.changes.outputs.code == 'true'
         uses: actions/checkout@v4
 
       - name: Setup Node.js
+        if: needs.changes.outputs.code == 'true'
         uses: actions/setup-node@v4
         with:
           node-version: '22'
           cache: 'npm'
 
       - name: Install dependencies
+        if: needs.changes.outputs.code == 'true'
         run: npm ci
 
       - name: Run ESLint
+        if: needs.changes.outputs.code == 'true'
         run: npm run lint
 
       - name: Run TypeScript typecheck
+        if: needs.changes.outputs.code == 'true'
         run: npm run typecheck
