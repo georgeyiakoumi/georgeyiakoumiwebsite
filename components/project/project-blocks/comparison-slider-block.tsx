@@ -18,11 +18,6 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
   const trackRef = useRef<HTMLDivElement>(null);
   const [isDragging, setIsDragging] = useState(false);
 
-  if (!block.before_image || !block.after_image) return null;
-
-  const beforeImageUrl = getStrapiMediaURL(block.before_image.url);
-  const afterImageUrl = getStrapiMediaURL(block.after_image.url);
-
   const handleTrackMove = useCallback((clientX: number) => {
     if (!trackRef.current) return;
 
@@ -77,6 +72,11 @@ export function ComparisonSliderBlock({ block, projectTitle }: ComparisonSliderB
       document.removeEventListener('touchend', handleEnd);
     };
   }, [isDragging, handleTrackMove]);
+
+  if (!block.before_image || !block.after_image) return null;
+
+  const beforeImageUrl = getStrapiMediaURL(block.before_image.url);
+  const afterImageUrl = getStrapiMediaURL(block.after_image.url);
 
   return (
     <BlockFigure>

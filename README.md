@@ -32,7 +32,7 @@ Create a `.env.local` file in the project root:
 
 ```bash
 # Strapi CMS
-NEXT_PUBLIC_STRAPI_API_URL=your_strapi_url
+STRAPI_API_URL=your_strapi_url
 STRAPI_API_TOKEN=your_api_token
 
 # Cloudflare API (optional - for manual cache purging)
@@ -282,7 +282,7 @@ npm run purge:cloudflare:all
 ### Environment Variables
 
 **Frontend** (`.env.local` and Netlify):
-- `NEXT_PUBLIC_STRAPI_API_URL` - Public Strapi API URL
+- `STRAPI_API_URL` - Public Strapi API URL
 - `STRAPI_API_TOKEN` - Server-side API token
 - `REVALIDATE_SECRET` - Webhook authentication secret
 

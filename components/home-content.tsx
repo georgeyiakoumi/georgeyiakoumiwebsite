@@ -1,31 +1,12 @@
 "use client";
 
-import { type ToolData, type BusinessData, type ProjectData, type TestimonialData } from "@/lib/strapi-queries";
+import { type ToolData, type BusinessData, type ProjectData, type TestimonialData, type AboutData } from "@/lib/strapi-queries";
 import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedWorkSection } from "@/components/home/featured-work-section";
 import { CompaniesSection } from "@/components/home/companies-section";
 import { StackSection } from "@/components/home/stack-section";
 import { TestimonialsSection } from "@/components/home/testimonials-section";
 import { AboutSection } from "@/components/home/about-section";
-
-interface AboutData {
-  hero: Array<{
-    type: string;
-    children?: Array<{ text?: string }>;
-    image?: {
-      url: string;
-      alternativeText?: string;
-    };
-  }>;
-  heading_businesses: string;
-  heading_tools: string;
-  contact: Array<{
-    type: string;
-    children?: Array<{ text?: string }>;
-  }>;
-  email?: string;
-  cvUrl?: string;
-}
 
 interface HomeContentProps {
   aboutData: AboutData | null;

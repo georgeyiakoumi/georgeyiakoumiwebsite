@@ -67,7 +67,7 @@ npm run test:all
 ├── e2e/
 │   ├── home.spec.ts                 # E2E tests for homepage
 │   ├── navigation.spec.ts           # E2E tests for navigation
-│   └── contact.spec.ts              # E2E tests for contact form
+│   └── smoke.spec.ts                # E2E smoke tests
 └── test/
     └── setup.ts                     # Test setup and configuration
 ```
@@ -142,9 +142,10 @@ test.describe('Feature', () => {
 ### E2E Tests
 - ✅ `e2e/home.spec.ts` - Homepage functionality (5 tests)
 - ✅ `e2e/navigation.spec.ts` - Navigation and routing (3 tests)
-- ✅ `e2e/contact.spec.ts` - Contact form validation (4 tests)
+- ✅ `e2e/smoke.spec.ts` - Smoke tests (3 tests)
+- ✅ `e2e/media.spec.ts` - Media loading tests
 
-**Total: 24 tests** (12 unit/component + 12 E2E)
+**Total: ~20 tests** (unit/component + E2E)
 
 ## Configuration Files
 
