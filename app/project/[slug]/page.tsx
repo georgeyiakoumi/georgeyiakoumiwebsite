@@ -13,8 +13,7 @@ interface ProjectPageProps {
 
 export async function generateMetadata({ params }: ProjectPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const projects = await getProjects();
-  const project = projects.find((p) => p.slug === slug);
+  const project = await getProjectBySlug(slug);
 
   if (!project) {
     return generatePageMetadata({
