@@ -20,6 +20,7 @@ type CarouselProps = {
   plugins?: CarouselPlugin
   setApi?: (api: CarouselApi) => void
   fade?: boolean
+  noGap?: boolean
   navigation?: "overlay" | "inline"
 }
 
@@ -32,7 +33,8 @@ type CarouselContextProps = {
   canScrollNext: boolean
   selectedIndex: number
   fade: boolean
-} & Omit<CarouselProps, "fade">
+  noGap: boolean
+} & Omit<CarouselProps, "fade" | "noGap">
 
 const CarouselContext = React.createContext<CarouselContextProps | null>(null)
 
@@ -51,6 +53,7 @@ function Carousel({
   setApi,
   plugins,
   fade = false,
+  noGap = false,
   navigation,
   className,
   children,
@@ -118,6 +121,7 @@ function Carousel({
         api: api,
         opts,
         fade,
+        noGap,
         scrollPrev,
         scrollNext,
         canScrollPrev,
@@ -148,7 +152,7 @@ function Carousel({
 }
 
 function CarouselContent({ className, viewportClassName, ...props }: React.ComponentProps<"div"> & { viewportClassName?: string }) {
-  const { carouselRef, fade } = useCarousel()
+  const { carouselRef, fade, noGap } = useCarousel()
 
   return (
     <div
@@ -159,7 +163,7 @@ function CarouselContent({ className, viewportClassName, ...props }: React.Compo
       <div
         className={cn(
           "flex touch-pan-y pinch-zoom",
-          !fade && "space-x-4 md:space-x-8",
+          !fade && (noGap ? "space-x-0" : "space-x-4 md:space-x-8"),
           className
         )}
         {...props}
@@ -169,7 +173,7 @@ function CarouselContent({ className, viewportClassName, ...props }: React.Compo
 }
 
 function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"> & { index?: number }) {
-  const { selectedIndex, fade } = useCarousel()
+  const { selectedIndex, fade, noGap } = useCarousel()
   const isActive = index === undefined || index === selectedIndex
 
   return (
@@ -182,10 +186,10 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
         fade
           ? "[flex:0_0_100%]"
           : cn(
-              "md:max-w-xl",
-              "last:mr-4 md:last:mr-8",
-              "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
-              !isActive && "opacity-40"
+              !noGap && "md:max-w-xl",
+              !noGap && "last:mr-4 md:last:mr-8",
+              noGap ? "[flex:0_0_100%]" : "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
+              !isActive && !noGap && "opacity-40"
             ),
         className
       )}
@@ -285,7 +289,7 @@ function CarouselNavigation({ variant = "overlay", className }: { variant?: "ove
 
 // Responsive carousel — peek on mobile/md, fade on lg+
 // CSS visibility handles which instance is active; context-aware classes prevent style conflicts
-function ResponsiveCarousel({ loop, children }: { loop?: boolean; children: React.ReactNode }) {
+function ResponsiveCarousel({ loop, noGap, children }: { loop?: boolean; noGap?: boolean; children: React.ReactNode }) {
   const slides = React.Children.toArray(children)
 
   const slideItems = slides.map((child, i) => (
@@ -296,6 +300,7 @@ function ResponsiveCarousel({ loop, children }: { loop?: boolean; children: Reac
 
   return (
     <>
+      {/* Mobile / md — peek carousel with inline navigation */}
       <Carousel
         opts={{ align: "center", loop, containScroll: false }}
         navigation="inline"
@@ -305,11 +310,13 @@ function ResponsiveCarousel({ loop, children }: { loop?: boolean; children: Reac
           {slideItems}
         </CarouselContent>
       </Carousel>
+      {/* lg+ — fade (default) or swipe with no gaps */}
       <Carousel
         opts={{ align: "center", loop, containScroll: false }}
-        fade
+        fade={!noGap}
+        noGap={noGap}
         navigation="overlay"
-        className="hidden lg:flex"
+        className={cn("hidden lg:flex", noGap && "border border-border rounded-lg overflow-hidden")}
       >
         <CarouselContent>
           {slideItems}

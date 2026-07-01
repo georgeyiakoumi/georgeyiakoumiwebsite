@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { ResponsiveCarousel } from "@/components/ui/carousel";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
@@ -19,12 +20,12 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
 
   return (
     <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
-      <ResponsiveCarousel loop={canLoop}>
+      <ResponsiveCarousel loop={canLoop} noGap={noGap}>
         {block.slides.map((slide) => {
           const slideUrl = getStrapiMediaURL(slide.url);
           const isVideo = slide.mime?.startsWith('video/');
           return (
-            <div key={slide.id} className="border border-border rounded-lg overflow-hidden">
+            <div key={slide.id} className={cn(!noGap && "border border-border rounded-lg", "overflow-hidden")}>
               {isVideo ? (
                 <video src={slideUrl || ''} className="w-full h-auto" controls playsInline>
                   Your browser does not support the video tag.
