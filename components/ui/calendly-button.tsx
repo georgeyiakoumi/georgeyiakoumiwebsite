@@ -33,6 +33,7 @@ export function CalendlyButton({ label = "Book a 30 min call" }: CalendlyButtonP
       <Button
         size="lg"
         variant="outline"
+        className="w-full md:w-auto"
         onClick={() => setOpen(true)}
         onMouseEnter={() => calendarIconRef.current?.startAnimation()}
         onMouseLeave={() => calendarIconRef.current?.stopAnimation()}

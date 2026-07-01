@@ -76,7 +76,7 @@ function SnapshotValue({ content, projectRole }: { content: SnapshotContent[]; p
 
   if (component.__component === 'project-blocks.string-value') {
     return (
-      <span className="flex flex-col">
+      <span className="flex flex-col gap-1">
         <span>{component.text}</span>
         {component.subtext && (
           <span className="text-xs text-muted-foreground">{component.subtext}</span>
