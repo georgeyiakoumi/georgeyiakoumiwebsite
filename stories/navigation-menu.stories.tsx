@@ -56,7 +56,7 @@ export const Default: Story = {
           </NavigationMenuLink>
         </NavigationMenuItem>
         <NavigationMenuItem>
-          <NavigationMenuTrigger className={navigationMenuTriggerStyle()}>
+          <NavigationMenuTrigger>
             Documentation
           </NavigationMenuTrigger>
           <NavigationMenuContent>

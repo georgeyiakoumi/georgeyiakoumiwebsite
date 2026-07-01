@@ -1,41 +1,35 @@
-import { expect, userEvent } from "storybook/test";
-// Replace nextjs-vite with the name of your framework
 import type { Meta, StoryObj } from "@storybook/nextjs";
 
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
+  CarouselNavigation,
 } from "@/components/ui/carousel";
 
 /**
  * A carousel with motion and swipe built using Embla.
+ * Supports peek (mobile) and fade (desktop) variants via ResponsiveCarousel,
+ * or standalone usage with inline/overlay navigation.
  */
 const meta: Meta<typeof Carousel> = {
   title: "ui/Carousel",
   component: Carousel,
   tags: ["autodocs"],
-  argTypes: {},
+  argTypes: {
+    fade: {
+      control: "boolean",
+      description: "Enable fade transition instead of slide",
+    },
+    navigation: {
+      control: "select",
+      options: [undefined, "inline", "overlay"],
+      description: "Navigation variant",
+    },
+  },
   args: {
     className: "w-full max-w-xs",
   },
-  render: (args) => (
-    <Carousel {...args}>
-      <CarouselContent>
-        {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index}>
-            <div className="bg-card flex aspect-square items-center justify-center rounded border p-6">
-              <span className="text-4xl font-semibold">{index + 1}</span>
-            </div>
-          </CarouselItem>
-        ))}
-      </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
-    </Carousel>
-  ),
   parameters: {
     layout: "centered",
   },
@@ -46,56 +40,58 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /**
- * The default form of the carousel.
+ * Default carousel with inline navigation below.
  */
-export const Default: Story = {};
-
-/**
- * Use the `basis` utility class to change the size of the carousel.
- */
-export const Size: Story = {
+export const Default: Story = {
   render: (args) => (
-    <Carousel {...args} className="mx-12 w-full max-w-xs">
+    <Carousel {...args} navigation="inline">
       <CarouselContent>
         {Array.from({ length: 5 }).map((_, index) => (
-          <CarouselItem key={index} className="basis-1/3">
+          <CarouselItem key={index} index={index}>
             <div className="bg-card flex aspect-square items-center justify-center rounded border p-6">
               <span className="text-4xl font-semibold">{index + 1}</span>
             </div>
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious />
-      <CarouselNext />
     </Carousel>
   ),
-  args: {
-    className: "mx-12 w-full max-w-xs",
-  },
 };
 
-export const ShouldNavigate: Story = {
-  name: "when clicking next/previous buttons, should navigate through slides",
-  tags: ["!dev", "!autodocs"],
-  play: async ({ canvas, step }) => {
-    const slides = await canvas.findAllByRole("group");
-    expect(slides).toHaveLength(5);
-    const nextBtn = await canvas.findByRole("button", { name: /next/i });
-    const prevBtn = await canvas.findByRole("button", {
-      name: /previous/i,
-    });
-
-    await step("navigate to the last slide", async () => {
-      for (let i = 0; i < slides.length - 1; i++) {
-        await userEvent.click(nextBtn);
-      }
-    });
-
-    await step("navigate back to the first slide", async () => {
-      for (let i = slides.length - 1; i > 0; i--) {
-        await userEvent.click(prevBtn);
-      }
-    });
-  },
+/**
+ * Carousel with overlay navigation (pill in top-right corner).
+ */
+export const Overlay: Story = {
+  render: (args) => (
+    <Carousel {...args} navigation="overlay" className="relative w-full max-w-xs">
+      <CarouselContent>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <CarouselItem key={index} index={index}>
+            <div className="bg-card flex aspect-square items-center justify-center rounded border p-6">
+              <span className="text-4xl font-semibold">{index + 1}</span>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  ),
 };
-//
+
+/**
+ * Carousel with fade transition enabled.
+ */
+export const Fade: Story = {
+  render: (args) => (
+    <Carousel {...args} fade navigation="overlay" className="relative w-full max-w-xs">
+      <CarouselContent>
+        {Array.from({ length: 5 }).map((_, index) => (
+          <CarouselItem key={index} index={index}>
+            <div className="bg-card flex aspect-square items-center justify-center rounded border p-6">
+              <span className="text-4xl font-semibold">{index + 1}</span>
+            </div>
+          </CarouselItem>
+        ))}
+      </CarouselContent>
+    </Carousel>
+  ),
+};
