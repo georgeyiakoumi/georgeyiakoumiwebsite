@@ -60,7 +60,7 @@ export function CompaniesSection({ heading, businesses }: CompaniesSectionProps)
               data-sector={business.sector?.name}
               className={`aspect-auto transition-all duration-300 ease-out motion-reduce:transition-none ${
                 !isActive ? "opacity-50 blur-sm pointer-events-none scale-90 saturate-50" : "scale-100 saturate-100 opacity-100 blur-0"
-              } ${index > 5 ? "lazy-load" : ""}`}
+              }`}
               style={{ willChange: isActive ? 'auto' : 'opacity, filter, transform' }}
             >
               <LogoCard data={business} />

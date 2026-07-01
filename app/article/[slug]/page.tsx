@@ -13,10 +13,9 @@ interface ArticlePageProps {
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
   const { slug } = await params;
-  const projects = await getProjects();
-  const project = projects.find((p) => p.slug === slug && p.type === "article");
+  const project = await getProjectBySlug(slug);
 
-  if (!project) {
+  if (!project || project.type !== "article") {
     return generatePageMetadata({
       title: "Article Not Found",
       description: "The article you're looking for could not be found.",
