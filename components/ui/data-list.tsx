@@ -56,7 +56,7 @@ interface DataListLabelProps extends Omit<React.ComponentProps<"dt">, "children"
 
 function DataListLabel({ className, label, tooltip, ...props }: DataListLabelProps) {
   return (
-    <Typography as="dt" variant="overline" className={cn("flex items-center gap-1 pb-2", className)} {...props}>
+    <Typography as="dt" variant="overline" className={cn("flex items-center gap-1 pb-2 pt-1", className)} {...props}>
       {label}
       {tooltip && (
         <Tooltip>

@@ -186,7 +186,7 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
         fade
           ? "[flex:0_0_100%]"
           : cn(
-              "md:max-w-xl",
+              noGap ? "md:max-w-xl lg:max-w-none" : "md:max-w-xl",
               !noGap && "last:mr-4 md:last:mr-8",
               "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
               noGap && "first:rounded-l-lg last:rounded-r-lg overflow-hidden",
