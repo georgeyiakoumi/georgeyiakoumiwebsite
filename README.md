@@ -1,18 +1,19 @@
 # George Yiakoumi Portfolio
 
-A modern, full-stack portfolio website showcasing design and development work. Built with Next.js 15 and powered by a headless Strapi CMS, featuring smooth animations, dark mode, and a fully responsive design.
+A modern, full-stack portfolio website showcasing design and development work. Built with Next.js 16 and powered by a headless Strapi CMS, featuring smooth animations, dark mode, and a fully responsive design.
 
 ## Features
 
-- **Dynamic Content Management**: All portfolio projects, about page content, and contact information managed through Strapi CMS
+- **Dynamic Content Management**: All portfolio projects, about page content, and testimonials managed through Strapi CMS
 - **Media Gallery**: Projects support mixed media galleries with images and auto-playing videos distributed between content sections
 - **Rich Text Rendering**: Custom renderer supporting nested lists, formatting, embedded images, code blocks, and more
 - **Responsive Design**: Mobile-first approach with seamless adaptation across all screen sizes
 - **Dark Mode**: System-aware theme switching with persistent user preference
-- **Smooth Animations**: Interactive animated icons, smooth transitions, scroll-triggered video playback, and scroll-aware UI hiding on mobile
+- **Smooth Animations**: GSAP scroll timelines with SplitText, motion/react animated icons, CSS transitions, and scroll-aware UI hiding on mobile
 - **Code Blocks**: Syntax-highlighted code snippets in project pages using Shiki with light/dark theme support
 - **Share Bar**: Copy link, native share (mobile), and LinkedIn share on all project pages
 - **Comparison Slider**: Before/after image comparison with V1 (overlay) and V2 (track below) variants
+- **Data Visualisation**: Stats blocks with 7 chart types (area, bar, line, pie, radar, radial, number-only) via Recharts
 - **Type-Safe**: Full TypeScript integration across frontend and API layer
 - **Modern UI**: Built with shadcn/ui components and Tailwind CSS
 - **Optimized Performance**: ISR caching with webhook-based revalidation for low server costs and real-time updates
@@ -34,6 +35,9 @@ Create a `.env.local` file in the project root:
 # Strapi CMS
 STRAPI_API_URL=your_strapi_url
 STRAPI_API_TOKEN=your_api_token
+
+# Google Analytics
+NEXT_PUBLIC_GA_MEASUREMENT_ID=your_ga_id
 
 # Cloudflare API (optional - for manual cache purging)
 CLOUDFLARE_ZONE_ID=your_zone_id
@@ -117,18 +121,10 @@ npm run storybook
 Open [http://localhost:6006](http://localhost:6006) to view the component library.
 
 **Storybook includes:**
-- All shadcn/ui components with interactive controls
-- Custom components (Section, LogoItem, ProjectCard, etc.)
+- shadcn/ui primitive components with interactive controls
 - Theme switching for testing dark mode
 - Accessibility testing tools
 - Multiple viewports for responsive testing
-
-**Deployment:**
-Storybook can be deployed separately to showcase the component library:
-```bash
-npm run build-storybook
-netlify deploy --dir=storybook-static --prod
-```
 
 ## Available Scripts
 
@@ -137,6 +133,9 @@ netlify deploy --dir=storybook-static --prod
 - `npm run build` - Build the production application
 - `npm run start` - Start the production server
 - `npm run lint` - Run ESLint
+- `npm run typecheck` - Run TypeScript type checking
+- `npm run test:run` - Run unit and component tests
+- `npm run test:e2e` - Run E2E tests
 
 ### CMS (from project root)
 - `npm run cms:dev` - Start Strapi development server (port 1337)
@@ -150,45 +149,55 @@ netlify deploy --dir=storybook-static --prod
 ## Tech Stack
 
 ### Frontend
-- **Framework**: Next.js 15.5.2 with React 19.1.0
+- **Framework**: Next.js 16.1.0 with React 19.1.0
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS 4.1.13
 - **UI Components**: shadcn/ui + Radix UI
-- **Icons**: Lucide React + @animate-ui/icons for animated components
+- **Icons**: Lucide React + custom animated icons via motion/react
 - **Syntax Highlighting**: Shiki (VS Code engine, server-rendered, dual theme)
-- **Animation**: CSS transitions and @animate-ui interactive animations
+- **Animation**: GSAP (scroll timelines, SplitText), motion/react (icon animations), CSS transitions
+- **Charts**: Recharts (lazy-loaded per project page)
 - **Forms**: React Hook Form + Zod
 - **Theme**: next-themes (dark mode support)
-- **Development**: Storybook 8.5 for component development and documentation
+- **Development**: Storybook 10 for component development and documentation
 
 ### CMS
 - **Headless CMS**: Strapi 5.8.1
-- **Content Types**: Projects (client, personal, article), About Page, Contact Info, Tools
-- **Dynamic Zone Blocks**: Rich text, images, video, carousel, comparison slider (V1/V2), stats, code blocks
+- **Content Types**: Projects (client, personal, article), About Page, Testimonials, Tools
+- **Dynamic Zone Blocks**: Rich text, images, video, carousel, comparison slider (V1/V2), stats, code blocks, Lottie, Figma embed
 - **Media**: Cloudinary integration for images and video
 
 ## Project Structure
 
 ```
 ├── app/                      # Next.js App Router pages
-│   ├── about/               # About page with GSAP animations
-│   ├── portfolio/           # Portfolio listing and detail pages
-│   │   └── [slug]/         # Dynamic project pages
-│   ├── contact/            # Contact page
-│   └── layout.tsx          # Root layout with navigation
-├── components/             # React components
-│   ├── ui/                # shadcn/ui components (Typography, AnimatedTabs, etc.)
-│   ├── project-blocks/    # Dynamic zone block renderers (code, image, video, etc.)
-│   ├── legacy/            # V1 components kept for backwards compatibility
-│   └── ...                # Custom components (ShareBar, ThemedLogo, etc.)
-├── hooks/                 # Custom React hooks
-│   ├── use-mobile.ts
-│   └── use-scroll-visibility.ts  # Shared scroll-aware hide/show context
-├── lib/                   # Utilities and integrations
-│   ├── strapi.ts         # Strapi API client
-│   ├── strapi-queries.ts # Content fetching functions
+│   ├── page.tsx              # Homepage (Hero, Featured Work, Companies, Testimonials, About, Stack)
+│   ├── projects/             # Portfolio listing with filter tabs
+│   ├── project/[slug]/       # Individual project case studies
+│   ├── article/[slug]/       # Article pages
+│   ├── api/                  # API routes (revalidation webhook)
+│   └── layout.tsx            # Root layout with navigation
+├── components/               # React components
+│   ├── ui/                   # shadcn/ui components (Typography, AnimatedTabs, Carousel, DataList, etc.)
+│   ├── project/
+│   │   ├── project-blocks/   # Dynamic zone block renderers
+│   │   │   ├── blocks/       # Structural components (BlockFigure, BlockCaption)
+│   │   │   └── stats/        # Chart components (area, bar, line, pie, radar, radial, number-only)
+│   │   └── slug/             # Project detail page components (hero, description, snapshot, share bar)
+│   ├── home/                 # Homepage section components
+│   ├── layout/               # Layout chrome (navigation, footer, back button)
+│   └── legacy/               # V1 components kept for backwards compatibility
+├── hooks/                    # Custom React hooks
+│   ├── use-scroll-visibility.ts  # Shared scroll-aware hide/show context
+│   ├── use-hero-animation.ts     # GSAP hero animation
+│   └── use-media-query.ts        # Responsive breakpoint detection
+├── lib/                      # Utilities and integrations
+│   ├── strapi.ts             # Strapi API client
+│   ├── strapi-queries.ts     # Content fetching functions
 │   └── strapi-blocks-renderer.tsx # Rich text renderer
-└── public/               # Static assets
+├── e2e/                      # Playwright E2E tests
+├── test/                     # Test setup and configuration
+└── public/                   # Static assets
 ```
 
 ## Content Management
@@ -197,7 +206,7 @@ Portfolio content is managed through Strapi CMS with the following content types
 
 - **Projects**: Portfolio case studies with rich text sections (Challenge, Solution, Role, Impact, Takeaway), images, tags, and external links
 - **About Page**: Personal bio, skills, and work experience
-- **Contact Info**: Contact details and social links
+- **Testimonials**: Client testimonials displayed on the homepage
 
 ### Rich Text Features
 
@@ -212,10 +221,10 @@ The custom rich text renderer supports:
 
 ## Pages
 
-- **Home** (`/`) - Landing page with bio, latest project, business logos, tools, and contact CTA
-- **Projects** (`/projects`) - Filterable project listing with animated tabs (Client Work, Personal Projects, Articles)
-- **Project Details** (`/project/[slug]`) - Individual case studies with dynamic zone blocks (rich text, images, video, comparison sliders, code blocks, stats) and share bar
-- **Contact** (`/contact`) - Contact form with validation and toast notifications (using Sonner)
+- **Home** (`/`) - Landing page with hero, featured work, company logos, testimonials, about section, and tech stack
+- **Projects** (`/projects`) - Filterable project listing with animated tabs (Client Work, Personal Projects, Articles) and grid/list view toggle
+- **Project Details** (`/project/[slug]`) - Individual case studies with dynamic zone blocks (rich text, images, video, comparison sliders, code blocks, stats, Lottie, Figma embeds) and share bar
+- **Articles** (`/article/[slug]`) - Article pages for written content
 
 ## Caching Strategy
 
@@ -275,16 +284,13 @@ npm run purge:cloudflare
 npm run purge:cloudflare:all
 ```
 
-**Old Manual Method** (deprecated):
-- Netlify: "Deploy without cache" in dashboard
-- Cloudflare: https://dash.cloudflare.com → Caching → Purge Cache
-
 ### Environment Variables
 
 **Frontend** (`.env.local` and Netlify):
-- `STRAPI_API_URL` - Public Strapi API URL
+- `STRAPI_API_URL` - Strapi API URL (server-side only)
 - `STRAPI_API_TOKEN` - Server-side API token
 - `REVALIDATE_SECRET` - Webhook authentication secret
+- `NEXT_PUBLIC_GA_MEASUREMENT_ID` - Google Analytics measurement ID
 
 **Cloudflare API** (for automated cache purging):
 - `CLOUDFLARE_ZONE_ID` - Zone ID from Cloudflare dashboard (domain overview)
@@ -309,7 +315,7 @@ Before committing changes:
 
 ```bash
 npm run lint          # ESLint check
-npx tsc --noEmit      # TypeScript check
+npm run typecheck     # TypeScript check
 npm run test:run      # Unit tests
 npm run test:e2e      # E2E tests (optional for minor changes)
 npm run build         # Production build
