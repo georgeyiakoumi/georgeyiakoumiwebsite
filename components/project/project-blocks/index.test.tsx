@@ -1,5 +1,18 @@
 import { describe, it, expect, vi } from 'vitest';
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
+
+// Mock next/dynamic to eagerly resolve the lazy component
+vi.mock('next/dynamic', () => ({
+  __esModule: true,
+  default: (importFn: () => Promise<any>) => {
+    const React = require('react');
+    const Lazy = React.lazy(importFn);
+    return function DynamicMock(props: any) {
+      return React.createElement(React.Suspense, { fallback: null }, React.createElement(Lazy, props));
+    };
+  },
+}));
+
 import { ProjectBlockRenderer } from './index';
 
 // Mock all block components to isolate the renderer logic
@@ -21,7 +34,7 @@ vi.mock('./comparison-slider-block', () => ({
 vi.mock('@/components/legacy/comparison-slider-block', () => ({
   ComparisonSliderBlock: ({ block }: any) => <div data-testid="legacy-comparison-slider-block">{block.id}</div>,
 }));
-vi.mock('./stats-block', () => ({
+vi.mock('./stats/index', () => ({
   StatsBlock: ({ block }: any) => <div data-testid="stats-block">{block.id}</div>,
 }));
 vi.mock('./code-block', () => ({
@@ -70,9 +83,9 @@ describe('ProjectBlockRenderer', () => {
     expect(screen.getByTestId('legacy-comparison-slider-block')).toBeInTheDocument();
   });
 
-  it('renders stats block', () => {
+  it('renders stats block', async () => {
     render(<ProjectBlockRenderer blocks={[{ __component: 'project-blocks.stats', id: 7 } as any]} projectTitle="Test" />);
-    expect(screen.getByTestId('stats-block')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId('stats-block')).toBeInTheDocument());
   });
 
   it('renders code-block', () => {
@@ -80,9 +93,9 @@ describe('ProjectBlockRenderer', () => {
     expect(screen.getByTestId('code-block')).toBeInTheDocument();
   });
 
-  it('renders lottie block', () => {
+  it('renders lottie block', async () => {
     render(<ProjectBlockRenderer blocks={[{ __component: 'project-blocks.lottie', id: 9 } as any]} projectTitle="Test" />);
-    expect(screen.getByTestId('lottie-block')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId('lottie-block')).toBeInTheDocument());
   });
 
   it('renders figma-embed block', () => {
@@ -98,7 +111,7 @@ describe('ProjectBlockRenderer', () => {
     consoleSpy.mockRestore();
   });
 
-  it('renders multiple blocks in order', () => {
+  it('renders multiple blocks in order', async () => {
     render(
       <ProjectBlockRenderer
         blocks={[
@@ -111,6 +124,6 @@ describe('ProjectBlockRenderer', () => {
     );
     expect(screen.getByTestId('rich-text-block')).toBeInTheDocument();
     expect(screen.getByTestId('image-block')).toBeInTheDocument();
-    expect(screen.getByTestId('stats-block')).toBeInTheDocument();
+    await waitFor(() => expect(screen.getByTestId('stats-block')).toBeInTheDocument());
   });
 });

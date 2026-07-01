@@ -2,8 +2,8 @@
 
 import { useRef, useEffect } from "react";
 import { getStrapiMediaURL } from "@/lib/strapi";
-import { BlockFigure } from "./block-figure";
-import { BlockCaption } from "./block-caption";
+import { BlockFigure } from "./blocks/block-figure";
+import { BlockCaption } from "./blocks/block-caption";
 import type { VideoBlock as VideoBlockType } from "@/lib/strapi-queries";
 
 function toEmbedUrl(url: string): string {

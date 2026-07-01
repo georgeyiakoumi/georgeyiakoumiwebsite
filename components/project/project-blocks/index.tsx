@@ -1,4 +1,5 @@
 import React from "react";
+import dynamic from "next/dynamic";
 import type { ProjectBlock } from "@/lib/strapi-queries";
 import { RichTextBlock } from "./rich-text-block";
 import { ImageBlock } from "./image-block";
@@ -6,10 +7,11 @@ import { CarouselBlock } from "./carousel-block";
 import { VideoBlock } from "./video-block";
 import { ComparisonSliderBlock } from "./comparison-slider-block";
 import { ComparisonSliderBlock as LegacyComparisonSliderBlock } from "@/components/legacy/comparison-slider-block";
-import { StatsBlock } from "./stats-block";
 import { CodeBlock } from "./code-block";
-import { LottieBlock } from "./lottie-block";
 import { FigmaEmbedBlock } from "./figma-embed-block";
+
+const StatsBlock = dynamic(() => import("./stats/index").then(mod => ({ default: mod.StatsBlock })), { ssr: false });
+const LottieBlock = dynamic(() => import("./lottie-block").then(mod => ({ default: mod.LottieBlock })), { ssr: false });
 interface ProjectBlockRendererProps {
   blocks: ProjectBlock[];
   projectTitle: string;

@@ -4,8 +4,8 @@ import { useState, useRef, useEffect, useCallback } from "react";
 import { ChevronsLeftRight } from "lucide-react";
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
-import { BlockFigure } from "./block-figure";
-import { BlockCaption } from "./block-caption";
+import { BlockFigure } from "./blocks/block-figure";
+import { BlockCaption } from "./blocks/block-caption";
 import type { ComparisonSliderBlock as ComparisonSliderBlockType } from "@/lib/strapi-queries";
 
 interface ComparisonSliderBlockProps {

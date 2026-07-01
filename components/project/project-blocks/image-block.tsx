@@ -1,8 +1,8 @@
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { ZoomableImage } from "@/components/zoomable-image";
-import { BlockFigure } from "./block-figure";
-import { BlockCaption } from "./block-caption";
+import { BlockFigure } from "./blocks/block-figure";
+import { BlockCaption } from "./blocks/block-caption";
 import type { ImageBlock as ImageBlockType } from "@/lib/strapi-queries";
 
 interface ImageBlockProps {

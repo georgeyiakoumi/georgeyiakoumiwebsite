@@ -3,8 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "next-themes";
 import { createHighlighter, type Highlighter } from "shiki";
-import { BlockFigure } from "./block-figure";
-import { BlockCaption } from "./block-caption";
+import { BlockFigure } from "./blocks/block-figure";
+import { BlockCaption } from "./blocks/block-caption";
 import type { CodeBlockType } from "@/lib/strapi-queries";
 
 const SUPPORTED_LANGS = [

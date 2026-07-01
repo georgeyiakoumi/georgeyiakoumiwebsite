@@ -1,5 +1,5 @@
-import { BlockFigure } from "./block-figure";
-import { BlockCaption } from "./block-caption";
+import { BlockFigure } from "./blocks/block-figure";
+import { BlockCaption } from "./blocks/block-caption";
 import type { FigmaEmbedBlock as FigmaEmbedBlockType } from "@/lib/strapi-queries";
 
 interface FigmaEmbedBlockProps {
