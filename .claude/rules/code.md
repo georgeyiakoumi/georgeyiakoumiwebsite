@@ -29,7 +29,7 @@ These rules are not guidance. They are hard constraints that apply on every proj
 - **Reserve `primary` for interactive elements only.** Buttons, links, active states. Status indicators and decorative elements must use `muted`, `accent`, `success`, or `destructive`. Non-interactive elements using `primary` make users try to click them.
 - **Extract repeated JSX into components at 2 instances.** Two copies of the same structure = extract it. Three = tech debt. See `ui-standards.md` → Extract repeated structures.
 - **Never define reusable components inside page/screen files.** If a component is worth naming, it lives in `components/`. Inline definitions get copy-pasted, drift, and can't be found.
-- **Never use `next/dynamic` for components that render during client-side navigation.** It causes silent hydration failures — browser freezes, no console errors. Use static imports or object lookups.
+- **Use `next/dynamic` with `ssr: false` only for heavy below-the-fold libraries** (e.g. recharts, lottie-react) inside `"use client"` components. Never use it for above-the-fold / LCP content or in Server Components. The original "silent hydration failure" concern was a React 17/18 issue — React 19 surfaces clear error messages instead.
 
 ---
 

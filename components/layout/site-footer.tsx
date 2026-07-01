@@ -4,8 +4,11 @@ import { useState, useRef, useCallback } from "react";
 import { useTheme } from "next-themes";
 import { AUTHOR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import Lottie, { type LottieRefCurrentProps } from "lottie-react";
+import dynamic from "next/dynamic";
+import { type LottieRefCurrentProps } from "lottie-react";
 import gyLogo from "@/public/gy-logo.json";
+
+const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import {
   Tooltip,
   TooltipContent,

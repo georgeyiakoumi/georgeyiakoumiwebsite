@@ -184,7 +184,6 @@ export interface ProjectBlocksStatItem extends Struct.ComponentSchema {
     displayName: 'stat-item';
   };
   attributes: {
-    description: Schema.Attribute.String;
     group: Schema.Attribute.String;
     label: Schema.Attribute.String;
     suffix: Schema.Attribute.String;
@@ -210,7 +209,7 @@ export interface ProjectBlocksStats extends Struct.ComponentSchema {
     chart_type: Schema.Attribute.Enumeration<
       ['area', 'bar', 'line', 'pie', 'radar', 'radial', 'number-only']
     >;
-    description: Schema.Attribute.Text;
+    caption: Schema.Attribute.Text;
     items: Schema.Attribute.Component<'project-blocks.stat-item', true>;
     line_variant: Schema.Attribute.Enumeration<
       ['default', 'linear', 'step', 'multiple', 'dots']

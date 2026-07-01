@@ -15,9 +15,6 @@
     "suffix": {
       "type": "string"
     },
-    "description": {
-      "type": "string"
-    },
     "group": {
       "type": "string"
     }

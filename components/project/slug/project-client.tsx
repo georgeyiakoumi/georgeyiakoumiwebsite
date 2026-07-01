@@ -5,7 +5,7 @@ import { ProjectHero } from "@/components/project/slug/project-hero";
 import { ProjectDescription } from "@/components/project/slug/project-description";
 import { OtherProjects } from "@/components/project/slug/other-projects";
 import { ProjectBlockRenderer } from "@/components/project/project-blocks";
-import { SnapshotBlock } from "@/components/project/project-blocks/snapshot-block";
+import { SnapshotBlock } from "@/components/project/slug/project-snapshot";
 import { ShareBar } from "@/components/project/slug/share-bar";
 import type { ProjectData, SnapshotItem } from "@/lib/strapi-queries";
 

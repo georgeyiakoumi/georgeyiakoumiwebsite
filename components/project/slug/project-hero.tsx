@@ -3,7 +3,7 @@
 import { cn } from "@/lib/utils";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { ScrollIndicator } from "@/components/scroll-indicator";
-import { BlockFigure } from "@/components/project/project-blocks/block-figure";
+import { BlockFigure } from "@/components/project/project-blocks/blocks/block-figure";
 import { Typography } from "@/components/ui/typography";
 
 interface ProjectHeroProps {

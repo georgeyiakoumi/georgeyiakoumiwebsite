@@ -105,7 +105,6 @@ export interface StatItem {
   value: number;
   suffix?: string;
   context?: string;
-  description?: string; // Strapi uses 'description' field name
   group?: string;
 }
 
@@ -132,7 +131,7 @@ export interface StatsBlock {
   show_axes?: boolean;
   show_dots?: boolean;
   show_labels?: boolean;
-  description?: string;
+  caption?: string;
 }
 
 export interface CodeBlockType {
