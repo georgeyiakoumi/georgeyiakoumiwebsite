@@ -186,9 +186,10 @@ function CarouselItem({ className, index, ...props }: React.ComponentProps<"div"
         fade
           ? "[flex:0_0_100%]"
           : cn(
-              !noGap && "md:max-w-xl",
+              "md:max-w-xl",
               !noGap && "last:mr-4 md:last:mr-8",
-              noGap ? "[flex:0_0_100%]" : "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
+              "[flex:0_0_calc(var(--carousel-slide-size,100%)-var(--carousel-peek,0px)*2)]",
+              noGap && "first:rounded-l-lg last:rounded-r-lg overflow-hidden",
               !isActive && !noGap && "opacity-40"
             ),
         className
@@ -303,6 +304,7 @@ function ResponsiveCarousel({ loop, noGap, children }: { loop?: boolean; noGap?:
       {/* Mobile / md — peek carousel with inline navigation */}
       <Carousel
         opts={{ align: "center", loop, containScroll: false }}
+        noGap={noGap}
         navigation="inline"
         className="lg:hidden"
       >
