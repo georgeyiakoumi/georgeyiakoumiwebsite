@@ -73,3 +73,8 @@ storybook-static
 
 # Claude Code setup guides (local development documentation)
 claude-guides/
+
+# Agent skills (installed locally via npx skills)
+.agents/
+.claude/skills/
+skills-lock.json
