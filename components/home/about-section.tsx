@@ -53,7 +53,7 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
                 </a>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom">{email}</TooltipContent>
+            <TooltipContent side="bottom" className="hidden xl:block">{email}</TooltipContent>
           </Tooltip>
         )}
         <Tooltip>
@@ -62,7 +62,7 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
               <CalendlyButton />
             </span>
           </TooltipTrigger>
-          <TooltipContent side="bottom">Calendly</TooltipContent>
+          <TooltipContent side="bottom" className="hidden xl:block">Calendly</TooltipContent>
         </Tooltip>
         {cvUrl && (
           <Tooltip>
@@ -80,7 +80,7 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
                 </a>
               </Button>
             </TooltipTrigger>
-            <TooltipContent side="bottom">Google Drive</TooltipContent>
+            <TooltipContent side="bottom" className="hidden xl:block">Google Drive</TooltipContent>
           </Tooltip>
         )}
       </div>

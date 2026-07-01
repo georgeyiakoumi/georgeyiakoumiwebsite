@@ -20,10 +20,15 @@ export function LottieBlock({ block }: LottieBlockProps) {
     const url = getStrapiMediaURL(block.file.url);
     if (!url) return;
 
-    fetch(url)
+    const controller = new AbortController();
+    fetch(url, { signal: controller.signal })
       .then((res) => res.json())
       .then(setAnimationData)
-      .catch(console.error);
+      .catch((err) => {
+        if (err.name !== "AbortError") console.error(err);
+      });
+
+    return () => controller.abort();
   }, [block.file]);
 
   if (!block.file || !animationData) return null;

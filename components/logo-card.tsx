@@ -43,10 +43,16 @@ export function LogoCard({ data }: LogoCardProps) {
 
   useEffect(() => {
     if (!imageUrl || !isSvg) return;
-    fetch(imageUrl)
+
+    const controller = new AbortController();
+    fetch(imageUrl, { signal: controller.signal })
       .then(res => res.text())
       .then(setSvgContent)
-      .catch(console.error);
+      .catch((err) => {
+        if (err.name !== "AbortError") console.error(err);
+      });
+
+    return () => controller.abort();
   }, [imageUrl, isSvg]);
 
   if (!imageUrl) return null;

@@ -27,8 +27,6 @@ describe('ImageWithFallback', () => {
 
   it('should show skeleton overlay while loading', () => {
     render(<ImageWithFallback {...defaultProps} />);
-    const skeleton = screen.getByTestId ? undefined : undefined;
-    // Skeleton is present (has data-slot="skeleton")
     const wrapper = screen.getByRole('img', { name: /test image/i }).closest('span');
     expect(wrapper).not.toBeNull();
     const skeletonEl = wrapper?.querySelector('[data-slot="skeleton"]');
