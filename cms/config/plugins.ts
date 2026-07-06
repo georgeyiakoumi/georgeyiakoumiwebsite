@@ -17,6 +17,9 @@ module.exports = ({ env }) => ({
             return { folder: "website/general" }; // Default fallback
           },
         },
+        security: {
+          maxFileSize: 10 * 1024 * 1024, // 10MB
+        },
         breakpoints: {},
         allowedFileTypes: {
           image: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml', 'image/avif'],

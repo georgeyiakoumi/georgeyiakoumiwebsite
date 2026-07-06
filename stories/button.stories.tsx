@@ -24,7 +24,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: "select",
-      options: ["default", "sm", "lg", "icon"],
+      options: ["default", "sm", "lg", "icon", "icon-sm", "icon-lg"],
       if: { arg: "variant", neq: "link" },
     },
     children: {
