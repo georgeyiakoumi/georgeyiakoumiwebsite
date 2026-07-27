@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useTheme } from "next-themes";
 import { AUTHOR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -28,7 +28,10 @@ export function SiteFooter({ className }: { className?: string }) {
   const currentYear = new Date().getFullYear();
   const [open, setOpen] = useState(false);
   const { resolvedTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
   const lottieRef = useRef<LottieRefCurrentProps>(null);
+
+  useEffect(() => setMounted(true), []);
 
   const handleMouseEnter = useCallback(() => {
     lottieRef.current?.goToAndPlay(0);
@@ -38,7 +41,7 @@ export function SiteFooter({ className }: { className?: string }) {
     <div
       className="size-12 lg:size-14"
       style={{
-        filter: resolvedTheme === "dark" ? "invert(1)" : undefined,
+        filter: mounted && resolvedTheme === "dark" ? "invert(1)" : undefined,
       }}
     >
       <Lottie
