@@ -3,8 +3,8 @@
   "version": "1.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
-    "dev:network": "next dev -H 0.0.0.0",
+    "dev": "rm -rf .next && next dev",
+    "dev:network": "rm -rf .next && next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
     "lint": "eslint .",
