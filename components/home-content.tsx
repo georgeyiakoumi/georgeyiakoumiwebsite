@@ -1,6 +1,6 @@
 "use client";
 
-import { type ToolData, type BusinessData, type ProjectData, type TestimonialData, type AboutData } from "@/lib/strapi-queries";
+import type { ToolData, BusinessData, ProjectData, TestimonialData, AboutData } from "@/lib/strapi-queries";
 import { HeroSection } from "@/components/home/hero-section";
 import { FeaturedWorkSection } from "@/components/home/featured-work-section";
 import { CompaniesSection } from "@/components/home/companies-section";

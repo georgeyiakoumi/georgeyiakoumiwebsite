@@ -771,6 +771,8 @@ export interface ApiToolTool extends Struct.CollectionTypeSchema {
     cssVariables: Schema.Attribute.JSON;
     cssVariablesDark: Schema.Attribute.JSON;
     description: Schema.Attribute.Text;
+    iconSlug: Schema.Attribute.String;
+    iconSlugDark: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::tool.tool'> &

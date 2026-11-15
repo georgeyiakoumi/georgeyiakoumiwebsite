@@ -5,6 +5,8 @@ import { Item, ItemMedia } from "@/components/ui/item";
 import { getStrapiMediaURL } from "@/lib/strapi";
 import { Badge } from "@/components/ui/badge";
 import { ResponsiveTooltip } from "@/components/ui/responsive-tooltip";
+import { BrandIcon } from "@/components/brand-icon";
+import type { BrandIcon as BrandIconData } from "@/lib/brand-icons";
 import { useEffect, useState } from "react";
 
 interface LogoItemData {
@@ -15,6 +17,7 @@ interface LogoItemData {
   cssVariablesDark?: Record<string, string> | null;
   description?: string | null;
   url?: string | null;
+  icon?: BrandIconData;
   image?: {
     url: string;
     alternativeText?: string;
@@ -42,7 +45,7 @@ export function LogoCard({ data }: LogoCardProps) {
   }, []);
 
   useEffect(() => {
-    if (!imageUrl || !isSvg) return;
+    if (data.icon || !imageUrl || !isSvg) return;
 
     const controller = new AbortController();
     fetch(imageUrl, { signal: controller.signal })
@@ -53,14 +56,25 @@ export function LogoCard({ data }: LogoCardProps) {
       });
 
     return () => controller.abort();
-  }, [imageUrl, isSvg]);
+  }, [data.icon, imageUrl, isSvg]);
 
-  if (!imageUrl) return null;
+  if (!data.icon && !imageUrl) return null;
 
   const cssVariables = {
     ...(data.cssVariables || {}),
     ...(mounted && resolvedTheme === 'dark' && data.cssVariablesDark ? data.cssVariablesDark : {}),
   } as React.CSSProperties;
+
+  const logoMedia = data.icon ? (
+    <ItemMedia className={`w-full h-full ${data.classes || ""}`}>
+      <BrandIcon icon={data.icon} className="size-full" />
+    </ItemMedia>
+  ) : (
+    <ItemMedia
+      className={`w-full h-full [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain ${data.classes || ""}`}
+      dangerouslySetInnerHTML={svgContent ? { __html: svgContent } : undefined}
+    />
+  );
 
   const logoItem = (
     <Item
@@ -70,10 +84,7 @@ export function LogoCard({ data }: LogoCardProps) {
       aria-label={`Logo for ${data.name}`}
       style={cssVariables}
     >
-      <ItemMedia
-        className={`w-full h-full [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain ${data.classes || ""}`}
-        dangerouslySetInnerHTML={svgContent ? { __html: svgContent } : undefined}
-      />
+      {logoMedia}
     </Item>
   );
 
@@ -87,10 +98,7 @@ export function LogoCard({ data }: LogoCardProps) {
       aria-label={`Logo for ${data.name}`}
       style={cssVariables}
     >
-      <ItemMedia
-        className={`w-full h-full [&>svg]:w-full [&>svg]:h-full [&>svg]:object-contain ${data.classes || ""}`}
-        dangerouslySetInnerHTML={svgContent ? { __html: svgContent } : undefined}
-      />
+      {logoMedia}
     </Item>
   );
 
