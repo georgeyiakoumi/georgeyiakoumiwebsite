@@ -1,8 +1,16 @@
 import type { IconifyIcon } from "@iconify/types";
 
+export type Recolor = Record<string, string>;
+
 export interface BrandIconOverride {
+  /** Replaces the logo in both modes (use currentColor for single-colour marks). */
   light?: IconifyIcon;
+  /** Adds or replaces the dark-mode logo. */
   dark?: IconifyIcon;
+  /** Recolours theSVG's logo, e.g. a brand refresh. Fails if a colour isn't found. */
+  recolor?: Recolor;
+  /** Dark-mode version made by recolouring theSVG's logo. */
+  darkRecolor?: Recolor;
 }
 
 // Curated logos that replace or complement theSVG where its version is wrong.
@@ -20,10 +28,10 @@ export const BRAND_ICON_OVERRIDES: Record<string, BrandIconOverride> = {
   // Pro Tools rebranded to purple (#7826E7) in 2019; theSVG still ships the old green.
   // Colour taken from Avid's official PT2019 icon (Wikimedia Commons, CC BY 4.0).
   "pro-tools": {
-    light: { width: 24, height: 24, body: "<path fill=\"#7826E7\" d=\"M.505 15.452Q.27 14.63.14 13.762Q.01 12.891.01 12q0-2.49.94-4.673q.94-2.184 2.572-3.804Q5.155 1.902 7.339.938Q9.523 0 12.012 0q2.465 0 4.65.94q2.183.962 3.815 2.583q1.633 1.62 2.572 3.804t.94 4.673q0 .869-.118 1.714q-.118.846-.352 1.644q.21.047.34.07l.13.024l-1.363 3.429l-.188-.012l-.54-.106Q21.1 19.937 20.02 20.9q-1.057.987-2.325 1.668t-2.724 1.056q-1.433.376-2.96.376q-1.55 0-3.005-.376q-1.433-.375-2.7-1.068q-1.269-.693-2.35-1.656q-1.08-.963-1.878-2.16q-.282.094-.434.117l-.153.024l-1.48-3.382l.118.012zM22.744 12q0-2.23-.846-4.18q-.845-1.95-2.301-3.405q-1.456-1.456-3.429-2.301q-1.949-.846-4.156-.846q-2.231 0-4.18.846q-1.973.845-3.429 2.3Q2.947 5.872 2.102 7.82Q1.256 9.77 1.256 12q0 .751.106 1.491t.317 1.444q.892-.516 2.02-1.972q1.127-1.456 1.808-2.912q.352-.728.916-1.597q.54-.869 1.338-1.632q.799-.763 1.855-1.256q1.057-.517 2.396-.517q1.315 0 2.419.587q1.103.587 1.913 1.35t1.304 1.492q.516.727.657.986q.165.282.47.94q.329.633.728 1.361q.4.728.822 1.433q.423.68.798 1.033q.259.258.564.446t.61.329q.212-.728.33-1.48q.117-.751.117-1.526M12.012 22.732q1.338 0 2.583-.305q1.268-.33 2.383-.916q1.116-.587 2.055-1.41q.94-.821 1.668-1.83q-.94-.494-2.173-1.645q-1.233-1.15-2.5-3.358q-.142-.235-.494-.94q-.352-.704-.857-1.455t-1.115-1.339t-1.268-.587q-.681 0-1.386.634q-.704.61-1.303 1.386q-.6.775-1.022 1.503q-.423.704-.54.916q-1.174 2.066-2.477 3.205q-1.304 1.139-2.29 1.656q.728 1.01 1.667 1.831q.963.846 2.079 1.433q1.115.587 2.36.892q1.268.329 2.63.329\"/>" },
+    recolor: { "#7acb10": "#7826E7" },
   },
   // The black (#111) hedgehog head disappears on dark backgrounds.
   posthog: {
-    dark: { width: 52, height: 28, body: "<path fill=\"url(#SVGUJK2UHTN)\" d=\"M10.74 7.16L4.54.8A2.66 2.66 0 0 0 0 2.66V7.5l10.74 11.18z\"/><path fill=\"url(#SVGXXkqtbOL)\" d=\"M9.19 28h1.55v-9.32L0 7.5v10.73z\"/><path fill=\"url(#SVGYxonFbIW)\" d=\"M0 25.41A2.6 2.6 0 0 0 2.58 28H9.2L0 18.23z\"/><path fill=\"url(#SVG61kXZRSd)\" d=\"M10.74 2.66v4.5l11.22 11.52V7.63L15.3.8a2.66 2.66 0 0 0-4.56 1.86\"/><path fill=\"url(#SVGWBoFabbN)\" d=\"M10.74 28h8.96l-8.96-9.32z\"/><path fill=\"url(#SVGF9riBetx)\" d=\"M10.74 7.16v11.52L19.7 28h2.26v-9.32z\"/><path fill=\"url(#SVGsr7PheXP)\" d=\"M21.96 2.67v4.96l11.3 11.6h.02V7.75L26.63.85a2.8 2.8 0 0 0-2-.85a2.67 2.67 0 0 0-2.67 2.67\"/><path fill=\"url(#SVGR522SdkB)\" d=\"M21.96 7.63v11.05L31.03 28h2.25v-8.75z\"/><path fill=\"url(#SVGm6AeMciT)\" d=\"M21.96 28h9.07l-9.07-9.32z\"/><path fill=\"#fff\" d=\"M51.66 25.22A1.9 1.9 0 0 0 50 23.33l-.34-.04c-1-.13-1.94-.6-2.65-1.33L33.28 7.75V28H49a2.66 2.66 0 0 0 2.67-2.67zM39.2 23.54h-.09a1.78 1.78 0 1 1 .1 0\"/><defs><linearGradient id=\"SVGsr7PheXP\" x1=\"21.96\" x2=\"33.28\" y1=\"9.62\" y2=\"9.62\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#ffd849\"/><stop offset=\".96\" stop-color=\"#fbae01\"/></linearGradient><linearGradient id=\"SVGR522SdkB\" x1=\"21.96\" x2=\"33.28\" y1=\"17.81\" y2=\"17.81\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#ffb700\"/><stop offset=\"1\" stop-color=\"#f9aa01\"/></linearGradient><linearGradient id=\"SVGm6AeMciT\" x1=\"21.96\" x2=\"31.03\" y1=\"23.34\" y2=\"23.34\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#ff9500\"/><stop offset=\"1\" stop-color=\"#f8aa00\"/></linearGradient><linearGradient id=\"SVG61kXZRSd\" x1=\"10.74\" x2=\"21.96\" y1=\"9.34\" y2=\"9.34\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#ff651e\"/><stop offset=\"1\" stop-color=\"#e4400a\"/></linearGradient><linearGradient id=\"SVGWBoFabbN\" x1=\"10.74\" x2=\"19.7\" y1=\"23.34\" y2=\"23.34\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#c42c00\"/><stop offset=\"1\" stop-color=\"#d63600\"/></linearGradient><linearGradient id=\"SVGF9riBetx\" x1=\"10.74\" x2=\"21.96\" y1=\"17.58\" y2=\"17.58\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#ef3c00\"/><stop offset=\"1\" stop-color=\"#d63601\"/></linearGradient><linearGradient id=\"SVGUJK2UHTN\" x1=\"0\" x2=\"10.74\" y1=\"9.34\" y2=\"9.34\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#3f80ff\"/><stop offset=\"1\" stop-color=\"#084fe0\"/></linearGradient><linearGradient id=\"SVGXXkqtbOL\" x1=\"0\" x2=\"10.74\" y1=\"17.75\" y2=\"17.75\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#0255ff\"/><stop offset=\"1\" stop-color=\"#0145d2\"/></linearGradient><linearGradient id=\"SVGYxonFbIW\" x1=\"0\" x2=\"9.19\" y1=\"23.11\" y2=\"23.11\" gradientUnits=\"userSpaceOnUse\"><stop stop-color=\"#0041c6\"/><stop offset=\"1\" stop-color=\"#0045d0\"/></linearGradient></defs>" },
+    darkRecolor: { "#111": "#fff" },
   },
 };

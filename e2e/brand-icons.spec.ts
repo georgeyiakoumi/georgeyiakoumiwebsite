@@ -39,7 +39,7 @@ async function logoVisibility(page: Page) {
     const results: { name: string; share: number }[] = []
 
     for (const card of cards) {
-      const pageBackground = backgroundBehind(card.parentElement ?? card)
+      const pageBackground = backgroundBehind(card)
       const visible = [...card.querySelectorAll<HTMLElement>('span')].find(
         (span) => span.querySelector('svg[focusable="false"]') && getComputedStyle(span).display !== 'none'
       )
@@ -81,15 +81,19 @@ async function logoVisibility(page: Page) {
 for (const colorScheme of ['light', 'dark'] as const) {
   test(`stack logos are visible in ${colorScheme} mode`, async ({ browser }) => {
     const context = await browser.newContext({ colorScheme, viewport: { width: 1440, height: 900 } })
-    const page = await context.newPage()
-    await page.goto('/')
-    await page.waitForLoadState('networkidle')
+    try {
+      const page = await context.newPage()
+      await page.goto('/')
 
-    const results = await logoVisibility(page)
-    test.skip(results.length === 0, 'No brand-icon logos on this content (slugs not set yet)')
+      const brandLogo = page.locator('[role="img"][aria-label^="Logo for"] svg[focusable="false"]').first()
+      const hasBrandLogos = await brandLogo.waitFor({ state: 'attached', timeout: 15_000 }).then(() => true, () => false)
+      test.skip(!hasBrandLogos, 'No brand-icon logos on this content (slugs not set yet)')
 
-    const invisible = results.filter((r) => r.share < MIN_VISIBLE_SHARE).map((r) => `${r.name} (${Math.round(r.share * 100)}%)`)
-    expect(invisible, `Logos that mostly disappear in ${colorScheme} mode`).toEqual([])
-    await context.close()
+      const results = await logoVisibility(page)
+      const invisible = results.filter((r) => r.share < MIN_VISIBLE_SHARE).map((r) => `${r.name} (${Math.round(r.share * 100)}%)`)
+      expect(invisible, `Logos that mostly disappear in ${colorScheme} mode`).toEqual([])
+    } finally {
+      await context.close()
+    }
   })
 }

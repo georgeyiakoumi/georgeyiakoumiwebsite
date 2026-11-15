@@ -12,7 +12,7 @@ All logos are rendered server-side as inline SVG. No icon data reaches the brows
 
 1. In Strapi, create the Tool and set **`iconSlug`** to the theSVG name, e.g. `figma`. Browse names at <https://icon-sets.iconify.design/thesvg-color/>.
 2. If theSVG ships separate versions, use the one meant for light backgrounds as `iconSlug` and the other as **`iconSlugDark`**, e.g. `github-light` / `github-dark`. **Check both by eye.** The naming is inconsistent: Miro's `-light` is white.
-3. Preview locally (`npm run cms:db:pull`, `npm run cms:dev`, `npm run dev:local-cms`). Then run `npx playwright test e2e/brand-icons.spec.ts`, which fails if any logo disappears in light or dark mode.
+3. Preview locally (`npm run cms:db:pull`, `npm run cms:dev`, `npm run dev:local-cms`). Then run `npx playwright test e2e/brand-icons.spec.ts`, which fails if any **stack section** logo disappears in light or dark mode. Tool badges on project pages aren't covered yet, so check those by eye.
 
 ## When a logo is wrong, add an override
 
@@ -25,13 +25,14 @@ render: {
   light: { width: 24, height: 24, body: '<g fill="currentColor">…</g>' },
 },
 posthog: {
-  // Keep theSVG's light logo; supply only a dark-mode version.
-  dark: { width: 52, height: 28, body: '…' },
+  // Keep theSVG's logo; make the black head white in dark mode.
+  darkRecolor: { "#111": "#fff" },
 },
 ```
 
-- `light` replaces the logo everywhere. Prefer `currentColor` for single-colour marks.
+- `light` replaces the logo in **both** modes, ignoring any `iconSlugDark`. Prefer `currentColor` for single-colour marks.
 - `dark` adds or replaces the dark-mode version.
+- `recolor` / `darkRecolor` recolour theSVG's own artwork, e.g. `{ "#7acb10": "#7826E7" }` for a brand refresh. They throw if the colour isn't found, so a theSVG update that changes the artwork can't slip through silently.
 - Source the artwork from the brand's own press kit where possible, otherwise from theSVG, svgl or Simple Icons. Copy it in as a fixed string, so a package update can't change it.
 - Add a unit test in `lib/brand-icons.test.ts` and confirm the e2e visibility check passes.
 

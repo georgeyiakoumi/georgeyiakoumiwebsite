@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getBrandIcon, getBrandIconSVG, withBrandIcons } from './brand-icons';
+import { getBrandIcon, getBrandIconSVG, recolor, withBrandIcons } from './brand-icons';
 
 describe('getBrandIconSVG', () => {
   it('returns null for empty or unknown slugs', () => {
@@ -109,6 +109,34 @@ describe('curated overrides', () => {
 
   it('falls back to theSVG for slugs without overrides', () => {
     expect(getBrandIconSVG('react-light', overrides)).toBe(getBrandIconSVG('react-light', {}));
+  });
+});
+
+describe('override precedence', () => {
+  const mono = { width: 24, height: 24, body: '<path fill="currentColor" d="M0 0h24v24H0z"/>' };
+
+  it('a curated light (monochrome) logo is used in both modes, ignoring the CMS dark slug', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light', iconSlugDark: 'github-dark' }, { 'github-light': { light: mono } });
+    expect(icon?.light).toContain('currentColor');
+    expect(icon).not.toHaveProperty('dark');
+  });
+
+  it('recolor and darkRecolor apply to the pinned theSVG artwork', () => {
+    const icon = getBrandIcon({ iconSlug: 'figma' }, { figma: { darkRecolor: { '#0acf83': '#000000' } } })!;
+    expect(icon.light.toLowerCase()).toContain('#0acf83');
+    expect(icon.dark).toContain('#000000');
+  });
+
+  it('recolor fails loudly when the colour to replace is missing (artwork changed)', () => {
+    expect(() => recolor({ width: 24, height: 24, body: '<path fill="#123456"/>' }, { '#abcdef': '#000' }, 'x')).toThrow(
+      /colour #abcdef not found/
+    );
+  });
+
+  it('every shipped override resolves without throwing', () => {
+    for (const slug of ['render', 'linear', 'pro-tools', 'posthog']) {
+      expect(getBrandIcon({ iconSlug: slug })?.light).toMatch(/^<svg /);
+    }
   });
 });
 
