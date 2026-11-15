@@ -287,7 +287,7 @@ export interface ProjectBlocksVideo extends Struct.ComponentSchema {
 }
 
 declare module '@strapi/strapi' {
-  export module Public {
+  export namespace Public {
     export interface ComponentSchemas {
       'about.business': AboutBusiness;
       'cv.chapter': CvChapter;
