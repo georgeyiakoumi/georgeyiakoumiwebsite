@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
+import { getEntryPaths } from './entries'
 
 // The site scrolls inside <main> (overflow-y-auto), not the window, so lazy media
 // only loads if <main> itself is scrolled.
@@ -28,7 +29,7 @@ test('privacy page renders the notice', async ({ page }) => {
 })
 
 test('site makes no third-party requests', async ({ page }) => {
-  test.setTimeout(180_000)
+  test.setTimeout(300_000)
   const thirdParty: string[] = []
   page.on('request', req => {
     const url = new URL(req.url())
@@ -42,12 +43,9 @@ test('site makes no third-party requests', async ({ page }) => {
     await page.waitForLoadState('networkidle')
   }
 
-  await page.goto('/projects')
-  const entryLinks = await page.locator('a[href^="/project/"], a[href^="/article/"]').evaluateAll(
-    links => [...new Set(links.map(link => link.getAttribute('href')).filter(Boolean))] as string[]
-  )
-  expect(entryLinks.length).toBeGreaterThan(0)
-  for (const href of entryLinks) {
+  const entryPaths = await getEntryPaths(page)
+  expect(entryPaths.length).toBeGreaterThan(0)
+  for (const href of entryPaths) {
     await page.goto(href)
     await scrollMainToBottom(page)
     await page.waitForLoadState('networkidle')

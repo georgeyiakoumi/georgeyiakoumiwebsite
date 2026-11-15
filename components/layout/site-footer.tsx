@@ -6,10 +6,10 @@ import { useTheme } from "next-themes";
 import { AUTHOR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import dynamic from "next/dynamic";
-import { type LottieRefCurrentProps } from "lottie-react";
+import type { LottieHandle } from "lottie-react";
 import gyLogo from "@/public/gy-logo.json";
 
-const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
+const LottieSvg = dynamic(() => import("lottie-react").then((m) => m.LottieSvg), { ssr: false });
 import {
   Popover,
   PopoverContent,
@@ -47,12 +47,13 @@ export function SiteFooter({ className }: { className?: string }) {
   const [popoverOpen, setPopoverOpen] = useState(false);
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const lottieRef = useRef<LottieRefCurrentProps>(null);
+  const lottieRef = useRef<LottieHandle>(null);
 
   useEffect(() => setMounted(true), []);
 
   const handleMouseEnter = useCallback(() => {
-    lottieRef.current?.goToAndPlay(0);
+    lottieRef.current?.seek(0);
+    lottieRef.current?.play();
   }, []);
 
   const logoLottie = (
@@ -62,9 +63,9 @@ export function SiteFooter({ className }: { className?: string }) {
         filter: mounted && resolvedTheme === "dark" ? "invert(1)" : undefined,
       }}
     >
-      <Lottie
+      <LottieSvg
         lottieRef={lottieRef}
-        animationData={gyLogo}
+        src={gyLogo}
         loop={false}
         autoplay={false}
         className="size-full"
