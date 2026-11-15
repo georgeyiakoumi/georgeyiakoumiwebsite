@@ -16,6 +16,7 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       code: ${{ steps.filter.outputs.code }}
+      cms: ${{ steps.filter.outputs.cms }}
     steps:
       - name: Checkout code
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
@@ -34,6 +35,9 @@ jobs:
               - '**/*.json'
               - '**/*.css'
               - '!**/*.md'
+            cms:
+              - 'cms/**'
+              - '!cms/**/*.md'
 
   unit-tests:
     name: Unit & Component Tests
@@ -170,3 +174,42 @@ jobs:
       - name: Run TypeScript typecheck
         if: needs.changes.outputs.code == 'true'
         run: npm run typecheck
+
+  cms-build:
+    name: CMS Build
+    needs: changes
+    if: needs.changes.outputs.cms == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: cms
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: cms/package-lock.json
+
+      - name: Install CMS dependencies
+        run: npm ci
+
+      # Compiles the Strapi TypeScript and builds the admin panel, so a CMS
+      # dependency or schema change that breaks the build fails here, not on Render.
+      # Dummy secrets only; no database or Cloudinary access is needed to build.
+      - name: Build CMS
+        run: npx strapi build
+        env:
+          NODE_ENV: production
+          CMS_ENV: local
+          DATABASE_CLIENT: postgres
+          DATABASE_HOST: 127.0.0.1
+          APP_KEYS: ci-a,ci-b,ci-c,ci-d
+          API_TOKEN_SALT: ci-only
+          ADMIN_JWT_SECRET: ci-only
+          TRANSFER_TOKEN_SALT: ci-only
+          JWT_SECRET: ci-only

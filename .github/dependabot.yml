@@ -16,6 +16,10 @@ updates:
     groups:
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Types must match the Node 22 runtime used by Netlify and CI.
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: npm
     directory: /cms
@@ -27,3 +31,16 @@ updates:
         patterns: ['@strapi/*']
       minor-and-patch:
         update-types: [minor, patch]
+    ignore:
+      # Strapi 5's admin panel runs on React 18.
+      - dependency-name: 'react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: 'react-dom'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/react'
+        update-types: ['version-update:semver-major']
+      - dependency-name: '@types/react-dom'
+        update-types: ['version-update:semver-major']
+      # The CMS runs on Node 22 (its engines field allows <=22).
+      - dependency-name: '@types/node'
+        update-types: ['version-update:semver-major']
