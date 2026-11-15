@@ -1,4 +1,5 @@
 import { test, expect, type Page } from '@playwright/test'
+import { getEntryPaths } from './entries'
 
 /**
  * Media integrity tests — verify images load correctly across the site.
@@ -179,4 +180,32 @@ test.describe('Media integrity — Project page', () => {
       ).not.toMatch(OPTIMISATION_PATTERN)
     }
   })
+})
+
+// ---------------------------------------------------------------------------
+// Lottie blocks
+// ---------------------------------------------------------------------------
+
+test('every Lottie block renders an animation with real height', async ({ page }) => {
+  test.setTimeout(300_000)
+  await page.setViewportSize({ width: 1440, height: 900 })
+  const collapsed: string[] = []
+  let checked = 0
+
+  for (const path of await getEntryPaths(page)) {
+    await page.goto(path, { waitUntil: 'networkidle' })
+    const displays = page.locator('main .lottie-display')
+    const count = await displays.count()
+    for (let i = 0; i < count; i++) {
+      const display = displays.nth(i)
+      await display.evaluate((el) => el.scrollIntoView({ block: 'center' }))
+      await expect(display.locator('svg').first()).toBeAttached()
+      const height = (await display.boundingBox())?.height ?? 0
+      if (height < 100) collapsed.push(`${path} #${i + 1} (${Math.round(height)}px)`)
+      checked++
+    }
+  }
+
+  test.skip(checked === 0, 'No Lottie blocks in the current content')
+  expect(collapsed, 'Lottie blocks that collapsed').toEqual([])
 })

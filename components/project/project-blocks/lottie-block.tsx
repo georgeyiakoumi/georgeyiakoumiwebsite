@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Lottie from "lottie-react";
+import { LottieSvg } from "lottie-react";
 import { getBrowserMediaURL } from "@/lib/strapi";
 import { BlockFigure } from "./blocks/block-figure";
 import { BlockCaption } from "./blocks/block-caption";
@@ -36,8 +36,8 @@ export function LottieBlock({ block }: LottieBlockProps) {
   return (
     <BlockFigure>
       <div className="w-full border border-border rounded-lg overflow-hidden flex justify-center">
-        <Lottie
-          animationData={animationData}
+        <LottieSvg
+          src={animationData}
           loop={block.loop ?? true}
           autoplay={block.autoplay ?? true}
           className="w-full"
