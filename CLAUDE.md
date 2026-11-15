@@ -6,35 +6,28 @@ This is a personal portfolio website built with modern web technologies to showc
 ## Tech Stack
 
 ### Framework
-- **Next.js 15.5.2** - React framework with App Router
-- **React 19.1.0** - UI library
-- **TypeScript** - All components use TypeScript (.tsx files)
+- **Next.js 16** - React framework with App Router (Turbopack in dev)
+- **React 19** - UI library
+- **TypeScript** - All code is TypeScript (`.ts`/`.tsx`, scripts as `.mts`)
 
 ### Styling & UI
-- **Tailwind CSS 4.1.13** - Utility-first CSS framework
-- **shadcn/ui** - Component library built on Radix UI
-- **Radix UI** - Unstyled, accessible component primitives
-- **class-variance-authority** - Component variant management
-- **tailwind-merge** - Intelligent Tailwind class merging
+- **Tailwind CSS 4** - Utility-first CSS; theme tokens are OKLCH CSS variables in `app/globals.css`
+- **shadcn/ui** - Component source in `components/ui/` (built on Radix UI)
+- **Radix UI** - Unstyled, accessible primitives (`radix-ui` package)
+- **class-variance-authority** / **tailwind-merge** - Variants and class merging via `cn()`
 
-### Icons & Animations
-- **Lucide React** - Primary icon library (User, Briefcase, Mail, Github, LinkedIn, etc.)
-- **@animate-ui/icons** - Animated icon components from shadcn (ArrowLeft, CheckCheck, etc.)
-  - Use AnimateIcon wrapper with animateOnHover and animateOnView props
+### Icons
+- **Lucide React** - Static icons
+- **Animated icons** (`components/ui/` files such as `at-sign.tsx`, `chevron-right.tsx`) - from the `@lucide-animated` shadcn registry, built on **motion** (`motion/react`). Each exposes a ref handle with `startAnimation()` / `stopAnimation()`, typically triggered on hover.
+- **Brand logos** (stack section, tool badges) - theSVG via Iconify, with curated overrides. See [docs/BRAND_ICONS.md](docs/BRAND_ICONS.md).
 
 ### Animation
-- **@animate-ui/icons** - Interactive animated icons with hover and view triggers
-- **CSS Transitions** - Smooth theme transitions and UI state changes
-- **Tailwind Transitions** - Utility-based animation classes
+- **GSAP** (+ ScrollTrigger) - Scroll-driven and timeline animation (the scroll container is `<main>`, not `window`)
+- **lottie-react** - Footer logo animation and Lottie project blocks
+- **CSS / Tailwind transitions** - Theme switching and UI state changes
 
 ### Theme & Dark Mode
-- **next-themes** - Theme management with dark mode support
-- Theme toggle available in top-right corner
-
-### Forms & Validation
-- **React Hook Form** - Form management
-- **Zod** - Schema validation
-- **@hookform/resolvers** - Integration between React Hook Form and Zod
+- **next-themes** - System-aware dark mode with a manual toggle (top-right)
 
 ### Syntax Highlighting
 - **Shiki** - Server-side syntax highlighting using VS Code's engine
@@ -44,55 +37,49 @@ This is a personal portfolio website built with modern web technologies to showc
 
 ### Additional Libraries
 - **Sonner** - Toast notifications
-- **date-fns** - Date utilities
-- **cmdk** - Command menu
-- **embla-carousel-react** - Carousel component
-- **recharts** - Data visualization
+- **embla-carousel-react** - Carousels
+- **recharts** - Data visualisation (stats blocks)
+- **react-zoom-pan-pinch** - Zoomable images in project pages
 
 ### CMS (Content Management)
-- **Strapi 5.8.1** - Headless CMS located in `/cms` folder
-- **PostgreSQL** - Database (hosted on Supabase)
-- **Cloudinary** - Media storage and optimization
-- Portfolio projects, images, and content managed through Strapi admin panel
+- **Strapi 5** - Headless CMS in `/cms` (separate Node.js app, Node 22)
+- **PostgreSQL** - Database (Supabase)
+- **Cloudinary** - Media storage; browser-loaded media is proxied through `/media/*` on our own domain
+- Production and local CMS are fully isolated. See [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
 
 ## Project Structure
 
 ```
-├── app/                    # Next.js App Router pages
-│   ├── page.tsx           # Homepage (redirects to /about)
-│   ├── about/page.tsx     # About page (main landing)
-│   ├── portfolio/         # Portfolio pages
-│   │   ├── page.tsx       # Portfolio listing
-│   │   └── [slug]/page.tsx # Individual project pages
-│   ├── contact/page.tsx   # Contact page
-│   ├── layout.tsx         # Root layout with navigation
-│   ├── globals.css        # Global styles and Tailwind directives
-│   └── components/        # App-specific components
-│       └── ScrollBlurEffect.tsx
-├── components/            # Shared components
-│   ├── ui/               # shadcn/ui components (all .tsx files)
-│   ├── section.tsx       # Reusable section wrapper
-│   ├── logo-item.tsx     # Company/tool logo component
-│   ├── theme-provider.tsx
-│   └── mode-toggle.tsx
-├── lib/                   # Utilities and helpers
-│   ├── utils.tsx         # cn() utility for className merging
-│   ├── constants.ts      # Site-wide constants (companies, tools, author)
-│   ├── strapi.ts         # Strapi API connection utilities
-│   ├── strapi-queries.ts # Strapi data fetching functions
-│   └── strapi-blocks-renderer.tsx # Rich text rendering
-├── hooks/                 # Custom React hooks
-│   ├── use-mobile.ts
-│   └── use-scroll-visibility.ts  # Shared scroll-aware hide/show for fixed UI
-├── cms/                   # Strapi CMS (separate Node.js app)
-│   ├── config/           # Strapi configuration
-│   ├── src/              # Content types, controllers, services
-│   ├── public/uploads/   # Uploaded media (gitignored)
-│   ├── database/         # Database files (gitignored)
-│   └── .env             # CMS environment variables (gitignored)
-└── public/               # Static assets
-    └── logo.svg
-
+├── app/                       # Next.js App Router
+│   ├── page.tsx               # Homepage (hero, about, featured work, stack, companies, testimonials)
+│   ├── projects/page.tsx      # Projects listing (filterable by type)
+│   ├── project/[slug]/        # Case study pages
+│   ├── article/[slug]/        # Article pages
+│   ├── privacy/page.tsx       # Privacy notice
+│   ├── api/revalidate/        # Strapi → ISR revalidation webhook
+│   ├── layout.tsx             # Root layout
+│   ├── sitemap.ts / robots.ts
+│   └── globals.css            # Tailwind + theme tokens
+├── components/
+│   ├── ui/                    # shadcn/ui components + animated icons
+│   ├── layout/                # Navigation, footer, section, theme provider, mode toggle
+│   ├── home/                  # Homepage sections
+│   ├── project/               # Project cards, case study layout, content blocks
+│   ├── legacy/                # V1 comparison slider (still used by one project)
+│   ├── brand-icon.tsx         # Light/dark brand logo renderer
+│   └── logo-card.tsx          # Stack/company logo tile
+├── lib/
+│   ├── strapi.ts              # API client and media URL helpers
+│   ├── strapi-queries.ts      # Data fetching + content types
+│   ├── brand-icons.ts         # Brand logo resolution (+ brand-icons/overrides.ts)
+│   ├── metadata.ts            # SEO metadata and JSON-LD
+│   └── constants.ts           # Author, navigation, privacy date
+├── hooks/                     # use-scroll-visibility, use-hero-animation, use-media-query, use-sticky-trigger
+├── e2e/                       # Playwright tests (incl. privacy and brand-icon visibility checks)
+├── scripts/                   # cms-db-pull.mts, purge-cloudflare.mjs
+├── docs/                      # ENVIRONMENTS.md, BRAND_ICONS.md
+├── cms/                       # Strapi 5 app (config, content types, bootstrap guards)
+└── public/                    # Static assets (favicons, gy-logo)
 ```
 
 ## Key Features
@@ -100,12 +87,16 @@ This is a personal portfolio website built with modern web technologies to showc
 ### Navigation
 - Fixed navigation menu (bottom-center on mobile, top-left on desktop)
 - Labels visible on mobile as text-xs beneath icons in vertical layout
-- Links: About, Projects, Contact, LinkedIn, GitHub
-- Logo displayed top-center mobile (circular bg-background), bottom-right desktop (ThemedLogo component manages drawer visibility)
+- Links: About, Projects, CV and Email (both from Strapi), LinkedIn, GitHub
+- Footer logo (animated Lottie, bottom-right on desktop): opens a popover on desktop and a drawer on mobile, with copyright, tagline and the Privacy link
 - **Scroll-aware visibility**: All fixed UI elements (nav, mode toggle, logo, back button) hide while scrolling on mobile and reappear after 150ms idle. Uses shared `ScrollVisibilityProvider` context with a single scroll listener. Desktop unaffected.
 
+### Privacy
+- No cookies, analytics or third-party requests from the visitor's browser. `e2e/privacy.spec.ts` fails if any page contacts another domain.
+- Third-party iframes/embeds are not supported. Videos are Cloudinary uploads served via the `/media` proxy.
+
 ### Animations
-- Animated icons with hover and view-trigger effects using @animate-ui
+- Animated icons triggered on hover via ref handles
 - Smooth CSS transitions for theme switching and UI interactions
 - Loading states with skeleton components
 
@@ -209,11 +200,11 @@ This project is hosted on Netlify Free Tier with limited serverless function inv
 - Using `@netlify/plugin-nextjs` (do NOT enable Netlify Prerender Extension)
 
 ### Current Status
-- **Completed Pages**: All core pages complete - About, Portfolio (listing + detail pages), Contact, Contact Success
+- **Pages**: Homepage (about, featured work, stack, companies, testimonials), Projects listing, case study and article pages, Privacy
+- **Contact**: Email (`mailto:`) and CV links from Strapi. There is no contact form.
 - **CMS Integration**: Fully integrated with Strapi for all dynamic content
 - **Responsive Design**: Fully responsive across all breakpoints (mobile, tablet, desktop)
 - **Animations**: Interactive animated icons throughout, smooth CSS transitions
-- **Form Handling**: Contact form with validation, success page with animated confirmation
 
 ### Code Style
 - Use TypeScript exclusively (.tsx/.ts files) - no JavaScript files
@@ -348,15 +339,16 @@ The Strapi CMS includes the following content types:
 - **Projects** - Portfolio case studies with:
   - Rich text content sections (Challenge, Solution, Role, Impact, Takeaway)
   - Media gallery field supporting multiple images and videos
-  - Dynamic zone blocks: rich-text, image, video, carousel, comparison-slider (V1 legacy + V2), stats, code-block
-  - Hero image, thumbnail, tags, dates, client info
+  - Dynamic zone blocks: rich-text, image, video (Cloudinary uploads only), carousel, comparison-slider (V1 legacy + V2), stats, code-block, lottie
+  - Hero image, thumbnail, tags, dates, client info, tools, snapshot items
   - Type enum: `client`, `personal`, `article`
   - Slug for URL routing
-- **About** - About page content
-- **Contact Page** - Contact form configuration
+- **Project Tags** - Tags for projects
+- **About** - Homepage about content, stack heading, contact copy, CV URL, email
 - **Global SEO** - Site-wide SEO metadata
-- **Navigation** - Site navigation structure
-- **Tools** - Skills and technologies
+- **Tools** - Stack section and project tool badges (`iconSlug` / `iconSlugDark` for brand logos)
+- **Businesses** (+ Business Sectors, Business Tags) - Companies section
+- **Testimonials** - Testimonials section
 
 ## Quality Standards & Best Practices
 
@@ -483,7 +475,7 @@ npx lighthouse http://localhost:3000 --only-categories=performance --view
 2. **Test Pyramid**:
    - **Unit tests** (majority): Fast, isolated, focused
    - **Component tests**: Integration of component + children
-   - **E2E tests** (fewer): Critical paths only (homepage, nav, contact form)
+   - **E2E tests** (fewer): Critical paths only (homepage, navigation, privacy/no third-party requests, brand-icon visibility)
 3. **Coverage Requirements**:
    - Utilities: 100% coverage (small, pure functions)
    - Components: Test all props, variants, states
@@ -571,6 +563,6 @@ When implementing new features or fixing bugs:
 - Blocks wrap content in `<figure>` with `px-8 lg:px-0`
 
 ## Future Enhancements
-1. Implement contact form email backend (currently uses Sonner toast notifications)
-2. Add more portfolio projects through Strapi CMS
-3. Add page transitions between routes
+1. Add more portfolio projects through Strapi CMS
+2. Add page transitions between routes
+3. Migrate UI primitives from Radix UI to Base UI
