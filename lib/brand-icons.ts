@@ -1,5 +1,7 @@
 import { icons as thesvgColor } from "@iconify-json/thesvg-color";
+import type { IconifyIcon } from "@iconify/types";
 import { getIconData, iconToHTML, iconToSVG, replaceIDs } from "@iconify/utils";
+import { BRAND_ICON_OVERRIDES, type BrandIconOverride } from "./brand-icons/overrides";
 
 export interface BrandIcon {
   light: string;
@@ -11,11 +13,7 @@ export interface BrandIconSlugs {
   iconSlugDark?: string | null;
 }
 
-export function getBrandIconSVG(slug: string | null | undefined): string | null {
-  if (!slug) return null;
-  const data = getIconData(thesvgColor, slug.trim());
-  if (!data) return null;
-
+function toHTML(data: IconifyIcon) {
   const { attributes, body } = iconToSVG(data, { height: "auto" });
   return iconToHTML(replaceIDs(body), {
     ...attributes,
@@ -24,10 +22,27 @@ export function getBrandIconSVG(slug: string | null | undefined): string | null 
   });
 }
 
-export function getBrandIcon({ iconSlug, iconSlugDark }: BrandIconSlugs): BrandIcon | undefined {
-  const light = getBrandIconSVG(iconSlug);
+export function getBrandIconSVG(
+  slug: string | null | undefined,
+  overrides: Record<string, BrandIconOverride> = BRAND_ICON_OVERRIDES
+): string | null {
+  if (!slug) return null;
+  const key = slug.trim();
+  const override = overrides[key]?.light;
+  if (override) return toHTML(override);
+  const data = getIconData(thesvgColor, key);
+  return data ? toHTML(data) : null;
+}
+
+export function getBrandIcon(
+  { iconSlug, iconSlugDark }: BrandIconSlugs,
+  overrides: Record<string, BrandIconOverride> = BRAND_ICON_OVERRIDES
+): BrandIcon | undefined {
+  const light = getBrandIconSVG(iconSlug, overrides);
   if (!light) return undefined;
-  const dark = getBrandIconSVG(iconSlugDark);
+
+  const curatedDark = iconSlug ? overrides[iconSlug.trim()]?.dark : undefined;
+  const dark = curatedDark ? toHTML(curatedDark) : getBrandIconSVG(iconSlugDark, overrides);
   return dark ? { light, dark } : { light };
 }
 

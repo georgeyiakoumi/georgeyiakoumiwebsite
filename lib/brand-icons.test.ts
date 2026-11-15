@@ -82,3 +82,49 @@ describe('withBrandIcons', () => {
     expect(legacy).not.toHaveProperty('icon');
   });
 });
+
+describe('curated overrides', () => {
+  const square = (body: string) => ({ width: 24, height: 24, body });
+  const overrides = {
+    figma: { light: square('<path fill="currentColor" d="M0 0h24v24H0z"/>') },
+    'github-light': { dark: square('<path fill="#abcdef" d="M0 0h24v24H0z"/>') },
+  };
+
+  it('replaces the theSVG logo when a light override exists', () => {
+    expect(getBrandIconSVG('figma', overrides)).toContain('fill="currentColor"');
+    expect(getBrandIcon({ iconSlug: 'figma' }, overrides)).toEqual({ light: expect.stringContaining('currentColor') });
+  });
+
+  it('adds a curated dark variant while keeping the theSVG light logo', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light' }, overrides);
+    const withoutIds = (svg: string | null | undefined) => svg?.replace(/(id="|url\(#|href="#)[^")]+/g, '$1');
+    expect(withoutIds(icon?.light)).toBe(withoutIds(getBrandIconSVG('github-light', {})));
+    expect(icon?.dark).toContain('#abcdef');
+  });
+
+  it('prefers the curated dark variant over the CMS dark slug', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light', iconSlugDark: 'github-dark' }, overrides);
+    expect(icon?.dark).toContain('#abcdef');
+  });
+
+  it('falls back to theSVG for slugs without overrides', () => {
+    expect(getBrandIconSVG('react-light', overrides)).toBe(getBrandIconSVG('react-light', {}));
+  });
+});
+
+describe('shipped overrides', () => {
+  it('render and linear are monochrome so they follow the text colour in both modes', () => {
+    for (const slug of ['render', 'linear']) {
+      const svg = getBrandIconSVG(slug)!;
+      expect(svg).toContain('currentColor');
+      expect(svg).not.toMatch(/fill="#(?!fff)/i);
+    }
+  });
+
+  it('posthog gets a dark variant with a light hedgehog head', () => {
+    const icon = getBrandIcon({ iconSlug: 'posthog' })!;
+    expect(icon.light).toContain('fill="#111"');
+    expect(icon.dark).toContain('fill="#fff"');
+    expect(icon.dark).not.toContain('fill="#111"');
+  });
+});
