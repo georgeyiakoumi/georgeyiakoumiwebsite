@@ -26,6 +26,12 @@
         "audios"
       ]
     },
+    "iconSlug": {
+      "type": "string"
+    },
+    "iconSlugDark": {
+      "type": "string"
+    },
     "url": {
       "type": "string"
     },

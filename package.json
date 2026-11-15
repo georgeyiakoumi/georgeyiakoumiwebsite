@@ -31,6 +31,8 @@
   "dependencies": {
     "@gsap/react": "^2.1.2",
     "@hookform/resolvers": "^5.2.2",
+    "@iconify-json/thesvg-color": "1.2.27",
+    "@iconify/utils": "3.1.7",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-hover-card": "^1.1.15",
     "@radix-ui/react-label": "^2.1.7",

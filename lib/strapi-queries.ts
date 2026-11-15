@@ -1,4 +1,5 @@
 import { fetchAPI } from './strapi';
+import type { BrandIcon } from './brand-icons';
 
 interface StrapiRichTextBlock {
   id: number;
@@ -361,7 +362,11 @@ export async function getProjectBySlug(slug: string) {
       },
       tags: ['projects', `project-${slug}`],
     });
-    return data[0] || null;
+    const project = data[0];
+    if (!project) return null;
+    if (!project.tools) return project;
+    const { withBrandIcons } = await import('./brand-icons');
+    return { ...project, tools: withBrandIcons(project.tools) };
   } catch (error) {
     console.error(`Error fetching project with slug ${slug}:`, error);
     return null;
@@ -424,6 +429,9 @@ export interface ToolData {
   cssVariables?: Record<string, string> | null;
   cssVariablesDark?: Record<string, string> | null;
   classes?: string | null;
+  iconSlug?: string | null;
+  iconSlugDark?: string | null;
+  icon?: BrandIcon;
   image?: {
     id: number;
     documentId: string;
@@ -451,7 +459,8 @@ export async function getTools() {
       cache: 'force-cache',
       tags: ['tools'],
     });
-    return data;
+    const { withBrandIcons } = await import('./brand-icons');
+    return withBrandIcons(data);
   } catch (error) {
     console.error('Error fetching tools:', error);
     return [];
