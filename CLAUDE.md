@@ -165,17 +165,21 @@ npm run cms:dev
 # Build CMS (from project root)
 npm run cms:build
 
-# Start CMS in production mode (from project root)
-npm run cms:start
+# Copy production content into the local CMS (read-only against prod)
+npm run cms:db:pull
 
-# Or run directly from cms folder
-cd cms
-npm run develop  # Development mode with auto-reload
-npm run build    # Build admin panel
-npm run start    # Production mode
+# Run the website against the local CMS instead of production
+npm run dev:local-cms
 ```
 
 **Note**: The CMS runs on port 1337 by default. Access the admin panel at `http://localhost:1337/admin`
+
+### Environments (read before touching the CMS)
+**CRITICAL**: Production and local are fully separate. See [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
+- Always start the local CMS with `npm run cms:dev` (Node 22). Never run `strapi develop` or `strapi start` directly in `cms/`. There is no `cms/.env`, and production secrets never go in local files.
+- The local CMS sets `CMS_ENV=local`: its config refuses any non-localhost database and any Cloudinary credentials, so uploads stay on disk and can't affect production media.
+- Never write to production with direct SQL or `strapi transfer --to`. Use a temporary, scoped, expiring API token or the admin panel.
+- Strapi drops columns for removed fields on deploy. Rehearse schema changes against a local copy (`npm run cms:db:pull`) first.
 
 ## Important Notes
 

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "rm -rf .next && next dev",
+    "dev:local-cms": "rm -rf .next && set -a && . ./.env.local-cms && set +a && next dev",
     "dev:network": "rm -rf .next && next dev -H 0.0.0.0",
     "build": "next build",
     "start": "next start",
@@ -21,6 +22,7 @@
     "build-storybook": "storybook build",
     "test:strapi": "node scripts/test-strapi.mjs",
     "cms:dev": "cd cms && npm run develop",
+    "cms:db:pull": "node --experimental-strip-types --no-warnings=ExperimentalWarning scripts/cms-db-pull.mts",
     "cms:build": "cd cms && npm run build",
     "cms:start": "cd cms && npm run start",
     "purge:cloudflare": "node scripts/purge-cloudflare.mjs",
