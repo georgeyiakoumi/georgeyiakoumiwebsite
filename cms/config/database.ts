@@ -1,12 +1,15 @@
-import path from 'path';
 import { assertLocalDatabase } from '../src/utils/local-environment';
 
 export default ({ env }) => {
   assertLocalDatabase(process.env);
-  const client = env('DATABASE_CLIENT', 'sqlite');
+  const client = env('DATABASE_CLIENT', 'postgres');
+  if (client !== 'postgres') {
+    throw new Error(`Unsupported DATABASE_CLIENT "${client}". This CMS only runs on Postgres.`);
+  }
 
-  const connections = {
-    postgres: {
+  return {
+    connection: {
+      client,
       connection: {
         connectionString: env('DATABASE_URL'),
         host: env('DATABASE_HOST'),
@@ -17,19 +20,6 @@ export default ({ env }) => {
         ssl: env.bool('DATABASE_SSL', false) ? { rejectUnauthorized: false } : false,
       },
       pool: { min: 2, max: 10 },
-    },
-    sqlite: {
-      connection: {
-        filename: path.join(__dirname, '..', '..', env('DATABASE_FILENAME', '.tmp/data.db')),
-      },
-      useNullAsDefault: true,
-    },
-  };
-
-  return {
-    connection: {
-      client,
-      ...connections[client],
       acquireConnectionTimeout: env.int('DATABASE_CONNECTION_TIMEOUT', 60000),
     },
   };
