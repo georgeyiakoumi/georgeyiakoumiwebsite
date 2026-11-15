@@ -3,6 +3,7 @@
 import { useTheme } from "next-themes";
 import { Item, ItemMedia } from "@/components/ui/item";
 import { getStrapiMediaURL } from "@/lib/strapi";
+import { cn } from "@/lib/utils";
 import { Badge } from "@/components/ui/badge";
 import { ResponsiveTooltip } from "@/components/ui/responsive-tooltip";
 import { BrandIcon } from "@/components/brand-icon";
@@ -79,7 +80,10 @@ export function LogoCard({ data }: LogoCardProps) {
   const logoItem = (
     <Item
       variant="default"
-      className="size-full justify-center xl:opacity-80 xl:hover:opacity-100 xl:transition-[colors,opacity] xl:lg:hover:border-primary/50"
+      className={cn(
+        "size-full justify-center xl:opacity-80 xl:hover:opacity-100 xl:transition-[colors,opacity] xl:lg:hover:border-primary/50",
+        data.icon && "aspect-square"
+      )}
       role="img"
       aria-label={`Logo for ${data.name}`}
       style={cssVariables}
