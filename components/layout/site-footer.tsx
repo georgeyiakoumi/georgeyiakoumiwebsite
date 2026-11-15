@@ -27,7 +27,7 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
-const FOOTER_TAGLINE = "Product designer & design engineer. Designed and built with Next.js, shadcn/ui, and Strapi.";
+const FOOTER_TAGLINE = "Product designer & design engineer. Designed and built with Next.js, Radix UI, and Strapi.";
 
 function PrivacyLink({ onNavigate, className }: { onNavigate: () => void; className?: string }) {
   return (
