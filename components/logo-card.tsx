@@ -61,13 +61,13 @@ export function LogoCard({ data }: LogoCardProps) {
 
   if (!data.icon && !imageUrl) return null;
 
-  const cssVariables = {
+  const cssVariables = data.icon ? undefined : {
     ...(data.cssVariables || {}),
     ...(mounted && resolvedTheme === 'dark' && data.cssVariablesDark ? data.cssVariablesDark : {}),
   } as React.CSSProperties;
 
   const logoMedia = data.icon ? (
-    <ItemMedia className={`w-full h-full ${data.classes || ""}`}>
+    <ItemMedia className="w-full h-full">
       <BrandIcon icon={data.icon} className="size-full" />
     </ItemMedia>
   ) : (

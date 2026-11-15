@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { getBrandIcon, getBrandIconSVG, withBrandIcons } from './brand-icons';
+import { getBrandIcon, getBrandIconSVG, recolor, withBrandIcons } from './brand-icons';
 
 describe('getBrandIconSVG', () => {
   it('returns null for empty or unknown slugs', () => {
@@ -80,5 +80,85 @@ describe('withBrandIcons', () => {
     expect(figma.icon?.light).toMatch(/^<svg /);
     expect(legacy).toBe(items[1]);
     expect(legacy).not.toHaveProperty('icon');
+  });
+});
+
+describe('curated overrides', () => {
+  const square = (body: string) => ({ width: 24, height: 24, body });
+  const overrides = {
+    figma: { light: square('<path fill="currentColor" d="M0 0h24v24H0z"/>') },
+    'github-light': { dark: square('<path fill="#abcdef" d="M0 0h24v24H0z"/>') },
+  };
+
+  it('replaces the theSVG logo when a light override exists', () => {
+    expect(getBrandIconSVG('figma', overrides)).toContain('fill="currentColor"');
+    expect(getBrandIcon({ iconSlug: 'figma' }, overrides)).toEqual({ light: expect.stringContaining('currentColor') });
+  });
+
+  it('adds a curated dark variant while keeping the theSVG light logo', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light' }, overrides);
+    const withoutIds = (svg: string | null | undefined) => svg?.replace(/(id="|url\(#|href="#)[^")]+/g, '$1');
+    expect(withoutIds(icon?.light)).toBe(withoutIds(getBrandIconSVG('github-light', {})));
+    expect(icon?.dark).toContain('#abcdef');
+  });
+
+  it('prefers the curated dark variant over the CMS dark slug', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light', iconSlugDark: 'github-dark' }, overrides);
+    expect(icon?.dark).toContain('#abcdef');
+  });
+
+  it('falls back to theSVG for slugs without overrides', () => {
+    expect(getBrandIconSVG('react-light', overrides)).toBe(getBrandIconSVG('react-light', {}));
+  });
+});
+
+describe('override precedence', () => {
+  const mono = { width: 24, height: 24, body: '<path fill="currentColor" d="M0 0h24v24H0z"/>' };
+
+  it('a curated light (monochrome) logo is used in both modes, ignoring the CMS dark slug', () => {
+    const icon = getBrandIcon({ iconSlug: 'github-light', iconSlugDark: 'github-dark' }, { 'github-light': { light: mono } });
+    expect(icon?.light).toContain('currentColor');
+    expect(icon).not.toHaveProperty('dark');
+  });
+
+  it('recolor and darkRecolor apply to the pinned theSVG artwork', () => {
+    const icon = getBrandIcon({ iconSlug: 'figma' }, { figma: { darkRecolor: { '#0acf83': '#000000' } } })!;
+    expect(icon.light.toLowerCase()).toContain('#0acf83');
+    expect(icon.dark).toContain('#000000');
+  });
+
+  it('recolor fails loudly when the colour to replace is missing (artwork changed)', () => {
+    expect(() => recolor({ width: 24, height: 24, body: '<path fill="#123456"/>' }, { '#abcdef': '#000' }, 'x')).toThrow(
+      /colour #abcdef not found/
+    );
+  });
+
+  it('every shipped override resolves without throwing', () => {
+    for (const slug of ['render', 'linear', 'pro-tools', 'posthog']) {
+      expect(getBrandIcon({ iconSlug: slug })?.light).toMatch(/^<svg /);
+    }
+  });
+});
+
+describe('shipped overrides', () => {
+  it('render and linear are monochrome so they follow the text colour in both modes', () => {
+    for (const slug of ['render', 'linear']) {
+      const svg = getBrandIconSVG(slug)!;
+      expect(svg).toContain('currentColor');
+      expect(svg).not.toMatch(/fill="#(?!fff)/i);
+    }
+  });
+
+  it('pro-tools uses the 2019 purple instead of the old green', () => {
+    const svg = getBrandIconSVG('pro-tools')!;
+    expect(svg).toContain('#7826E7');
+    expect(svg.toLowerCase()).not.toContain('#7acb10');
+  });
+
+  it('posthog gets a dark variant with a light hedgehog head', () => {
+    const icon = getBrandIcon({ iconSlug: 'posthog' })!;
+    expect(icon.light).toContain('fill="#111"');
+    expect(icon.dark).toContain('fill="#fff"');
+    expect(icon.dark).not.toContain('fill="#111"');
   });
 });
