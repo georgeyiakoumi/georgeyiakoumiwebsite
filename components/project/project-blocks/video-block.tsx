@@ -1,22 +1,10 @@
 "use client";
 
 import { useRef, useEffect } from "react";
-import { getStrapiMediaURL } from "@/lib/strapi";
+import { getBrowserMediaURL } from "@/lib/strapi";
 import { BlockFigure } from "./blocks/block-figure";
 import { BlockCaption } from "./blocks/block-caption";
 import type { VideoBlock as VideoBlockType } from "@/lib/strapi-queries";
-
-function toEmbedUrl(url: string): string {
-  // YouTube: watch?v=ID → embed/ID
-  const ytMatch = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([\w-]+)/);
-  if (ytMatch) return `https://www.youtube.com/embed/${ytMatch[1]}`;
-
-  // Vimeo: vimeo.com/ID → player.vimeo.com/video/ID
-  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/);
-  if (vimeoMatch) return `https://player.vimeo.com/video/${vimeoMatch[1]}`;
-
-  return url;
-}
 
 interface VideoBlockProps {
   block: VideoBlockType;
@@ -52,29 +40,9 @@ export function VideoBlock({ block }: VideoBlockProps) {
     };
   }, [block.file]);
 
-  // Embedded URL (YouTube/Vimeo)
-  if (block.url) {
-    return (
-      <BlockFigure>
-        <div className="relative w-full aspect-video rounded-lg overflow-hidden lg:border-border lg:border">
-          <iframe
-            src={toEmbedUrl(block.url)}
-            title="Project video"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-            allowFullScreen
-            className="absolute inset-0 w-full h-full"
-          />
-        </div>
-        {block.caption && (
-          <BlockCaption>{block.caption}</BlockCaption>
-        )}
-      </BlockFigure>
-    );
-  }
-
   // Self-hosted video file
   if (block.file) {
-    const videoUrl = getStrapiMediaURL(block.file.url);
+    const videoUrl = getBrowserMediaURL(block.file.url);
 
     return (
       <BlockFigure>

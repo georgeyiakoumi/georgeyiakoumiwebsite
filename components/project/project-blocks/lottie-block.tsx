@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Lottie from "lottie-react";
-import { getStrapiMediaURL } from "@/lib/strapi";
+import { getBrowserMediaURL } from "@/lib/strapi";
 import { BlockFigure } from "./blocks/block-figure";
 import { BlockCaption } from "./blocks/block-caption";
 import type { LottieBlock as LottieBlockType } from "@/lib/strapi-queries";
@@ -17,7 +17,7 @@ export function LottieBlock({ block }: LottieBlockProps) {
   useEffect(() => {
     if (!block.file) return;
 
-    const url = getStrapiMediaURL(block.file.url);
+    const url = getBrowserMediaURL(block.file.url);
     if (!url) return;
 
     const controller = new AbortController();

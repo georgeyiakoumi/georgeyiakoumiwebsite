@@ -68,7 +68,6 @@ export interface CarouselBlock {
 export interface VideoBlock {
   __component: 'project-blocks.video';
   id: number;
-  url?: string;
   file?: {
     id: number;
     url: string;
@@ -143,13 +142,6 @@ export interface CodeBlockType {
   caption?: string;
 }
 
-export interface FigmaEmbedBlock {
-  __component: 'project-blocks.figma-embed';
-  id: number;
-  url: string;
-  caption?: string;
-}
-
 export interface LottieBlock {
   __component: 'project-blocks.lottie';
   id: number;
@@ -198,8 +190,7 @@ export type ProjectBlock =
   | ComparisonSliderBlock
   | StatsBlock
   | CodeBlockType
-  | LottieBlock
-  | FigmaEmbedBlock;
+  | LottieBlock;
 
 export interface ProjectData {
   id: number;
@@ -402,7 +393,6 @@ export interface GlobalSEOData {
     height?: number;
   };
   twitterCard?: 'summary' | 'summary_large_image';
-  gtagId?: string;
 }
 
 export async function getGlobalSEO() {

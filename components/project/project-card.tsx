@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { ChevronRightIcon, type ChevronRightIconHandle } from "@/components/ui/chevron-right";
 import { Carousel, CarouselContent, CarouselItem, CarouselNavigation } from "@/components/ui/carousel";
 import { cn, getEntryPath } from "@/lib/utils";
+import { getStrapiMediaURL } from "@/lib/strapi";
 import type { ProjectData } from "@/lib/strapi-queries";
 
 // --- Context ---
@@ -214,7 +215,7 @@ interface ProjectCardProps {
 }
 
 function ProjectCard({ project, variant = "thumb", className, showActions = true }: ProjectCardProps) {
-  const thumbSrc = project.project_thumb?.url;
+  const thumbSrc = getStrapiMediaURL(project.project_thumb?.url) ?? undefined;
   const thumbAlt = project.project_thumb?.alternativeText || project.title;
   const chevronRef = React.useRef<ChevronRightIconHandle>(null);
   const isList = variant === "list";

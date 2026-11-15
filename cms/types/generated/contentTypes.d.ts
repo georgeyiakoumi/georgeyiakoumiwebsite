@@ -598,7 +598,6 @@ export interface ApiGlobalSeoGlobalSeo extends Struct.SingleTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     githubUrl: Schema.Attribute.String;
-    gtagId: Schema.Attribute.String;
     keywords: Schema.Attribute.Text;
     linkedinUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

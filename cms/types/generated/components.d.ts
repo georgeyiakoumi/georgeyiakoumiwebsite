@@ -43,6 +43,18 @@ export interface CvLanguages extends Struct.ComponentSchema {
   };
 }
 
+export interface ProjectBlocksBadgeValue extends Struct.ComponentSchema {
+  collectionName: 'components_project_blocks_badge_values';
+  info: {
+    description: 'A list of badge items for a snapshot item';
+    displayName: 'badge-value';
+  };
+  attributes: {
+    badges: Schema.Attribute.Component<'project-blocks.team-member', true> &
+      Schema.Attribute.Required;
+  };
+}
+
 export interface ProjectBlocksCarousel extends Struct.ComponentSchema {
   collectionName: 'components_project_blocks_carousels';
   info: {
@@ -168,12 +180,17 @@ export interface ProjectBlocksSnapshotItem extends Struct.ComponentSchema {
     displayName: 'snapshot-item';
   };
   attributes: {
+    content: Schema.Attribute.DynamicZone<
+      ['project-blocks.string-value', 'project-blocks.badge-value']
+    > &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1;
+          min: 1;
+        },
+        number
+      >;
     label: Schema.Attribute.String & Schema.Attribute.Required;
-    members: Schema.Attribute.Component<'project-blocks.team-member', true>;
-    value: Schema.Attribute.String;
-    valueType: Schema.Attribute.Enumeration<['string', 'badges']> &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'string'>;
   };
 }
 
@@ -206,10 +223,10 @@ export interface ProjectBlocksStats extends Struct.ComponentSchema {
       ['default', 'horizontal', 'multiple', 'stacked', 'negative']
     > &
       Schema.Attribute.DefaultTo<'default'>;
+    caption: Schema.Attribute.Text;
     chart_type: Schema.Attribute.Enumeration<
       ['area', 'bar', 'line', 'pie', 'radar', 'radial', 'number-only']
     >;
-    caption: Schema.Attribute.Text;
     items: Schema.Attribute.Component<'project-blocks.stat-item', true>;
     line_variant: Schema.Attribute.Enumeration<
       ['default', 'linear', 'step', 'multiple', 'dots']
@@ -235,6 +252,17 @@ export interface ProjectBlocksStats extends Struct.ComponentSchema {
   };
 }
 
+export interface ProjectBlocksStringValue extends Struct.ComponentSchema {
+  collectionName: 'components_project_blocks_string_values';
+  info: {
+    description: 'A plain text value for a snapshot item';
+    displayName: 'string-value';
+  };
+  attributes: {
+    text: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface ProjectBlocksTeamMember extends Struct.ComponentSchema {
   collectionName: 'components_project_blocks_team_members';
   info: {
@@ -255,7 +283,6 @@ export interface ProjectBlocksVideo extends Struct.ComponentSchema {
   attributes: {
     caption: Schema.Attribute.Text;
     file: Schema.Attribute.Media<'files' | 'videos'>;
-    url: Schema.Attribute.String;
   };
 }
 
@@ -265,6 +292,7 @@ declare module '@strapi/strapi' {
       'about.business': AboutBusiness;
       'cv.chapter': CvChapter;
       'cv.languages': CvLanguages;
+      'project-blocks.badge-value': ProjectBlocksBadgeValue;
       'project-blocks.carousel': ProjectBlocksCarousel;
       'project-blocks.code-block': ProjectBlocksCodeBlock;
       'project-blocks.comparison-slider': ProjectBlocksComparisonSlider;
@@ -275,6 +303,7 @@ declare module '@strapi/strapi' {
       'project-blocks.snapshot-item': ProjectBlocksSnapshotItem;
       'project-blocks.stat-item': ProjectBlocksStatItem;
       'project-blocks.stats': ProjectBlocksStats;
+      'project-blocks.string-value': ProjectBlocksStringValue;
       'project-blocks.team-member': ProjectBlocksTeamMember;
       'project-blocks.video': ProjectBlocksVideo;
     }

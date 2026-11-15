@@ -48,7 +48,7 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
             />
           ) : (
             <Image
-              src={tool.image.url}
+              src={imageUrl || ''}
               alt={tool.image.alternativeText || tool.name}
               width={16}
               height={16}
@@ -75,7 +75,7 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
         />
       ) : (
         <Image
-          src={tool.image.url}
+          src={imageUrl || ''}
           alt={tool.image.alternativeText || tool.name}
           width={64}
           height={64}

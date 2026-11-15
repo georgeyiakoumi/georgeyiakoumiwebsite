@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { fetchAPI, getStrapiMediaURL, getStrapiURL } from './strapi';
+import { fetchAPI, getBrowserMediaURL, getStrapiMediaURL, getStrapiURL, toProxiedMediaURL } from './strapi';
 
 describe('getStrapiMediaURL', () => {
   it('returns null for null input', () => {
@@ -10,21 +10,83 @@ describe('getStrapiMediaURL', () => {
     expect(getStrapiMediaURL(undefined)).toBeNull();
   });
 
-  it('returns SVG URLs unchanged', () => {
-    const url = 'https://res.cloudinary.com/test/upload/v1/logo.svg';
+  it('proxies own-account Cloudinary SVGs through the site domain', () => {
+    const url = 'https://res.cloudinary.com/georgeyiakoumi/image/upload/v1/logo.svg';
+    expect(getStrapiMediaURL(url)).toBe('/media/image/upload/v1/logo.svg');
+  });
+
+  it('proxies SVGs with a query string', () => {
+    const url = 'https://res.cloudinary.com/georgeyiakoumi/image/upload/v1/logo.svg?v=2';
+    expect(getStrapiMediaURL(url)).toBe('/media/image/upload/v1/logo.svg?v=2');
+  });
+
+  it('leaves SVGs from other origins unchanged', () => {
+    const url = 'https://res.cloudinary.com/someone-else/image/upload/v1/logo.svg';
     expect(getStrapiMediaURL(url)).toBe(url);
   });
 
-  it('adds f_auto,q_auto to Cloudinary raster URLs', () => {
-    const url = 'https://res.cloudinary.com/test/upload/v1/photo.jpg';
+  it('adds f_auto,q_auto to Cloudinary raster URLs and keeps them absolute', () => {
+    const url = 'https://res.cloudinary.com/georgeyiakoumi/image/upload/v1/photo.jpg';
     expect(getStrapiMediaURL(url)).toBe(
-      'https://res.cloudinary.com/test/upload/f_auto,q_auto/v1/photo.jpg'
+      'https://res.cloudinary.com/georgeyiakoumi/image/upload/f_auto,q_auto/v1/photo.jpg'
     );
   });
 
   it('prepends Strapi URL for relative paths', () => {
     const url = '/uploads/image.png';
     expect(getStrapiMediaURL(url)).toBe(`${getStrapiURL()}/uploads/image.png`);
+  });
+});
+
+describe('toProxiedMediaURL', () => {
+  it('returns null for empty input', () => {
+    expect(toProxiedMediaURL(null)).toBeNull();
+    expect(toProxiedMediaURL(undefined)).toBeNull();
+    expect(toProxiedMediaURL('')).toBeNull();
+  });
+
+  it('rewrites own-account Cloudinary URLs to the /media proxy', () => {
+    expect(
+      toProxiedMediaURL('https://res.cloudinary.com/georgeyiakoumi/video/upload/v1/clip.mp4')
+    ).toBe('/media/video/upload/v1/clip.mp4');
+  });
+
+  it('leaves other URLs unchanged', () => {
+    const other = 'https://res.cloudinary.com/someone-else/video/upload/v1/clip.mp4';
+    expect(toProxiedMediaURL(other)).toBe(other);
+    expect(toProxiedMediaURL('/uploads/a.png')).toBe('/uploads/a.png');
+  });
+});
+
+describe('getBrowserMediaURL', () => {
+  it('returns null for empty input', () => {
+    expect(getBrowserMediaURL(null)).toBeNull();
+  });
+
+  it('proxies videos without format negotiation, so shared caches serve one format to every browser', () => {
+    const url = getBrowserMediaURL('https://res.cloudinary.com/georgeyiakoumi/video/upload/v1/clip.mp4');
+    expect(url).toBe('/media/video/upload/q_auto/v1/clip.mp4');
+    expect(url).not.toContain('f_auto');
+  });
+
+  it('proxies raster images with q_auto only', () => {
+    expect(getBrowserMediaURL('https://res.cloudinary.com/georgeyiakoumi/image/upload/v1/shot.jpg')).toBe(
+      '/media/image/upload/q_auto/v1/shot.jpg'
+    );
+  });
+
+  it('proxies SVGs and raw files (Lottie JSON) untouched', () => {
+    expect(getBrowserMediaURL('https://res.cloudinary.com/georgeyiakoumi/image/upload/v1/logo.svg')).toBe(
+      '/media/image/upload/v1/logo.svg'
+    );
+    expect(getBrowserMediaURL('https://res.cloudinary.com/georgeyiakoumi/raw/upload/v1/anim.json')).toBe(
+      '/media/raw/upload/v1/anim.json'
+    );
+  });
+
+  it('leaves non-Cloudinary and relative URLs to the usual handling', () => {
+    expect(getBrowserMediaURL('https://example.com/a.mp4')).toBe('https://example.com/a.mp4');
+    expect(getBrowserMediaURL('/uploads/a.png')).toBe(`${getStrapiURL()}/uploads/a.png`);
   });
 });
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import Link from "next/link";
 import { useTheme } from "next-themes";
 import { AUTHOR } from "@/lib/constants";
 import { cn } from "@/lib/utils";
@@ -10,11 +11,13 @@ import gyLogo from "@/public/gy-logo.json";
 
 const Lottie = dynamic(() => import("lottie-react"), { ssr: false });
 import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+  Popover,
+  PopoverContent,
+  PopoverDescription,
+  PopoverHeader,
+  PopoverTitle,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import {
   Drawer,
   DrawerContent,
@@ -24,9 +27,24 @@ import {
   DrawerTrigger,
 } from "@/components/ui/drawer";
 
+const FOOTER_TAGLINE = "Product designer & design engineer. Designed and built with Next.js, shadcn/ui, and Strapi.";
+
+function PrivacyLink({ onNavigate, className }: { onNavigate: () => void; className?: string }) {
+  return (
+    <Link
+      href="/privacy"
+      onClick={onNavigate}
+      className={cn("inline-flex min-h-12 items-center text-sm text-muted-foreground underline underline-offset-4 transition-colors duration-150 ease-out xl:min-h-0 xl:hover:text-foreground", className)}
+    >
+      Privacy
+    </Link>
+  );
+}
+
 export function SiteFooter({ className }: { className?: string }) {
   const currentYear = new Date().getFullYear();
   const [open, setOpen] = useState(false);
+  const [popoverOpen, setPopoverOpen] = useState(false);
   const { resolvedTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const lottieRef = useRef<LottieRefCurrentProps>(null);
@@ -37,7 +55,7 @@ export function SiteFooter({ className }: { className?: string }) {
     lottieRef.current?.goToAndPlay(0);
   }, []);
 
-  const LogoLottie = () => (
+  const logoLottie = (
     <div
       className="size-12 lg:size-14"
       style={{
@@ -61,36 +79,35 @@ export function SiteFooter({ className }: { className?: string }) {
         <Drawer open={open} onOpenChange={setOpen}>
           <DrawerTrigger asChild>
             <button aria-label="Open footer information" className="size-12 flex items-center justify-center lg:size-auto" onMouseEnter={handleMouseEnter}>
-              <LogoLottie />
+              {logoLottie}
             </button>
           </DrawerTrigger>
           <DrawerContent>
             <DrawerHeader className="gap-3 py-8">
               <DrawerTitle>© {currentYear} {AUTHOR.fullName}</DrawerTitle>
-              <DrawerDescription>
-                Product designer & design engineer.
-                Designed and built with Next.js, shadcn/ui, and Strapi
-              </DrawerDescription>
+              <DrawerDescription>{FOOTER_TAGLINE}</DrawerDescription>
+              <PrivacyLink onNavigate={() => setOpen(false)} className="self-center md:self-start" />
             </DrawerHeader>
           </DrawerContent>
         </Drawer>
       </div>
 
-      {/* Desktop: Tooltip */}
+      {/* Desktop: Popover */}
       <div className="hidden xl:block">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <button className="cursor-default" aria-label="Footer information" onMouseEnter={handleMouseEnter}>
-                <LogoLottie />
-              </button>
-            </TooltipTrigger>
-            <TooltipContent side="left">
-              <p>© {currentYear} {AUTHOR.fullName}</p>
-              <p className="text-xs opacity-80 mt-1">Product designer & design engineer.<br />Designed and built with Next.js, shadcn/ui, and Strapi.</p>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
+        <Popover open={popoverOpen} onOpenChange={setPopoverOpen}>
+          <PopoverTrigger asChild>
+            <button aria-label="Footer information" onMouseEnter={handleMouseEnter}>
+              {logoLottie}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent side="left" align="end" className="flex flex-col gap-2">
+            <PopoverHeader>
+              <PopoverTitle>© {currentYear} {AUTHOR.fullName}</PopoverTitle>
+              <PopoverDescription>{FOOTER_TAGLINE}</PopoverDescription>
+            </PopoverHeader>
+            <PrivacyLink onNavigate={() => setPopoverOpen(false)} className="self-start" />
+          </PopoverContent>
+        </Popover>
       </div>
     </footer>
   );

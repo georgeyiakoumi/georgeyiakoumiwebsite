@@ -2,7 +2,6 @@ import { Outfit } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/layout/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { GoogleAnalytics } from '@/components/google-analytics';
 import { generateSiteMetadata } from "@/lib/metadata";
 import { SEOScripts } from "@/components/seo-scripts";
 import { ConditionalLayout } from "@/components/layout/conditional-layout";
@@ -23,14 +22,11 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const gaId = process.env.NEXT_PUBLIC_GA_MEASUREMENT_ID;
   const aboutData = await getAboutPage();
 
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="preconnect" href="https://res.cloudinary.com" />
-        <link rel="dns-prefetch" href="https://res.cloudinary.com" />
 <SEOScripts />
       </head>
       <body className={font.className}>
@@ -41,7 +37,6 @@ export default async function RootLayout({
 
           <Toaster />
         </ThemeProvider>
-        {gaId && <GoogleAnalytics gaId={gaId} />}
       </body>
     </html>
   );
