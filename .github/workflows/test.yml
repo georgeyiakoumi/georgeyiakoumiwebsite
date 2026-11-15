@@ -81,7 +81,7 @@ jobs:
   e2e-tests:
     name: E2E Tests
     needs: changes
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
 
     steps:
