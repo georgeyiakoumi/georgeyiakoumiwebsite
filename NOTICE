@@ -1,0 +1,137 @@
+NOTICE
+
+George Yiakoumi — portfolio website
+https://georgeyiakoumi.com
+
+Except where noted below, the code and content in this repository are
+Copyright (c) 2025-2026 George Yiakoumi. All rights reserved.
+
+This project is built on open-source software. Thank you to everyone who
+maintains it. The notices below credit third-party work used by this project
+and satisfy the attribution requirements of their licences.
+
+
+1. Source code copied into this repository
+------------------------------------------
+
+shadcn/ui — https://ui.shadcn.com
+  Components in components/ui/ are based on shadcn/ui.
+  Copyright (c) 2023 shadcn. Licensed under the MIT License (see section 6).
+
+lucide-animated — https://lucide-animated.com
+  Animated icon components in components/ui/ (e.g. at-sign.tsx,
+  chevron-right.tsx) come from the lucide-animated registry.
+  Copyright (c) 2024-2026 pqoqubbw. Licensed under the MIT License (see section 6).
+
+
+2. Brand logos and trademarks
+-----------------------------
+
+Tool logos in the stack section are provided by theSVG
+(https://thesvg.org, via @iconify-json/thesvg-color, MIT License), with a few
+curated adjustments in lib/brand-icons/overrides.ts.
+
+All product names, logos and brands are the property of their respective
+owners. They are shown only to indicate tools and technologies used. Their use
+does not imply any affiliation with or endorsement by those owners.
+
+Pro Tools: the logo colour (#7826E7) is taken from "PT2019.svg" by Avid
+Technology, via Wikimedia Commons
+(https://commons.wikimedia.org/wiki/File:PT2019.svg), licensed under
+CC BY 4.0 (https://creativecommons.org/licenses/by/4.0/). Change: theSVG's
+Pro Tools mark is recoloured to match.
+
+
+3. Fonts
+--------
+
+Outfit — https://fonts.google.com/specimen/Outfit
+  Licensed under the SIL Open Font License 1.1 (https://openfontlicense.org).
+  Self-hosted via next/font.
+
+
+4. Website dependencies
+-----------------------
+
+- @gsap/react (GreenSock Standard "No Charge" License) — https://github.com/greensock/react
+- @iconify-json/thesvg-color (MIT) — https://icon-sets.iconify.design/thesvg-color/
+- @iconify/utils (MIT) — https://github.com/iconify/iconify
+- @radix-ui/react-dialog (MIT) — https://github.com/radix-ui/primitives
+- @radix-ui/react-hover-card (MIT) — https://github.com/radix-ui/primitives
+- @radix-ui/react-navigation-menu (MIT) — https://github.com/radix-ui/primitives
+- @radix-ui/react-slot (MIT) — https://github.com/radix-ui/primitives
+- @radix-ui/react-tooltip (MIT) — https://github.com/radix-ui/primitives
+- @tailwindcss/postcss (MIT) — https://github.com/tailwindlabs/tailwindcss
+- @tailwindcss/typography (MIT) — https://github.com/tailwindlabs/tailwindcss-typography
+- class-variance-authority (Apache-2.0) — https://github.com/joe-bell/cva
+- clsx (MIT) — https://github.com/lukeed/clsx
+- embla-carousel-fade (MIT) — https://github.com/davidjerleke/embla-carousel
+- embla-carousel-react (MIT) — https://github.com/davidjerleke/embla-carousel
+- gsap (GreenSock Standard "No Charge" License) — https://github.com/greensock/GSAP
+- lottie-react (MIT) — https://github.com/Gamote/lottie-react
+- lucide-react (ISC) — https://github.com/lucide-icons/lucide
+- motion (MIT) — https://github.com/motiondivision/motion
+- next (MIT) — https://github.com/vercel/next.js
+- next-themes (MIT) — https://github.com/pacocoursey/next-themes
+- postcss (MIT) — https://github.com/postcss/postcss
+- radix-ui (MIT) — https://github.com/radix-ui/primitives
+- react (MIT) — https://github.com/facebook/react
+- react-dom (MIT) — https://github.com/facebook/react
+- react-zoom-pan-pinch (MIT) — https://github.com/prc5/react-zoom-pan-pinch
+- recharts (MIT) — https://github.com/recharts/recharts
+- shiki (MIT) — https://github.com/shikijs/shiki
+- sonner (MIT) — https://github.com/emilkowalski/sonner
+- tailwind-merge (MIT) — https://github.com/dcastil/tailwind-merge
+- tailwindcss (MIT) — https://github.com/tailwindlabs/tailwindcss
+- vaul (MIT) — https://github.com/emilkowalski/vaul
+
+
+5. CMS dependencies (cms/)
+--------------------------
+
+- @cloudinary/react (MIT) — https://github.com/cloudinary/frontend-frameworks
+- @cloudinary/url-gen (MIT) — https://github.com/cloudinary/js-url-gen
+- @strapi/plugin-cloud (MIT) — https://github.com/strapi/strapi
+- @strapi/plugin-users-permissions (MIT, Community Edition) — https://github.com/strapi/strapi
+- @strapi/provider-upload-cloudinary (MIT, Community Edition) — https://github.com/strapi/strapi
+- @strapi/strapi (MIT, Community Edition) — https://github.com/strapi/strapi
+- better-sqlite3 (MIT) — https://github.com/WiseLibs/better-sqlite3
+- cloudinary (MIT) — https://github.com/cloudinary/cloudinary_npm
+- pg (MIT) — https://github.com/brianc/node-postgres
+- react (MIT) — https://github.com/facebook/react
+- react-dom (MIT) — https://github.com/facebook/react
+- react-router-dom (MIT) — https://github.com/remix-run/react-router
+- strapi-plugin-tagsinput (MIT) — https://github.com/canopas/strapi-plugin-tagsinput
+- styled-components (MIT) — https://github.com/styled-components/styled-components
+
+Strapi: the Community Edition used here is MIT licensed. Enterprise Edition
+code (under "ee/" directories) has a separate licence and is not used.
+
+Development tooling (not shipped to visitors) includes TypeScript, ESLint,
+Vitest, Playwright, Testing Library, Storybook and the shadcn CLI, each under
+its own open-source licence.
+
+Each package's full licence is included in its distribution under
+node_modules/<package>/.
+
+
+6. MIT License (applies to the MIT-licensed works credited above)
+-----------------------------------------------------------------
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.

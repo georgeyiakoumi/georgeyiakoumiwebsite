@@ -17,62 +17,30 @@ A modern, full-stack portfolio website showcasing design and development work. B
 - **Type-Safe**: Full TypeScript integration across frontend and API layer
 - **Modern UI**: Built with shadcn/ui components and Tailwind CSS
 - **Optimized Performance**: ISR caching with webhook-based revalidation for low server costs and real-time updates
+- **Privacy by Design**: No cookies, analytics or third-party requests from the visitor's browser. Media is proxied through our own domain, and an E2E test enforces it.
+- **Brand Logos**: Stack section logos from theSVG with curated overrides and an automated light/dark visibility check ([docs/BRAND_ICONS.md](docs/BRAND_ICONS.md))
 
 ## Getting Started
 
 ### Prerequisites
 
-- Node.js 22.15.1 (managed via nvm)
-- Strapi CMS instance running (configure via environment variables)
+- Node.js 22 (managed via nvm; the CMS doesn't support newer versions)
+- Postgres 17 for a local CMS (optional; `npm run dev` reads production content read-only)
 
 ### Environment Variables
 
 #### Frontend (.env.local)
 
-Create a `.env.local` file in the project root:
+Copy the templates and fill them in. Every real env file is gitignored, and only the `*.example` templates are committed.
 
-```bash
-# Strapi CMS
-STRAPI_API_URL=your_strapi_url
-STRAPI_API_TOKEN=your_api_token
+| File | From template | Purpose |
+|---|---|---|
+| `.env.local` | `.env.local.example` | Website: Strapi URL + **read-only** token, revalidation secret, optional Cloudflare purge credentials |
+| `.env.local-cms` | `.env.local-cms.example` | Points the website at the local CMS (created automatically by `npm run cms:db:pull`) |
+| `cms/.env.local` | `cms/.env.example` | Local CMS: `CMS_ENV=local`, fresh local secrets, local Postgres, **no** Cloudinary credentials |
+| `cms/.env.pull` | `cms/.env.pull.example` | Read-only database role used by `npm run cms:db:pull` |
 
-# Google Analytics
-NEXT_PUBLIC_GA_MEASUREMENT_ID=your_ga_id
-
-# Cloudflare API (optional - for manual cache purging)
-CLOUDFLARE_ZONE_ID=your_zone_id
-CLOUDFLARE_API_TOKEN=your_api_token
-```
-
-#### CMS (cms/.env)
-
-The CMS requires its own environment file at `cms/.env`:
-
-```bash
-HOST=0.0.0.0
-PORT=1337
-APP_KEYS=your_app_keys
-API_TOKEN_SALT=your_api_token_salt
-ADMIN_JWT_SECRET=your_admin_jwt_secret
-TRANSFER_TOKEN_SALT=your_transfer_token_salt
-JWT_SECRET=your_jwt_secret
-
-# Database (PostgreSQL/Supabase)
-DATABASE_CLIENT=postgres
-DATABASE_HOST=your_db_host
-DATABASE_PORT=5432
-DATABASE_NAME=postgres
-DATABASE_USERNAME=postgres
-DATABASE_PASSWORD=your_db_password
-DATABASE_SSL=true
-
-# Cloudinary (for media storage)
-CLOUDINARY_NAME=your_cloudinary_name
-CLOUDINARY_KEY=your_cloudinary_key
-CLOUDINARY_SECRET=your_cloudinary_secret
-```
-
-**Note:** The `cms/.env` file is gitignored for security.
+**Production and local are fully separate.** Production secrets live only in the Netlify and Render dashboards (and a password manager), never in a local file. See [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md).
 
 ### Development Servers
 
@@ -88,20 +56,15 @@ Open [http://localhost:3000](http://localhost:3000) to view the site.
 
 #### CMS (Strapi)
 
-The CMS runs separately from the frontend. You can start it in two ways:
+The CMS runs separately from the frontend, on a local copy of production content:
 
-**Option 1: From project root**
 ```bash
-npm run cms:dev
+npm run cms:db:pull   # copy production content into the local CMS (read-only against production)
+npm run cms:dev       # local Strapi on :1337 (Node 22)
+npm run dev:local-cms # website on :3000, reading the local CMS
 ```
 
-**Option 2: From cms directory**
-```bash
-cd cms
-npm run develop
-```
-
-Open [http://localhost:1337/admin](http://localhost:1337/admin) to access the Strapi admin panel.
+Open [http://localhost:1337/admin](http://localhost:1337/admin) to access the local Strapi admin panel. Always start the CMS with `npm run cms:dev`, which loads `cms/.env.local`.
 
 **Troubleshooting:**
 - If you get "Port 1337 is already used by another application", kill the existing process:
@@ -129,7 +92,8 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 ## Available Scripts
 
 ### Frontend
-- `npm run dev` - Start Next.js development server (port 3000)
+- `npm run dev` - Start Next.js development server (port 3000, production content)
+- `npm run dev:local-cms` - Start the development server against the local CMS
 - `npm run build` - Build the production application
 - `npm run start` - Start the production server
 - `npm run lint` - Run ESLint
@@ -138,7 +102,8 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 - `npm run test:e2e` - Run E2E tests
 
 ### CMS (from project root)
-- `npm run cms:dev` - Start Strapi development server (port 1337)
+- `npm run cms:dev` - Start the local Strapi development server (port 1337)
+- `npm run cms:db:pull` - Copy production content into the local CMS (backs up local first)
 - `npm run cms:build` - Build Strapi admin panel
 - `npm run cms:start` - Start Strapi in production mode
 
@@ -157,15 +122,14 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 - **Syntax Highlighting**: Shiki (VS Code engine, server-rendered, dual theme)
 - **Animation**: GSAP (scroll timelines, SplitText), motion/react (icon animations), CSS transitions
 - **Charts**: Recharts (lazy-loaded per project page)
-- **Forms**: React Hook Form + Zod
 - **Theme**: next-themes (dark mode support)
 - **Development**: Storybook 10 for component development and documentation
 
 ### CMS
-- **Headless CMS**: Strapi 5.8.1
-- **Content Types**: Projects (client, personal, article), About Page, Testimonials, Tools
-- **Dynamic Zone Blocks**: Rich text, images, video, carousel, comparison slider (V1/V2), stats, code blocks, Lottie, Figma embed
-- **Media**: Cloudinary integration for images and video
+- **Headless CMS**: Strapi 5
+- **Content Types**: Projects (client, personal, article), Project Tags, About, Global SEO, Tools, Businesses, Testimonials
+- **Dynamic Zone Blocks**: Rich text, images, video (Cloudinary uploads), carousel, comparison slider (V1/V2), stats, code blocks, Lottie
+- **Media**: Cloudinary for images and video, proxied through `/media/*` on our own domain
 
 ## Project Structure
 
@@ -175,6 +139,7 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 │   ├── projects/             # Portfolio listing with filter tabs
 │   ├── project/[slug]/       # Individual project case studies
 │   ├── article/[slug]/       # Article pages
+│   ├── privacy/              # Privacy notice
 │   ├── api/                  # API routes (revalidation webhook)
 │   └── layout.tsx            # Root layout with navigation
 ├── components/               # React components
@@ -194,9 +159,13 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 ├── lib/                      # Utilities and integrations
 │   ├── strapi.ts             # Strapi API client
 │   ├── strapi-queries.ts     # Content fetching functions
+│   ├── brand-icons.ts        # Brand logo resolution (+ brand-icons/overrides.ts)
 │   └── strapi-blocks-renderer.tsx # Rich text renderer
 ├── e2e/                      # Playwright E2E tests
 ├── test/                     # Test setup and configuration
+├── scripts/                  # cms:db:pull, Cloudflare purge
+├── docs/                     # ENVIRONMENTS.md, BRAND_ICONS.md
+├── cms/                      # Strapi 5 CMS
 └── public/                   # Static assets
 ```
 
@@ -205,7 +174,9 @@ Open [http://localhost:6006](http://localhost:6006) to view the component librar
 Portfolio content is managed through Strapi CMS with the following content types:
 
 - **Projects**: Portfolio case studies with rich text sections (Challenge, Solution, Role, Impact, Takeaway), images, tags, and external links
-- **About Page**: Personal bio, skills, and work experience
+- **About**: Homepage bio, contact copy, CV link and email
+- **Tools**: The stack section and project tool badges
+- **Businesses**: The companies section
 - **Testimonials**: Client testimonials displayed on the homepage
 
 ### Rich Text Features
@@ -223,8 +194,9 @@ The custom rich text renderer supports:
 
 - **Home** (`/`) - Landing page with hero, featured work, company logos, testimonials, about section, and tech stack
 - **Projects** (`/projects`) - Filterable project listing with animated tabs (Client Work, Personal Projects, Articles) and grid/list view toggle
-- **Project Details** (`/project/[slug]`) - Individual case studies with dynamic zone blocks (rich text, images, video, comparison sliders, code blocks, stats, Lottie, Figma embeds) and share bar
+- **Project Details** (`/project/[slug]`) - Individual case studies with dynamic zone blocks (rich text, images, video, comparison sliders, code blocks, stats, Lottie) and share bar
 - **Articles** (`/article/[slug]`) - Article pages for written content
+- **Privacy** (`/privacy`) - Short privacy notice (no cookies, analytics or tracking)
 
 ## Caching Strategy
 
@@ -290,7 +262,6 @@ npm run purge:cloudflare:all
 - `STRAPI_API_URL` - Strapi API URL (server-side only)
 - `STRAPI_API_TOKEN` - Server-side API token
 - `REVALIDATE_SECRET` - Webhook authentication secret
-- `NEXT_PUBLIC_GA_MEASUREMENT_ID` - Google Analytics measurement ID
 
 **Cloudflare API** (for automated cache purging):
 - `CLOUDFLARE_ZONE_ID` - Zone ID from Cloudflare dashboard (domain overview)
@@ -325,4 +296,11 @@ GitHub Actions CI will automatically verify these checks on all PRs.
 
 ## Documentation
 
-For detailed technical documentation and development guidelines, see [CLAUDE.md](CLAUDE.md).
+- [CLAUDE.md](CLAUDE.md) - Technical documentation and development rules
+- [docs/ENVIRONMENTS.md](docs/ENVIRONMENTS.md) - Production vs local CMS, copying content, shipping CMS changes
+- [docs/BRAND_ICONS.md](docs/BRAND_ICONS.md) - Adding tools and fixing brand logos
+- [TESTING.md](TESTING.md) - Testing guide
+
+## Credits
+
+Built with open-source software, including [shadcn/ui](https://ui.shadcn.com) components. See [NOTICE](NOTICE) for third-party credits and licences.
