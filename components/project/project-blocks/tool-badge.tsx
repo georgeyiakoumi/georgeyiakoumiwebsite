@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { Badge } from "@/components/ui/badge";
 import { ResponsiveTooltip } from "@/components/ui/responsive-tooltip";
 import { getStrapiMediaURL } from "@/lib/strapi";
+import { BrandIcon } from "@/components/brand-icon";
 import type { ToolData } from "@/lib/strapi-queries";
 
 export function ToolBadge({ tool }: { tool: ToolData }) {
@@ -20,13 +21,13 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
   }, []);
 
   useEffect(() => {
-    if (isSvg && imageUrl) {
+    if (!tool.icon && isSvg && imageUrl) {
       fetch(imageUrl)
         .then((res) => res.text())
         .then((svg) => setSvgContent(svg))
         .catch((err) => console.error('Failed to fetch SVG:', err));
     }
-  }, [isSvg, imageUrl]);
+  }, [tool.icon, isSvg, imageUrl]);
 
   const cssVariables = {
     ...(tool.cssVariables || {}),
@@ -39,7 +40,9 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
       className={`gap-2 select-none cursor-pointer ${tool.classes || ""}`}
       style={cssVariables}
     >
-      {tool.image && (
+      {tool.icon ? (
+        <BrandIcon icon={tool.icon} className="size-4" />
+      ) : tool.image && (
         <>
           {isSvg && svgContent ? (
             <span
@@ -48,7 +51,7 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
             />
           ) : (
             <Image
-              src={tool.image.url}
+              src={imageUrl || ''}
               alt={tool.image.alternativeText || tool.name}
               width={16}
               height={16}
@@ -63,7 +66,11 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
 
   if (!tool.description) return badge;
 
-  const drawerIcon = tool.image ? (
+  const drawerIcon = tool.icon ? (
+    <div className="mx-auto size-16 flex items-center justify-center">
+      <BrandIcon icon={tool.icon} className="size-full" />
+    </div>
+  ) : tool.image ? (
     <div
       className="mx-auto size-16 flex items-center justify-center"
       style={cssVariables}
@@ -75,7 +82,7 @@ export function ToolBadge({ tool }: { tool: ToolData }) {
         />
       ) : (
         <Image
-          src={tool.image.url}
+          src={imageUrl || ''}
           alt={tool.image.alternativeText || tool.name}
           width={64}
           height={64}

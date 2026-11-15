@@ -3,7 +3,6 @@
 import { useRef } from "react";
 import dynamic from "next/dynamic";
 import { Button } from "@/components/ui/button";
-import { CalendlyButton } from "@/components/ui/calendly-button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { Section } from "@/components/layout/section";
@@ -56,14 +55,6 @@ export function AboutSection({ heading, paragraphs, email, cvUrl }: AboutSection
             <TooltipContent side="bottom" className="hidden xl:block">{email}</TooltipContent>
           </Tooltip>
         )}
-        <Tooltip>
-          <TooltipTrigger asChild>
-            <span>
-              <CalendlyButton />
-            </span>
-          </TooltipTrigger>
-          <TooltipContent side="bottom" className="hidden xl:block">Calendly</TooltipContent>
-        </Tooltip>
         {cvUrl && (
           <Tooltip>
             <TooltipTrigger asChild>
@@ -100,7 +91,6 @@ export function AboutSectionSkeleton() {
       </div>
       <div className="flex flex-col md:flex-row gap-3">
         <Skeleton className="h-10 w-36 rounded-lg" />
-        <Skeleton className="h-10 w-44 rounded-lg" />
         <Skeleton className="h-10 w-28 rounded-lg" />
       </div>
     </Section>

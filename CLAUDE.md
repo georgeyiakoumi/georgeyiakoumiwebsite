@@ -410,9 +410,9 @@ npx lighthouse http://localhost:3000 --only-categories=accessibility --view
    - Fetch data server-side in parallel using Promise.all()
    - Eliminates loading states and client-side waterfalls
 2. **Resource Hints**: Always include for external resources
-   - preconnect for critical origins (Cloudinary, Analytics)
-   - dns-prefetch as fallback for older browsers
-   - Currently: Cloudinary CDN, Google Analytics
+   - Browsers must only ever connect to the site's own domain (no third-party requests from the visitor)
+   - Direct-to-browser Cloudinary media (video, SVG, fetch, raw img) goes through `getBrowserMediaURL()` → `/media/*` proxy in netlify.toml
+   - `next/image` rasters stay on Cloudinary URLs (Netlify Image CDN fetches them server-side)
 3. **Image Optimization**:
    - Use Next.js Image component with fill prop
    - Add fetchPriority="high" to LCP images (hero, above-fold)

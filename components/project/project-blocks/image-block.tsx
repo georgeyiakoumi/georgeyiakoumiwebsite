@@ -1,4 +1,4 @@
-import { getStrapiMediaURL } from "@/lib/strapi";
+import { getBrowserMediaURL, getStrapiMediaURL } from "@/lib/strapi";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { ZoomableImage } from "@/components/zoomable-image";
 import { BlockFigure } from "./blocks/block-figure";
@@ -38,7 +38,7 @@ export function ImageBlock({ block, projectTitle }: ImageBlockProps) {
     <BlockFigure>
       {block.zoomEnabled ? (
         <ZoomableImage
-          src={imageUrl || ''}
+          src={getBrowserMediaURL(block.image.url) || ''}
           alt={block.image.alternativeText || projectTitle}
           width={block.image.width || 1920}
           height={block.image.height || 1080}

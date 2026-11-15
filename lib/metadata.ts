@@ -234,7 +234,7 @@ export async function generateProjectJsonLd({
     name: title,
     description: description,
     url: `${SITE_CONFIG.url}${entryPath}`,
-    image: image || SITE_CONFIG.ogImage,
+    image: new URL(image || SITE_CONFIG.ogImage, SITE_CONFIG.url).toString(),
     datePublished: datePublished,
     dateModified: dateModified || datePublished,
     author: {

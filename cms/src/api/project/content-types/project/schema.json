@@ -66,8 +66,7 @@
         "project-blocks.comparison-slider",
         "project-blocks.carousel",
         "project-blocks.code-block",
-        "project-blocks.lottie",
-        "project-blocks.figma-embed"
+        "project-blocks.lottie"
       ]
     },
     "type": {

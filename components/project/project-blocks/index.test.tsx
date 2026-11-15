@@ -43,9 +43,6 @@ vi.mock('./code-block', () => ({
 vi.mock('./lottie-block', () => ({
   LottieBlock: ({ block }: any) => <div data-testid="lottie-block">{block.id}</div>,
 }));
-vi.mock('./figma-embed-block', () => ({
-  FigmaEmbedBlock: ({ block }: any) => <div data-testid="figma-embed-block">{block.id}</div>,
-}));
 
 describe('ProjectBlockRenderer', () => {
   it('returns null for empty blocks', () => {
@@ -96,11 +93,6 @@ describe('ProjectBlockRenderer', () => {
   it('renders lottie block', async () => {
     render(<ProjectBlockRenderer blocks={[{ __component: 'project-blocks.lottie', id: 9 } as any]} projectTitle="Test" />);
     await waitFor(() => expect(screen.getByTestId('lottie-block')).toBeInTheDocument());
-  });
-
-  it('renders figma-embed block', () => {
-    render(<ProjectBlockRenderer blocks={[{ __component: 'project-blocks.figma-embed', id: 10 } as any]} projectTitle="Test" />);
-    expect(screen.getByTestId('figma-embed-block')).toBeInTheDocument();
   });
 
   it('returns null for unknown block types', () => {

@@ -8,7 +8,6 @@ import { VideoBlock } from "./video-block";
 import { ComparisonSliderBlock } from "./comparison-slider-block";
 import { ComparisonSliderBlock as LegacyComparisonSliderBlock } from "@/components/legacy/comparison-slider-block";
 import { CodeBlock } from "./code-block";
-import { FigmaEmbedBlock } from "./figma-embed-block";
 
 const StatsBlock = dynamic(() => import("./stats/index").then(mod => ({ default: mod.StatsBlock })), { ssr: false });
 const LottieBlock = dynamic(() => import("./lottie-block").then(mod => ({ default: mod.LottieBlock })), { ssr: false });
@@ -50,9 +49,6 @@ export function ProjectBlockRenderer({ blocks, projectTitle }: ProjectBlockRende
 
           case 'project-blocks.lottie':
             return <LottieBlock key={key} block={block} />;
-
-          case 'project-blocks.figma-embed':
-            return <FigmaEmbedBlock key={key} block={block} />;
 
           default:
             console.warn(`Unknown block type: ${(block as any).__component}`);

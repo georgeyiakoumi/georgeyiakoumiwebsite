@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { getStrapiMediaURL } from "@/lib/strapi";
+import { getBrowserMediaURL, getStrapiMediaURL } from "@/lib/strapi";
 import { ResponsiveCarousel } from "@/components/ui/carousel";
 import { ImageWithFallback } from "@/components/ui/image-with-fallback";
 import { BlockFigure } from "./blocks/block-figure";
@@ -22,8 +22,8 @@ export function CarouselBlock({ block, projectTitle }: CarouselBlockProps) {
     <BlockFigure className="md:!max-w-full lg:!max-w-xl xl:!max-w-2xl px-0">
       <ResponsiveCarousel loop={canLoop} noGap={noGap}>
         {block.slides.map((slide) => {
-          const slideUrl = getStrapiMediaURL(slide.url);
           const isVideo = slide.mime?.startsWith('video/');
+          const slideUrl = isVideo ? getBrowserMediaURL(slide.url) : getStrapiMediaURL(slide.url);
           return (
             <div key={slide.id} className={cn(!noGap && "border border-border rounded-lg", "overflow-hidden")}>
               {isVideo ? (

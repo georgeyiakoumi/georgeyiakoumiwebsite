@@ -1,4 +1,5 @@
 import { fetchAPI } from './strapi';
+import type { BrandIcon } from './brand-icons';
 
 interface StrapiRichTextBlock {
   id: number;
@@ -68,7 +69,6 @@ export interface CarouselBlock {
 export interface VideoBlock {
   __component: 'project-blocks.video';
   id: number;
-  url?: string;
   file?: {
     id: number;
     url: string;
@@ -143,13 +143,6 @@ export interface CodeBlockType {
   caption?: string;
 }
 
-export interface FigmaEmbedBlock {
-  __component: 'project-blocks.figma-embed';
-  id: number;
-  url: string;
-  caption?: string;
-}
-
 export interface LottieBlock {
   __component: 'project-blocks.lottie';
   id: number;
@@ -198,8 +191,7 @@ export type ProjectBlock =
   | ComparisonSliderBlock
   | StatsBlock
   | CodeBlockType
-  | LottieBlock
-  | FigmaEmbedBlock;
+  | LottieBlock;
 
 export interface ProjectData {
   id: number;
@@ -370,7 +362,11 @@ export async function getProjectBySlug(slug: string) {
       },
       tags: ['projects', `project-${slug}`],
     });
-    return data[0] || null;
+    const project = data[0];
+    if (!project) return null;
+    if (!project.tools) return project;
+    const { withBrandIcons } = await import('./brand-icons');
+    return { ...project, tools: withBrandIcons(project.tools) };
   } catch (error) {
     console.error(`Error fetching project with slug ${slug}:`, error);
     return null;
@@ -402,7 +398,6 @@ export interface GlobalSEOData {
     height?: number;
   };
   twitterCard?: 'summary' | 'summary_large_image';
-  gtagId?: string;
 }
 
 export async function getGlobalSEO() {
@@ -434,6 +429,9 @@ export interface ToolData {
   cssVariables?: Record<string, string> | null;
   cssVariablesDark?: Record<string, string> | null;
   classes?: string | null;
+  iconSlug?: string | null;
+  iconSlugDark?: string | null;
+  icon?: BrandIcon;
   image?: {
     id: number;
     documentId: string;
@@ -461,7 +459,8 @@ export async function getTools() {
       cache: 'force-cache',
       tags: ['tools'],
     });
-    return data;
+    const { withBrandIcons } = await import('./brand-icons');
+    return withBrandIcons(data);
   } catch (error) {
     console.error('Error fetching tools:', error);
     return [];

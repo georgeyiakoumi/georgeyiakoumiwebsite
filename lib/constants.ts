@@ -28,3 +28,5 @@ export const NAV_LINKS = {
     ariaLabel: `View ${AUTHOR.firstName}'s projects`,
   },
 } as const;
+
+export const PRIVACY_LAST_UPDATED = '2026-11-15';

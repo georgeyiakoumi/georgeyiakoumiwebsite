@@ -598,7 +598,6 @@ export interface ApiGlobalSeoGlobalSeo extends Struct.SingleTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     githubUrl: Schema.Attribute.String;
-    gtagId: Schema.Attribute.String;
     keywords: Schema.Attribute.Text;
     linkedinUrl: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
@@ -772,6 +771,8 @@ export interface ApiToolTool extends Struct.CollectionTypeSchema {
     cssVariables: Schema.Attribute.JSON;
     cssVariablesDark: Schema.Attribute.JSON;
     description: Schema.Attribute.Text;
+    iconSlug: Schema.Attribute.String;
+    iconSlugDark: Schema.Attribute.String;
     image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::tool.tool'> &

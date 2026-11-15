@@ -2,6 +2,7 @@ import { MetadataRoute } from 'next';
 import { getProjects } from '@/lib/strapi-queries';
 import { SITE_CONFIG } from '@/lib/metadata';
 import { getEntryPath } from '@/lib/utils';
+import { PRIVACY_LAST_UPDATED } from '@/lib/constants';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = SITE_CONFIG.url;
@@ -22,6 +23,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: new Date(),
       changeFrequency: 'weekly',
       priority: 0.9,
+    },
+    {
+      url: `${baseUrl}/privacy`,
+      lastModified: new Date(PRIVACY_LAST_UPDATED),
+      changeFrequency: 'yearly',
+      priority: 0.1,
     },
   ];
 

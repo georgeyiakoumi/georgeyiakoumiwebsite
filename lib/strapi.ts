@@ -65,11 +65,31 @@ export function getStrapiURL(path = '') {
   return `${STRAPI_API_URL}${path}`;
 }
 
+export const CLOUDINARY_ORIGIN = 'https://res.cloudinary.com/georgeyiakoumi/';
+export const MEDIA_PROXY_PATH = '/media/';
+
+export function toProxiedMediaURL(url: string | null | undefined) {
+  if (!url) return null;
+  if (url.startsWith(CLOUDINARY_ORIGIN)) {
+    return `${MEDIA_PROXY_PATH}${url.slice(CLOUDINARY_ORIGIN.length)}`;
+  }
+  return url;
+}
+
 export function getStrapiMediaURL(url: string | null | undefined) {
   if (!url) return null;
   if (url.startsWith('http')) {
-    if (url.endsWith('.svg')) return url;
+    if (url.split('?', 1)[0].endsWith('.svg')) return toProxiedMediaURL(url);
     return url.replace('/upload/', '/upload/f_auto,q_auto/');
   }
   return getStrapiURL(url);
+}
+
+export function getBrowserMediaURL(url: string | null | undefined) {
+  if (!url) return null;
+  if (!url.startsWith('http')) return getStrapiURL(url);
+  const isSvg = url.split('?', 1)[0].endsWith('.svg');
+  const isTransformable = /\/(image|video)\/upload\//.test(url);
+  const stable = !isSvg && isTransformable ? url.replace('/upload/', '/upload/q_auto/') : url;
+  return toProxiedMediaURL(stable);
 }

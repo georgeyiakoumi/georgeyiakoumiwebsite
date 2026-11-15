@@ -24,6 +24,15 @@ const nextConfig = {
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
     minimumCacheTTL: 31536000, // 1 year cache for optimized images
   },
+  async rewrites() {
+    if (process.env.NETLIFY === 'true') return [];
+    return [
+      {
+        source: '/media/:path*',
+        destination: 'https://res.cloudinary.com/georgeyiakoumi/:path*',
+      },
+    ];
+  },
   // Allow iPad/mobile dev access
   allowedDevOrigins: ['192.168.1.59'],
   // Enable compression
