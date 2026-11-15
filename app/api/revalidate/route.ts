@@ -1,5 +1,12 @@
+import { timingSafeEqual } from 'node:crypto';
 import { revalidatePath } from 'next/cache';
 import { NextRequest, NextResponse } from 'next/server';
+
+function isAuthorized(header: string | null, secret: string) {
+  const expected = Buffer.from(`Bearer ${secret}`);
+  const received = Buffer.from(header ?? '');
+  return received.length === expected.length && timingSafeEqual(received, expected);
+}
 
 export async function POST(request: NextRequest) {
   const authHeader = request.headers.get('authorization');
@@ -15,7 +22,7 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  if (authHeader !== `Bearer ${secret}`) {
+  if (!isAuthorized(authHeader, secret)) {
     console.error('[Revalidate] Invalid token');
     return NextResponse.json(
       { message: 'Invalid token' },

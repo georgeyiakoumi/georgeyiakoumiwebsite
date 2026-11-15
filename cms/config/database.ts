@@ -1,6 +1,8 @@
 import path from 'path';
+import { assertLocalDatabase } from '../src/utils/local-environment';
 
 export default ({ env }) => {
+  assertLocalDatabase(process.env);
   const client = env('DATABASE_CLIENT', 'sqlite');
 
   const connections = {
