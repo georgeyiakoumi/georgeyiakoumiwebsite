@@ -121,6 +121,12 @@ describe('shipped overrides', () => {
     }
   });
 
+  it('pro-tools uses the 2019 purple instead of the old green', () => {
+    const svg = getBrandIconSVG('pro-tools')!;
+    expect(svg).toContain('#7826E7');
+    expect(svg.toLowerCase()).not.toContain('#7acb10');
+  });
+
   it('posthog gets a dark variant with a light hedgehog head', () => {
     const icon = getBrandIcon({ iconSlug: 'posthog' })!;
     expect(icon.light).toContain('fill="#111"');

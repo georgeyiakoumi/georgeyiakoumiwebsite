@@ -35,4 +35,4 @@ posthog: {
 - Source the artwork from the brand's own press kit where possible, otherwise from theSVG, svgl or Simple Icons. Copy it in as a fixed string, so a package update can't change it.
 - Add a unit test in `lib/brand-icons.test.ts` and confirm the e2e visibility check passes.
 
-Current overrides: **Render** (monochrome; theSVG's is black on black in dark mode), **Linear** (monochrome, per Linear's current brand guidance), **PostHog** (dark version with a white hedgehog head).
+Current overrides: **Render** (monochrome; theSVG's is black on black in dark mode), **Linear** (monochrome, per Linear's current brand guidance), **PostHog** (dark version with a white hedgehog head), **Pro Tools** (2019 purple `#7826E7`; theSVG still has the pre-2019 green).
