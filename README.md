@@ -304,3 +304,7 @@ GitHub Actions CI will automatically verify these checks on all PRs.
 ## Credits
 
 Built with open-source software, including [shadcn/ui](https://ui.shadcn.com) components. See [NOTICE](NOTICE) for third-party credits and licences.
+
+## Licence
+
+Copyright (c) 2025-2026 George Yiakoumi. All rights reserved. The code is public for reference and learning; reuse of the code, design or brand assets needs permission. See [LICENSE](LICENSE).
