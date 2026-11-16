@@ -87,7 +87,7 @@ export function SiteFooter({ className }: { className?: string }) {
             <DrawerHeader className="gap-3 py-8">
               <DrawerTitle>© {currentYear} {AUTHOR.fullName}</DrawerTitle>
               <DrawerDescription>{FOOTER_TAGLINE}</DrawerDescription>
-              <PrivacyLink onNavigate={() => setOpen(false)} className="self-center md:self-start" />
+              <PrivacyLink onNavigate={() => setOpen(false)} className="self-center" />
             </DrawerHeader>
           </DrawerContent>
         </Drawer>
